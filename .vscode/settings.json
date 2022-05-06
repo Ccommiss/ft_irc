@@ -1,0 +1,14 @@
+{
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "comment",
+                "settings": {
+                    "fontStyle": "bold",
+                    "foreground": "#8580c0"
+                }
+            }
+        ],
+        "comments": ""
+    }
+}
