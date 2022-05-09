@@ -45,7 +45,6 @@ _Make your own Internet Relay Chat_
         Web page - sends url and gets a page.
         Echo - sends a message and gets it back.
 
-  
 #### &emsp;&emsp;a) Server
 
 Schema from RFC 1459:
@@ -78,7 +77,7 @@ Schema from RFC 1459:
 
 #### &emsp;&emsp;b) Client
 
-- <def>** Definition ** </def> : anything connected to server which is not a server. Defined by :
+- <def>**Definition** </def> : anything connected to server which is not a server. Defined by :
   - a unique nick name of 9 char
   - Hostname
   - Server on which client is connected
@@ -104,32 +103,34 @@ Schema from RFC 1459:
 
 ### &emsp; <st> A. What is a socket ? </st>
 
-IBM docs 
+IBM docs
 
-<def>** Definition ** </def>: sort of endpoint in a 2-ways communication channel. Structur and properties are defined by an Application Programming Interface. 
+<def>**Definition** </def>: sort of endpoint in a 2-ways communication channel. Structur and properties are defined by an Application Programming Interface.
 
-Socket are used to create a communication channel, used to send data between two users. 
+Socket are used to create a communication channel, used to send data between two users.
 
-Analogy with a phone : 
-- Dialing a number = starting a socket call. 
+Analogy with a phone :
+
+- Dialing a number = starting a socket call.
   
-  When a socket() is needed, sytem returns an integer which is a sd, a socket descriptor. It is similar as file descriptor. But one main difference is : the OS actually binds FD to the file when open() is called, whereas for socket, applications can choose between specify the dest each time they use the socket (if datagrams) OR bind a dest address to the socket. 
+  When a socket() is needed, sytem returns an integer which is a sd, a socket descriptor. It is similar as file descriptor. But one main difference is : the OS actually binds FD to the file when open() is called, whereas for socket, applications can choose between specify the dest each time they use the socket (if datagrams) OR bind a dest address to the socket.
 
+Unix socket ?
 
-Unix socket ? 
 - Local sockets (AF_UNIX) : provide comm between processes on a single system
-- Internet Protocol Sockets part og Internet Address Family (AF_INET for ipv4) : provide means of communicating between applications on different system via Transport Control Protocol. 
+- Internet Protocol Sockets part og Internet Address Family (AF_INET for ipv4) : provide means of communicating between applications on different system via Transport Control Protocol.
 
-A soket is always defined by 
+A soket is always defined by
+
 - its family (UNIX or INET)
 - its communication mode (datagram or stream, SOCK_DGRAM and SOCK STREAM)
 - a protocol (0 :automatic choice)
 
-#### AF_INET 
+#### AF_INET
 
 **From [IBM](https://www.ibm.com/docs/en/zos/2.4.0?topic=SSLTBW_2.4.0/com.ibm.zos.v2r4.cbcpx01/adintrn.htm) doc :**
 
->A socket address in the Internet address family comprises the following fields: the address family (AF_INET), an Internet address, the length of that Internet address, a port, and a character array. The structure of the Internet socket address is defined by the following sockaddr_in structure, which is found in the netinet/in.h include file: 
+>A socket address in the Internet address family comprises the following fields: the address family (AF_INET), an Internet address, the length of that Internet address, a port, and a character array. The structure of the Internet socket address is defined by the following sockaddr_in structure, which is found in the netinet/in.h include file:
 
 ```
  struct in_addr {
@@ -144,9 +145,9 @@ A soket is always defined by
 };
 ```
 
-### &emsp; <st> B. Netcat tool </st> 
+### &emsp; <st> B. Netcat tool </st>
 
-<def>** Definition ** </def> tool establishing connections using TCP/UDP tranor protocol. Copies ata coming through STDOUT and wrtites in STDIN.
+<def>**Definition** </def> tool establishing connections using TCP/UDP tranor protocol. Copies ata coming through STDOUT and wrtites in STDIN.
 
 Open a connection to the port of host :
 ``` nc HOST PORT ```
@@ -201,11 +202,62 @@ CC-BY
 
 ```
 
-Socket : creation of a socket, have to specify it is a internet protocol (AF_INET) and TCP stream (SOCK_STREAM).
+**Useful functions :**
 
-Server socket : is listening. Will be use to derive new data socket, which means, no data will be transmitted.
+**Socket()** : creation of a socket, have to specify it is a internet protocol (AF_INET) and TCP stream (SOCK_STREAM).
 
-Accept : serrver waits fo client to executes "connect". Will then generates a new data socket which will be used to transmit data.
+---> Server socket : is listening. Will be use to derive new data socket, which means, no data will be transmitted.
+
+**setsockopt()** : set the socket options.
+
+**Bind()** : binds a name to a socket. After  cause to soecket(),
+> assigns the address specified by addr to the socket referred to
+> by the file descriptor sockfd.
+
+```Example : bind(listen_sd, (struct sockaddr*)&serv_addr, sizeof(serv_addr))```
+with serv address an instance of ```struct sockaddr_in```
+
+**Accept()** : accepts a connection on a socket. Server waits fo client to executes "connect". Will then generates a new data socket which will be used to transmit data. It will extracts the irst connection  request and returns a fd.
+=> The new socket is NOT on listening state, and original sockfd is not affected.
+
+``` int accept(int sockfd, struct sockaddr *restrict addr,  socklen_t*restrict addrlen); ```
+
+```newsockfd = accept(listen_sd, (struct sockaddr*)&cli_addr, &clilen);```
+With new sockfd = the new client, listen_sd as listening socket, cli addr (also aan instance of struct sockaddr_in and cli len as size of new cli.
+
+**Connect()** : initiate a connection a socket.
+
+``` int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen); ```
+
+**recv()** : The recv() calls are used to receive messages from a socket.  They may be used to receive data on both connectionless and connection-oriented sockets.
+```ssize_t recv(int sockfd, void *buf, size_t len, int flags);```
+
+**select()** :  select() allows a program to monitor multiple file descriptors,
+waiting until one or more of the file descriptors become "ready"
+for some class of I/O operation (e.g., input possible).  A file
+descriptor is considered ready if it is possible to perform a
+corresponding I/O operation (e.g., read(2), or a sufficiently
+small write(2)) without blocking.
+Prototype : ```int select(int nfds, fd_set *restrict readfds, fd_set*restrict writefds, fd_set *restrict exceptfds, struct timeval*restrict timeout);```
+
+```rc = select(max_sd + 1, &working_set, NULL, NULL, &timeout);```
+- rc is an int;
+- nfds = max_sd = highest FD. + 1.
+- readfds = The file descriptors in this set are watched to see if they are ready for reading.  A file descriptor is ready for reading if a read operation will not block;
+- writefds = fd set are watched to see if they are ready for writing. A file descriptor is ready for writing if a write operation will not block.  However, even if a file descriptor indicates as writable, a large write may still block.
+- exceptfds = this set are watched for "exceptional conditions".
+
+**What is a set ?**
+=> type fd_set : allows caller to wait for three classes of events on specified set of fds (read, write, except).
+
+Contains the following macro features :
+
+- FD_ZERO() : clears (removes all file descriptors from) set. It should be employed as the first step in initializing a file descriptor set
+- FD_SET(): adds the file descriptor fd to set.
+- FD_CLR() : removes the file descriptor fd from set.
+- FD_ISSET() : select() modifies the contents of the sets according to the rules described below.  After calling select(), the FD_ISSET() macro can be used to test if a file descriptor is still present in a set.
+
+- 
 
 ## <t> III. IRC Commands and grammar </t>
 
