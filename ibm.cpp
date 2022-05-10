@@ -16,7 +16,8 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <fcntl.h>
-
+#include <string>
+#include <sstream>
 #define SERVER_PORT  12345
 
 #define TRUE             1
@@ -91,7 +92,7 @@ int    main(int argc, char* argv[])
             /****************************************************/
             if (i == s.listen_sd)
             {
-               printf("Listening socket is readable\n");
+               //printf("Listening socket is readable\n");
                /*************************************************/
                /* Accept all incoming connections that are      */
                /* queued up on the listening socket before we   */
@@ -125,6 +126,11 @@ int    main(int argc, char* argv[])
                   /* master read set                            */
                   /**********************************************/
                   printf("New incoming connection - %d\n", new_sd);
+                  std::stringstream ss;
+                  ss << new_sd;
+                  std::string str = ss.str();
+                  std::string tmp = "Guest " + str;
+                  users[new_sd].nickname = tmp;
                   FD_SET(new_sd, &s.master_set);  // add new SD to master set 
                   if (new_sd > s.max_sd)
                      s.max_sd = new_sd;
@@ -141,7 +147,7 @@ int    main(int argc, char* argv[])
             /****************************************************/
             else
             {
-               printf("Descriptor %d is readable\n", i); // i = the SD 
+              // printf("Descriptor %d is readable\n", i); // i = the SD 
                s.close_conn = FALSE;
                /*************************************************/
                /* Receive all incoming data on this socket      */
@@ -180,15 +186,20 @@ int    main(int argc, char* argv[])
                   /* Data was received                          */
                   /**********************************************/
                   int len = rc;
-                  printf("%d bytes received from SD %d\n", len, i);
-                  write(1, s.buffer, len); // << std::endl;
-                  char *tokens = s.buffer.strtok(s.buffer, " ") ;
-                  if (tokens == "/nick")
+                  std::cout << users[i].nickname << " says : " << s.buffer;
+                 // printf("%d bytes received from SD %d\n", len, i);
+                  //write(1, s.buffer, len); // << std::endl;
+                  char *tokens = strtok(s.buffer, " ") ;
+                  if (strcmp(tokens, "/nick") == 0)
                   {
-                     tokens = strtok (NULL, " "); 
-                     users[i].nickname = tokens[1];
+                     tokens = strtok (NULL, " ");
+                     std::stringstream trimmer;
+                     trimmer << tokens;
+                     trimmer >> tokens;
+                     users[i].nickname = tokens;
+                     out ("nickname set to " <<  users[i].nickname)
                   }
-                  bzero(s.buffer, strlen(s.buffer));
+                  bzero(s.buffer, 80);
 
                   /**********************************************/
                   /* Echo the data back to the client           */

@@ -7,4 +7,4 @@ class User {
         std::string name;
         std::string nickname;
     
-}
+};
