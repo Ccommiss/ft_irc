@@ -36,6 +36,8 @@ class Server {
             perror("socket() failed");
             exit(-1);
         }
+
+
         if (setsockopt(listen_sd, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on)) < 0)
         {
             perror("setsockopt() failed");
@@ -75,7 +77,7 @@ class Server {
         max_sd = listen_sd;
         FD_SET(listen_sd, &master_set);
 
-        timeout.tv_sec = 3 * 60;
+        timeout.tv_sec = 10 * 60;
         timeout.tv_usec = 0;
     }
 
