@@ -22,61 +22,141 @@
 #define TRUE             1
 #define FALSE            0
 
-#include "Server.hpp"
-#include "User.hpp"
-
-void check_connection(fd_set master_set, int listen_sd, int max_sd)
+int main (int argc, char *argv[])
 {
-   for (int x = listen_sd; x <= max_sd + 1; x++)
+   int    i, len, rc, on = 1;
+   int    listen_sd, max_sd, new_sd;
+   int    desc_ready, end_server = FALSE;
+   int    close_conn;
+   char   buffer[80];
+    sockaddr_in6   addr;
+    timeval       timeout;
+    fd_set        master_set, working_set;
+
+   /*************************************************************/
+   /* Create an AF_INET6 stream socket to receive incoming      */
+   /* connections on                                            */
+   /*************************************************************/
+   listen_sd = socket(AF_INET6, SOCK_STREAM, 0);
+   if (listen_sd < 0)
    {
-      if (FD_ISSET(x, &master_set) == 1 && x == listen_sd) // new_sd > max_sd))
-         printf("Listening socket : %d is connected\n", x);
-      else if (FD_ISSET(x, &master_set) == 1)
-         printf("SD %d is connected\n", x);
-      else
-         std::cout << "SD " << x << "not set" << std::endl;
+      perror("socket() failed");
+      exit(-1);
    }
-}
 
-
-
-int    main(int argc, char* argv[])
-{
-
-   Server s;
-   User users[10]; // 10 user 
-
-   while (s.end_server == 0)
+   /*************************************************************/
+   /* Allow socket descriptor to be reuseable                   */
+   /*************************************************************/
+   rc = setsockopt(listen_sd, SOL_SOCKET,  SO_REUSEADDR,
+                   (char *)&on, sizeof(on));
+   if (rc < 0)
    {
-      out ("Listening socket = " << s.listen_sd);
+      perror("setsockopt() failed");
+      close(listen_sd);
+      exit(-1);
+   }
+
+   /*************************************************************/
+   /* Set socket to be nonblocking. All of the sockets for      */
+   /* the incoming connections will also be nonblocking since   */
+   /* they will inherit that state from the listening socket.   */
+   /*************************************************************/
+   rc = ioctl(listen_sd, FIONBIO, (char *)&on);
+   if (rc < 0)
+   {
+      perror("ioctl() failed");
+      close(listen_sd);
+      exit(-1);
+   }
+
+   /*************************************************************/
+   /* Bind the socket                                           */
+   /*************************************************************/
+   memset(&addr, 0, sizeof(addr));
+   addr.sin6_family      = AF_INET6;
+   memcpy(&addr.sin6_addr, &in6addr_any, sizeof(in6addr_any));
+   addr.sin6_port        = htons(SERVER_PORT);
+   rc = bind(listen_sd,
+             (struct sockaddr *)&addr, sizeof(addr));
+   if (rc < 0)
+   {
+      perror("bind() failed");
+      close(listen_sd);
+      exit(-1);
+   }
+
+   /*************************************************************/
+   /* Set the listen back log                                   */
+   /*************************************************************/
+   rc = listen(listen_sd, 32);
+   if (rc < 0)
+   {
+      perror("listen() failed");
+      close(listen_sd);
+      exit(-1);
+   }
+
+   /*************************************************************/
+   /* Initialize the master fd_set                              */
+   /*************************************************************/
+   FD_ZERO(&master_set);
+   max_sd = listen_sd;
+   FD_SET(listen_sd, &master_set);
+
+   /*************************************************************/
+   /* Initialize the timeval struct to 3 minutes.  If no        */
+   /* activity after 3 minutes this program will end.           */
+   /*************************************************************/
+   timeout.tv_sec  = 3 * 60;
+   timeout.tv_usec = 0;
+
+   /*************************************************************/
+   /* Loop waiting for incoming connects or for incoming data   */
+   /* on any of the connected sockets.                          */
+   /*************************************************************/
+   do
+   {
+      /**********************************************************/
+      /* Copy the master fd_set over to the working fd_set.     */
+      /**********************************************************/
+      memcpy(&working_set, &master_set, sizeof(master_set));
+
+      /**********************************************************/
+      /* Call select() and wait 3 minutes for it to complete.   */
+      /**********************************************************/
       printf("Waiting on select()...\n");
-      memcpy(&s.working_set, &s.master_set, sizeof(s.master_set));
-      int rc = select(s.max_sd + 1, &s.working_set, NULL, NULL, &s.timeout);
+      rc = select(max_sd + 1, &working_set, NULL, NULL, &timeout);
+
+      /**********************************************************/
+      /* Check to see if the select call failed.                */
+      /**********************************************************/
       if (rc < 0)
       {
-         perror("select() failed");
+         perror("  select() failed");
          break;
       }
-      if (rc == 0) // timeout 
+
+      /**********************************************************/
+      /* Check to see if the 3 minute time out expired.         */
+      /**********************************************************/
+      if (rc == 0)
       {
          printf("  select() timed out.  End program.\n");
          break;
       }
-      out ("1")
+
       /**********************************************************/
       /* One or more descriptors are readable.  Need to         */
       /* determine which ones they are.                         */
       /**********************************************************/
-      s.desc_ready = rc; // descriptor ready 
-      out (rc)
-      for (int i = 0; i <= s.max_sd && s.desc_ready > 0; ++i)
+      desc_ready = rc;
+      for (i=0; i <= max_sd  &&  desc_ready > 0; ++i)
       {
          /*******************************************************/
          /* Check to see if this descriptor is ready            */
          /*******************************************************/
-         if (FD_ISSET(i, &s.working_set))
+         if (FD_ISSET(i, &working_set))
          {
-            out ("2")
             /****************************************************/
             /* A descriptor was found that was readable - one   */
             /* less has to be looked for.  This is being done   */
@@ -84,21 +164,20 @@ int    main(int argc, char* argv[])
             /* once we have found all of the descriptors that   */
             /* were ready.                                      */
             /****************************************************/
-            s.desc_ready -= 1;
+            desc_ready -= 1;
 
             /****************************************************/
             /* Check to see if this is the listening socket     */
             /****************************************************/
-            if (i == s.listen_sd)
+            if (i == listen_sd)
             {
-               printf("Listening socket is readable\n");
+               printf("  Listening socket is readable\n");
                /*************************************************/
                /* Accept all incoming connections that are      */
                /* queued up on the listening socket before we   */
                /* loop back and call select again.              */
                /*************************************************/
-               int new_sd = 0;
-               while (new_sd != -1)
+               do
                {
                   /**********************************************/
                   /* Accept each incoming connection.  If       */
@@ -107,15 +186,13 @@ int    main(int argc, char* argv[])
                   /* failure on accept will cause us to end the */
                   /* server.                                    */
                   /**********************************************/
-                  new_sd = accept(s.listen_sd, NULL, NULL);
-                  out ("ACCEPTED NEW SD")
+                  new_sd = accept(listen_sd, NULL, NULL);
                   if (new_sd < 0)
                   {
-                     out (" NEW SD < 0")
                      if (errno != EWOULDBLOCK)
                      {
                         perror("  accept() failed");
-                        s.end_server = TRUE;
+                        end_server = TRUE;
                      }
                      break;
                   }
@@ -124,25 +201,26 @@ int    main(int argc, char* argv[])
                   /* Add the new incoming connection to the     */
                   /* master read set                            */
                   /**********************************************/
-                  printf("New incoming connection - %d\n", new_sd);
-                  FD_SET(new_sd, &s.master_set);  // add new SD to master set 
-                  if (new_sd > s.max_sd)
-                     s.max_sd = new_sd;
+                  printf("  New incoming connection - %d\n", new_sd);
+                  FD_SET(new_sd, &master_set);
+                  if (new_sd > max_sd)
+                     max_sd = new_sd;
 
                   /**********************************************/
                   /* Loop back up and accept another incoming   */
                   /* connection                                 */
                   /**********************************************/
-               } 
+               } while (new_sd != -1);
             }
+
             /****************************************************/
             /* This is not the listening socket, therefore an   */
             /* existing connection must be readable             */
             /****************************************************/
             else
             {
-               printf("Descriptor %d is readable\n", i); // i = the SD 
-               s.close_conn = FALSE;
+               printf("  Descriptor %d is readable\n", i);
+               close_conn = FALSE;
                /*************************************************/
                /* Receive all incoming data on this socket      */
                /* before we loop back and call select again.    */
@@ -155,16 +233,17 @@ int    main(int argc, char* argv[])
                   /* failure occurs, we will close the          */
                   /* connection.                                */
                   /**********************************************/
-                  rc = recv(i, s.buffer, sizeof(s.buffer), 0);
+                  rc = recv(i, buffer, sizeof(buffer), 0);
                   if (rc < 0)
                   {
                      if (errno != EWOULDBLOCK)
                      {
                         perror("  recv() failed");
-                        s.close_conn = TRUE;
+                        close_conn = TRUE;
                      }
                      break;
                   }
+
                   /**********************************************/
                   /* Check to see if the connection has been    */
                   /* closed by the client                       */
@@ -172,36 +251,28 @@ int    main(int argc, char* argv[])
                   if (rc == 0)
                   {
                      printf("  Connection closed\n");
-                     s.close_conn = TRUE;
+                     close_conn = TRUE;
                      break;
                   }
 
                   /**********************************************/
                   /* Data was received                          */
                   /**********************************************/
-                  int len = rc;
-                  printf("%d bytes received from SD %d\n", len, i);
-                  write(1, s.buffer, len); // << std::endl;
-                  char *tokens = s.buffer.strtok(s.buffer, " ") ;
-                  if (tokens == "/nick")
-                  {
-                     tokens = strtok (NULL, " "); 
-                     users[i].nickname = tokens[1];
-                  }
-                  bzero(s.buffer, strlen(s.buffer));
+                  len = rc;
+                  printf("  %d bytes received\n", len);
 
                   /**********************************************/
                   /* Echo the data back to the client           */
                   /**********************************************/
-                  rc = send(i, "Message recu !", 15, 0);
+                  rc = send(i, buffer, len, 0);
                   if (rc < 0)
                   {
                      perror("  send() failed");
-                     s.close_conn = TRUE;
+                     close_conn = TRUE;
                      break;
                   }
 
-               } while (FALSE); // TEST 
+               } while (FALSE);
 
                /*************************************************/
                /* If the close_conn flag was turned on, we need */
@@ -212,29 +283,28 @@ int    main(int argc, char* argv[])
                /* based on the bits that are still turned on in */
                /* the master set.                               */
                /*************************************************/
-               if (s.close_conn)
+               if (close_conn)
                {
-                  out ("Closing fd")
                   close(i);
-                  FD_CLR(i, &s.master_set);
-                  if (i == s.max_sd)
+                  FD_CLR(i, &master_set);
+                  if (i == max_sd)
                   {
-                     while (FD_ISSET(s.max_sd, &s.master_set) == FALSE)
-                        s.max_sd -= 1;
+                     while (FD_ISSET(max_sd, &master_set) == FALSE)
+                        max_sd -= 1;
                   }
                }
             } /* End of existing connection is readable */
          } /* End of if (FD_ISSET(i, &working_set)) */
       } /* End of loop through selectable descriptors */
 
-   } 
+   } while (end_server == FALSE);
 
    /*************************************************************/
    /* Clean up all of the sockets that are open                 */
    /*************************************************************/
-   for (int i = 0; i <= s.max_sd; ++i)
+   for (i=0; i <= max_sd; ++i)
    {
-      if (FD_ISSET(i, &s.master_set))
+      if (FD_ISSET(i, &master_set))
          close(i);
    }
 }

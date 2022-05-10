@@ -1,9 +1,8 @@
 
 
 
-
 class User {
-    private:
+    public:
         int         socket_descriptor; 
         std::string name;
         std::string nickname;

@@ -24,7 +24,7 @@ class Server {
     char   buffer[80];
     struct sockaddr_in6   addr;
     struct timeval       timeout;
-    fd_set        master_set;
+    fd_set        master_set, working_set;
 
 
 
@@ -42,12 +42,21 @@ class Server {
             close(listen_sd);
             exit(-1);
         }
-        out ("Part 1 ok");
+
+        int rc = ioctl(listen_sd, FIONBIO, (char*)&on);
+        if (rc < 0)
+        {
+            perror("ioctl() failed");
+            close(listen_sd);
+            exit(-1);
+        }
+        out("Part 1 ok");
+
+
         memset(&addr, 0, sizeof(addr));
         addr.sin6_family = AF_INET6;
         memcpy(&addr.sin6_addr, &in6addr_any, sizeof(in6addr_any));
         addr.sin6_port = htons(SERVER_PORT);
-
         rc = bind(listen_sd, (struct sockaddr*)&addr, sizeof(addr));
         if (rc < 0)
         {
