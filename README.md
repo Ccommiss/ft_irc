@@ -120,7 +120,7 @@ Unix socket ?
 - Local sockets (AF_UNIX) : provide comm between processes on a single system
 - Internet Protocol Sockets part og Internet Address Family (AF_INET for ipv4) : provide means of communicating between applications on different system via Transport Control Protocol.
 
-A soket is always defined by
+A socket is always defined by
 
 - its family (UNIX or INET)
 - its communication mode (datagram or stream, SOCK_DGRAM and SOCK STREAM)

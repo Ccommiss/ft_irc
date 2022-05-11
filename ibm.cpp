@@ -25,6 +25,9 @@
 
 #include "Server.hpp"
 #include "User.hpp"
+#include "Commands.hpp"
+
+void parse_cmd(User &user, Server &s);
 
 void check_connection(fd_set master_set, int listen_sd, int max_sd)
 {
@@ -44,8 +47,8 @@ void check_connection(fd_set master_set, int listen_sd, int max_sd)
 int    main(int argc, char* argv[])
 {
 
-	Server     s;
-	User     users[10]; // 10 user 
+	Server     	s;
+	User     	users[10]; // 10 user 
 
 	while (s.end_server == 0)
 	{
@@ -70,29 +73,16 @@ int    main(int argc, char* argv[])
 				if (i == s.listen_sd)
 				{
 					int new_sd = 0;
-				//	while (new_sd != -1)
-				//	{
-						new_sd = accept(s.listen_sd, NULL, NULL);
-							if (new_sd < 0)
+					new_sd = accept(s.listen_sd, NULL, NULL);
+					if (new_sd < 0)
+					{
+							if (errno != EWOULDBLOCK)// ca c gere par le non blocking
 							{
-									if (errno != EWOULDBLOCK)// ca c gere par le non blocking
-									{
-										perror("  accept() failed");
-										s.end_server = TRUE;
-									}
-							//	break;
+								perror("  accept() failed");
+								s.end_server = TRUE;
 							}
-						
-						std::stringstream ss;
-						ss << new_sd;
-						std::string str = ss.str();
-						std::string tmp = "Guest " + str;
-						users[new_sd].nickname = tmp;
-						FD_SET(new_sd, &s.master_set);  // add new SD to master set 
-						out(users[new_sd].nickname << " joined the chat !"); 
-						if (new_sd > s.max_sd)
-							s.max_sd = new_sd;
-					//}
+					}
+					s.welcome_user(new_sd, users[new_sd]);
 				}
 				else
 				{
@@ -114,35 +104,17 @@ int    main(int argc, char* argv[])
 						break;
 					}
 					std::cout << users[i].nickname << " says : " << s.buffer;
-					char* tokens = strtok(s.buffer, " ");
-					if (strcmp(tokens, "/nick") == 0)
-					{
-						tokens = strtok(NULL, " ");
-						std::stringstream trimmer;
-						trimmer << tokens;
-						trimmer >> tokens;
-						users[i].nickname = tokens;
-						out("nickname set to " << users[i].nickname)
-					}
+					parse_cmd(users[i], s);
 					bzero(s.buffer, 80);
-					rc = send(i, "Message recu !", 15, 0);
+					if (FD_ISSET(i, &s.master_set))
+						rc = send(i, "Message recu !", 15, 0);
 					if (rc < 0)
 					{
 						perror("  send() failed");
 						s.close_conn = TRUE;
 						break;
 					}
-					if (s.close_conn)
-					{
-						out("Closing fd")
-							close(i);
-						FD_CLR(i, &s.master_set);
-						if (i == s.max_sd)
-						{
-							while (FD_ISSET(s.max_sd, &s.master_set) == FALSE)
-								s.max_sd -= 1;
-						}
-					}
+			
 				} /* End of existing connection is readable */
 			} /* End of if (FD_ISSET(i, &working_set)) */
 		} /* End of loop through selectable descriptors */
