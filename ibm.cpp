@@ -70,8 +70,8 @@ int    main(int argc, char* argv[])
 				if (i == s.listen_sd)
 				{
 					int new_sd = 0;
-					while (new_sd != -1)
-					{
+				//	while (new_sd != -1)
+				//	{
 						new_sd = accept(s.listen_sd, NULL, NULL);
 							if (new_sd < 0)
 							{
@@ -80,7 +80,7 @@ int    main(int argc, char* argv[])
 										perror("  accept() failed");
 										s.end_server = TRUE;
 									}
-								break;
+							//	break;
 							}
 						
 						std::stringstream ss;
@@ -92,7 +92,7 @@ int    main(int argc, char* argv[])
 						out(users[new_sd].nickname << " joined the chat !"); 
 						if (new_sd > s.max_sd)
 							s.max_sd = new_sd;
-					}
+					//}
 				}
 				else
 				{

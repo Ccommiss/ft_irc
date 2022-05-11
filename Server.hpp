@@ -45,13 +45,13 @@ class Server {
             exit(-1);
         }
 
-        int rc = ioctl(listen_sd, FIONBIO, (char*)&on);
-        if (rc < 0)
-        {
-            perror("ioctl() failed");
-            close(listen_sd);
-            exit(-1);
-        }
+        // int rc = ioctl(listen_sd, FIONBIO, (char*)&on);
+        // if (rc < 0)
+        // {
+        //     perror("ioctl() failed");
+        //     close(listen_sd);
+        //     exit(-1);
+        // }
         out("Part 1 ok");
 
 
