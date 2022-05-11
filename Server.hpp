@@ -12,7 +12,8 @@
 #include <netinet/in.h>
 #include <sys/select.h>
 #include "User.hpp"
-#define SERVER_PORT  12345
+#define SERVER_PORT 6667
+
 
 #define out(x) std::cout << x << std::endl;
 

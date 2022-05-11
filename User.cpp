@@ -14,6 +14,7 @@ User::User() : socket_descriptor(0)
 
 User::User( const User & src )
 {
+    (void)src;
 }
 
 
@@ -32,6 +33,7 @@ User::~User()
 
 User &				User::operator=( User const & rhs )
 {
+    (void)rhs;
 	//if ( this != &rhs )
 	//{
 		//this->_value = rhs.getValue();
@@ -41,6 +43,7 @@ User &				User::operator=( User const & rhs )
 
 std::ostream &			operator<<( std::ostream & o, User const & i )
 {
+    (void)i;
 	//o << "Value = " << i.getValue();
 	return o;
 }

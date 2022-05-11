@@ -18,7 +18,7 @@
 #include <fcntl.h>
 #include <string>
 #include <sstream>
-#define SERVER_PORT  12345
+#define SERVER_PORT  6667
 
 #define TRUE             1
 #define FALSE            0
@@ -44,7 +44,7 @@ void check_connection(fd_set master_set, int listen_sd, int max_sd)
 
 
 
-int    main(int argc, char* argv[])
+int    main()//int argc, char* argv[])
 {
 
 	Server     	s;
@@ -76,11 +76,11 @@ int    main(int argc, char* argv[])
 					new_sd = accept(s.listen_sd, NULL, NULL);
 					if (new_sd < 0)
 					{
-							if (errno != EWOULDBLOCK)// ca c gere par le non blocking
-							{
-								perror("  accept() failed");
-								s.end_server = TRUE;
-							}
+						if (errno != EWOULDBLOCK)// ca c gere par le non blocking
+						{
+							perror("  accept() failed");
+							s.end_server = TRUE;
+						}
 					}
 					s.welcome_user(new_sd, users[new_sd]);
 				}
@@ -99,8 +99,11 @@ int    main(int argc, char* argv[])
 					}
 					if (rc == 0)
 					{
-						printf("  Connection closed\n");
+						printf(" Connection closed\n");
 						s.close_conn = TRUE;
+						out (i);
+						out (s.listen_sd)
+						out (s.end_server);
 						break;
 					}
 					std::cout << users[i].nickname << " says : " << s.buffer;

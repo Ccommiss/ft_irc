@@ -33,8 +33,6 @@ void parse_cmd(User &user, Server &s) //envoyer users[i]
 {
     std::string buff(s.buffer);
     std::vector<std::string> res = split(buff);
-    for (std::vector<std::string>::iterator it = res.begin(); it != res.end(); it++)
-        out ("CMD = " << *it);
 
     typedef void (*Cmd)(Server &s, User &user, std::string arg);
     std::map<std::string, Cmd> cmd_map;
@@ -45,10 +43,14 @@ void parse_cmd(User &user, Server &s) //envoyer users[i]
     {
         out ("found")
         Cmd a = cmd_map.at(*res.begin());
-        (*a)(s, user, *(res.begin() + 1)); // on envoie le deuxieme arg
-    }
-
-	
-
-    
+        if (res.size() > 2)
+        {
+            out ("lol")
+            (*a)(s, user, *(res.begin() + 1)); // on envoie le deuxieme arg
+        }
+        else
+        {   out ("lolt")
+            (*a)(s, user, ""); 
+        }
+    }  
 }

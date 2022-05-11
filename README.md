@@ -23,7 +23,10 @@ _Make your own Internet Relay Chat_
   - [&emsp; <st> A. What is a socket ? </st>](#-st-a-what-is-a-socket--st)
     - [AF_INET](#af_inet)
   - [&emsp; <st> B. Netcat tool </st>](#-st-b-netcat-tool-st)
-- [<t> III. IRC Commands and grammar </t>](#t-iii-irc-commands-and-grammar-t)
+- [<t> III. IRC Specs, commands and grammar </t>](#t-iii-irc-specs-commands-and-grammar-t)
+  - [&emsp; <st> A. IRC definitions </st>](#-st-a-irc-definitions-st)
+    - [Channels and operators](#channels-and-operators)
+    - [Numeric replies](#numeric-replies)
 
 ## <t> I. Introduction </t>
 
@@ -259,12 +262,45 @@ Contains the following macro features :
 
 - 
 
-## <t> III. IRC Commands and grammar </t>
+## <t> III. IRC Specs, commands and grammar </t>
 
-- Always formatted as ``` /command ```.
+
+### &emsp; <st> A. IRC definitions </st>
+
+
+
+
+
+
+#### Channels and operators 
+
+<def> Channel </def> : group of one or more client, implicitely created when first client joins. "Owned" by a channel operator. 
+
+
+Formatting :
+``` &chanel or #chanel```
+- does not contain white space or comma.
+
+- If there are multiple users on a server in the same
+   channel, the message text is sent only once to that server and then
+   sent to each client on the channel. 
+
+
+<def> Operators </def> : clients with special powers, eg. bam someone. 
+
+``` txt
+KICK    - Eject a client from the channel
+MODE    - Change the channel's mode
+INVITE  - Invite a client to an invite-only channel (mode +i)
+TOPIC   - Change the channel topic in a mode +t channel
+```
 
 Project steps
 
 <https://celeo.github.io/2021/06/18/Implementing-an-IRC-server-from-scratch-part-1/>
 
--
+
+
+#### Numeric replies 
+
+

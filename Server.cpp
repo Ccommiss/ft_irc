@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "User.hpp"
 #include <sstream>
+#include <sys/ioctl.h>
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
@@ -22,13 +23,13 @@ Server::Server() : max_sd(0), desc_ready(0), end_server(0), on(1)
         exit(-1);
     }
     out ("ok")
-    // int rc = ioctl(listen_sd, FIONBIO, (char*)&on);
-    // if (rc < 0)
-    // {
-    //     perror("ioctl() failed");
-    //     close(listen_sd);
-    //     exit(-1);
-    // }
+    int lol = ioctl(listen_sd, FIONBIO, (char*)&on);
+    if (lol < 0)
+    {
+        perror("ioctl() failed");
+        close(listen_sd);
+        exit(-1);
+    }
     memset(&addr, 0, sizeof(addr));
     addr.sin6_family = AF_INET6;
     memcpy(&addr.sin6_addr, &in6addr_any, sizeof(in6addr_any));
