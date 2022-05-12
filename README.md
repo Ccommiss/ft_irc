@@ -26,9 +26,14 @@ _Make your own Internet Relay Chat_
 - [<t> III. IRC Specs, commands and grammar </t>](#t-iii-irc-specs-commands-and-grammar-t)
   - [&emsp; <st> A. IRC definitions </st>](#-st-a-irc-definitions-st)
     - [Channels and operators](#channels-and-operators)
-    - [Numeric replies](#numeric-replies)
+    - [Numeric replies[^1]](#numeric-replies1)
+  - [&emsp; <st> C. Grammar</st>](#-st-c-grammarst)
+    - [&emsp; 1. Study case 1 : User registration](#-1-study-case-1--user-registration)
+    - [&emsp; 2. Study case 2 : Failing and server replies](#-2-study-case-2--failing-and-server-replies)
 
 ## <t> I. Introduction </t>
+
+---
 
 ### &emsp; <st> A. IRC : history, definition </st>
 
@@ -102,6 +107,7 @@ Schema from RFC 1459:
 
 ## <t> II. TCP protocol and socket programming </t>
 
+---
 <http://www.lsv.fr/~rodrigue/teach/npp/2012/tp1.pdf>
 
 ### &emsp; <st> A. What is a socket ? </st>
@@ -244,6 +250,7 @@ small write(2)) without blocking.
 Prototype : ```int select(int nfds, fd_set *restrict readfds, fd_set*restrict writefds, fd_set *restrict exceptfds, struct timeval*restrict timeout);```
 
 ```rc = select(max_sd + 1, &working_set, NULL, NULL, &timeout);```
+
 - rc is an int;
 - nfds = max_sd = highest FD. + 1.
 - readfds = The file descriptors in this set are watched to see if they are ready for reading.  A file descriptor is ready for reading if a read operation will not block;
@@ -260,33 +267,26 @@ Contains the following macro features :
 - FD_CLR() : removes the file descriptor fd from set.
 - FD_ISSET() : select() modifies the contents of the sets according to the rules described below.  After calling select(), the FD_ISSET() macro can be used to test if a file descriptor is still present in a set.
 
-- 
-
 ## <t> III. IRC Specs, commands and grammar </t>
 
+---
 
 ### &emsp; <st> A. IRC definitions </st>
 
+#### Channels and operators
 
-
-
-
-
-#### Channels and operators 
-
-<def> Channel </def> : group of one or more client, implicitely created when first client joins. "Owned" by a channel operator. 
-
+<def> Channel </def> : group of one or more client, implicitely created when first client joins. "Owned" by a channel operator.
 
 Formatting :
-``` &chanel or #chanel```
+```&chanel or #chanel```
+
 - does not contain white space or comma.
 
 - If there are multiple users on a server in the same
    channel, the message text is sent only once to that server and then
-   sent to each client on the channel. 
+   sent to each client on the channel.
 
-
-<def> Operators </def> : clients with special powers, eg. bam someone. 
+<def> Operators </def> : clients with special powers, eg. bam someone.
 
 ``` txt
 KICK    - Eject a client from the channel
@@ -299,8 +299,109 @@ Project steps
 
 <https://celeo.github.io/2021/06/18/Implementing-an-IRC-server-from-scratch-part-1/>
 
+#### Numeric replies[^1]
 
+Server server communication :
+:Name COMMAND parameter list
 
-#### Numeric replies 
+Must be formatted like :
+``` :<nickname>@<username>!<hostname> <COMMAND> <arg>\r\n ```
 
+Ex. Someone joins a server : greed him with a welcome message (rpl code n001).[^2]
 
+**Exemple**:
+> **Command**: NICK
+   **Parameters**:```<nickname>```
+
+=> Sent by client. When a user types in its client, this is how the client will format the request and send it to server. Thus, the server should be able to parse it accordingly.
+
+### &emsp; <st> C. Grammar</st>
+
+```txt
+The Augmented BNF representation for this is:
+
+    message    =  [ ":" prefix SPACE ] command [ params ] crlf
+    prefix     =  servername / ( nickname [ [ "!" user ] "@" host ] )
+    command    =  1*letter / 3digit
+    params     =  *14( SPACE middle ) [ SPACE ":" trailing ]
+               =/ 14( SPACE middle ) [ SPACE [ ":" ] trailing ]
+
+    nospcrlfcl =  %x01-09 / %x0B-0C / %x0E-1F / %x21-39 / %x3B-FF
+                    ; any octet except NUL, CR, LF, " " and ":"
+    middle     =  nospcrlfcl *( ":" / nospcrlfcl )
+    trailing   =  *( ":" / " " / nospcrlfcl )
+
+    SPACE      =  %x20        ; space character
+    crlf       =  %x0D %x0A   ; "carriage return" "linefeed"
+```
+
+Please refer to the glossary for further understanding of syntax.[^4]  
+
+**What does it really mean ?**
+
+- When a client (ex: IRSSI) sends the message, it pre-format it in order to be understood for the server. Clients also hide answer from server. This is not the case when simply using a TCP connection via Telnet.
+
+- Thus, for exemple, to register to a server, one should provide at least two command : NICK and USER. These are directly set by client, acccordingly to settings (located in irssi.conf file, for example).
+- But manually, we have to set it. Let us see how to connect via ```telnet irc.root-me.org 6667```
+
+#### &emsp; 1. Study case 1 : User registration
+
+<pre>
+Trying 51.210.70.121...
+Connected to irc.hackerzvoice.net.
+Escape character is '^]'.
+:irc.hackerzvoice.net NOTICE Auth :***Looking up your hostname...
+:irc.hackerzvoice.net NOTICE Auth :*** Could not resolve your hostname: Domain name not found; using your IP address (62.210.34.103) instead.
+NICK c
+USER guest 0 * :Ronnie Reagan
+:irc.hackerzvoice.net NOTICE Auth :Welcome to HackerzVoice!
+:irc.hackerzvoice.net 001 c :Welcome to the HackerzVoice IRC Network c!guest@62.210.34.103
+:irc.hackerzvoice.net 002 c :Your host is irc.hackerzvoice.net, running version InspIRCd-2.0
+:irc.hackerzvoice.net 003 c :This server was created 19:52:09 Aug 12 2013
+:irc.hackerzvoice.net 004 c irc.hackerzvoice.net InspIRCd-2.0 BHIRSWcghiorswx FLMNPRSYabcefhijklmnopqrstvz FLYabefhjkloqv
+[...]
+:c!guest@hzv-9qh.hrv.26em53.IP MODE c +x
+</pre>
+
+- Let us decompose step by step :
+- **STEP 1 : CLIENT REQUEST** ```NICK c and USER guest 0 * :Ronnie Reagan``` : we complied to RFC for formatting requests to server for command NICK and USER, which are strictly necessary (while PASS command is optional)
+
+- **STEP 2 : SERVER ANSWER** ```:irc.hackerzvoice.net 001 c :``` : this is the answer from the server. Not all commands request replies from server ; but for user registration, our current study case, this is mandatory.[^3] It complies to the BNF requirements seen above. Remember a message is formmated this way:     ```message    =  [ ":" prefix SPACE ] command [ params ] crlf```
+
+  - ```:irc.hackerzvoice.net``` : servername (in macro prefix), tells the origin of a message.
+  - ```001``` : numeric reply code (3 digits, in macro command). Stands for ```RPL WELCOME```.
+  - ```c``` : my nick but I genuinely do not know which BNF standard it complies to, sorry.
+
+- **STEP 2 : SERVER COMMAND** ```:c!guest@hzv-9qh.hrv.26em53.IP MODE c +x``` : another way if formatting with
+
+  - ```:c!guest@hzv-9qh.hrv.26em53.IP``` as  ```nickname [ [ "!" user ] "@" host ]``` (prefix). This is the full client identifier ```<nick>!<user>@<host>```.
+
+  - ```MODE``` as command
+  - ```c +x``` as param.
+
+#### &emsp; 2. Study case 2 : Failing and server replies
+
+Following the first example, we are now trying to create a user with a nick that will be already in use.
+
+``` txt
+NICK amy
+:bar.exemple.com 433 * amy :Nickname is already in use 
+```
+
+What does it mean ? Let's take a look back step by step.
+
+- ```:bar.exemple.com``` prefix, servername.
+- ```433```: numeric reply, code for ```ERR_NICKNAMEINUSE``` returned by NICK as mentionned in [RFC 2812](https://www.rfcreader.com/#rfc2812_line450)
+- ```*``` : usually the nick name, but it could not be set, thus it is not written and replaced by a wildcard
+- ```"<nick> :Nickname is already in use"``` i the formatted message for error 433 specified in RFC. 
+
+**More info about replies formatting :**
+<iframe
+  src="http://chi.cs.uchicago.edu/chirc/irc_examples.html"
+  style="width:100%; height:400px;"
+></iframe>
+
+[^1]: See <https://ircgod.com/posts/ircserver1/building-an-irc-server-1/>
+[^2]: See <https://www.rfcreader.com/#rfc2812_line1943>
+[^3]: See "3.1 Connection Registration", _RFC 2812_ , <https://www.rfcreader.com/#rfc2812_line411>
+[^4]: Little glossary . Note: / stands for alternative, <   and > are for rul naming, *rule for repetiton, [rule] is optional.
