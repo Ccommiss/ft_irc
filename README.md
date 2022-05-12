@@ -40,6 +40,10 @@ _Make your own Internet Relay Chat_
 - IRC : Internet Relay Chat
 - Creation : 1988
 - Initial documentation : [RFC 1459](https://www.rfcreader.com/#rfc1459)
+- Current doc : RFC 2810, RFC 2812(client to server), RFC 2813 (server to server).
+- Text-based protocol : encoded plain ASCII messgages.
+- Message : 512 chars max, ended by CR-LF ("\r\n"), composed of command + command param (max : 15 params).
+
 
 ### &emsp; <st> B. General architecture of IRC protocol : described as a "network of networks" base on client server model </st>
 
