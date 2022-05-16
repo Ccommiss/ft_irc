@@ -6,7 +6,6 @@
 #include <map>
 #include "Commands.hpp"
 
-void nick(Server &s, User &u, std::string nick);
 
 
 
@@ -38,22 +37,16 @@ void parse_cmd(User &user, Server &s) //envoyer users[i]
     std::string buff(s.buffer);
     std::vector<std::string> res = split(buff);
 
-    typedef void (*Cmd)(Server &s, User &user, std::string arg);
+    typedef void (*Cmd)(Server &s, User &user, std::vector<std::string> arg);
 
     std::map<std::string, Cmd> cmd_map;
-    cmd_map.insert(std::make_pair("/nick", &nick));
+    cmd_map.insert(std::make_pair("CAP", &nick));
+    cmd_map.insert(std::make_pair("NICK", &nick));
     cmd_map.insert(std::make_pair("/exit", &quit_s));
     
     if (cmd_map.find(*res.begin()) != cmd_map.end())
     {
         Cmd a = cmd_map.at(*res.begin());
-        if (res.size() > 2)
-        {
-            (*a)(s, user, *(res.begin() + 1)); // on envoie le deuxieme arg
-        }
-        else
-        {  
-            (*a)(s, user, ""); 
-        }
-    }  
+        (*a)(s, user, res); // on envoie le deuxieme arg
+    } // pour les messages slt  ; page accueil on peut que faire des cmd !!! 
 }

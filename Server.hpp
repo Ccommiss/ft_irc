@@ -12,6 +12,8 @@
 #include <netinet/in.h>
 #include <sys/select.h>
 #include "User.hpp"
+#include <vector>
+#include <map>
 #define SERVER_PORT 6667
 
 
