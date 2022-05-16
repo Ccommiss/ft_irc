@@ -405,7 +405,7 @@ What does it mean ? Let's take a look back step by step.
   style="width:100%; height:400px;"
 ></iframe>
 
-**Other resources**
+**Other resources **  
 list of commands : https://linux.developpez.com/formation_debian/irc.html
 
 operators' level : https://wiki.mibbit.com/index.php/Channel_operator
