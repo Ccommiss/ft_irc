@@ -406,6 +406,7 @@ What does it mean ? Let's take a look back step by step.
 ></iframe>
 
 **Other resources**
+  
 list of commands : https://linux.developpez.com/formation_debian/irc.html
 
 operators' level : https://wiki.mibbit.com/index.php/Channel_operator
