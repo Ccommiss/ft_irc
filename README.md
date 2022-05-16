@@ -405,7 +405,14 @@ What does it mean ? Let's take a look back step by step.
   style="width:100%; height:400px;"
 ></iframe>
 
+**Other resources**
+list of commands : https://linux.developpez.com/formation_debian/irc.html
+
+operators' level : https://wiki.mibbit.com/index.php/Channel_operator
+
+
 [^1]: See <https://ircgod.com/posts/ircserver1/building-an-irc-server-1/>
 [^2]: See <https://www.rfcreader.com/#rfc2812_line1943>
 [^3]: See "3.1 Connection Registration", _RFC 2812_ , <https://www.rfcreader.com/#rfc2812_line411>
 [^4]: Little glossary . Note: / stands for alternative, <   and > are for rul naming, *rule for repetiton, [rule] is optional.
+

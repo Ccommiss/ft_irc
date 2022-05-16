@@ -22,7 +22,7 @@ class Server {
     public:
     int           on;
     int           listen_sd;
-    int           max_sd; //va compter le nb de SD 
+    int           max_sd; //va compter le nb de SD
     int           desc_ready, end_server; 
     int           close_conn;
     char          buffer[80];
