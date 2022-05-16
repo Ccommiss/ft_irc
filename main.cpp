@@ -27,28 +27,19 @@
 #include "User.hpp"
 #include "Commands.hpp"
 
-void parse_cmd(User &user, Server &s);
-
-void check_connection(fd_set master_set, int listen_sd, int max_sd)
-{
-	for (int x = listen_sd; x <= max_sd + 1; x++)
-	{
-		if (FD_ISSET(x, &master_set) == 1 && x == listen_sd) // new_sd > max_sd))
-			printf("Listening socket : %d is connected\n", x);
-		else if (FD_ISSET(x, &master_set) == 1)
-			printf("SD %d is connected\n", x);
-		else
-			std::cout << "SD " << x << "not set" << std::endl;
-	}
-}
 
 
 
-int    main()//int argc, char* argv[])
+/*
+**	All credits to : 
+**	https://www.ibm.com/docs/en/i/7.1?topic=designs-example-nonblocking-io-select  
+*/
+int    main()
 {
 
 	Server     	s;
-	User     	users[10]; // 10 user 
+	User     	users[10];
+
 
 	while (s.end_server == 0)
 	{
@@ -76,12 +67,13 @@ int    main()//int argc, char* argv[])
 					new_sd = accept(s.listen_sd, NULL, NULL);
 					if (new_sd < 0)
 					{
-						if (errno != EWOULDBLOCK)// ca c gere par le non blocking
+						if (errno != EWOULDBLOCK)
 						{
 							perror("  accept() failed");
 							s.end_server = TRUE;
 						}
 					}
+					// See Server 
 					s.welcome_user(new_sd, users[new_sd]);
 				}
 				else

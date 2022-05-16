@@ -22,7 +22,6 @@ Server::Server() : max_sd(0), desc_ready(0), end_server(0), on(1)
         close(listen_sd);
         exit(-1);
     }
-    out ("ok")
     int lol = ioctl(listen_sd, FIONBIO, (char*)&on);
     if (lol < 0)
     {
@@ -47,7 +46,6 @@ Server::Server() : max_sd(0), desc_ready(0), end_server(0), on(1)
         close(listen_sd);
         exit(-1);
     }
-    out ("ok2")
     FD_ZERO(&master_set); // initilize FD set 
     max_sd = listen_sd;
     FD_SET(listen_sd, &master_set);

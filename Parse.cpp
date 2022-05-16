@@ -29,27 +29,30 @@ std::vector<std::string> split(std::string x)
     return splitted;
 }
 
+
+/*
+**  
+*/
 void parse_cmd(User &user, Server &s) //envoyer users[i]
 {
     std::string buff(s.buffer);
     std::vector<std::string> res = split(buff);
 
     typedef void (*Cmd)(Server &s, User &user, std::string arg);
+
     std::map<std::string, Cmd> cmd_map;
     cmd_map.insert(std::make_pair("/nick", &nick));
     cmd_map.insert(std::make_pair("/exit", &quit_s));
     
     if (cmd_map.find(*res.begin()) != cmd_map.end())
     {
-        out ("found")
         Cmd a = cmd_map.at(*res.begin());
         if (res.size() > 2)
         {
-            out ("lol")
             (*a)(s, user, *(res.begin() + 1)); // on envoie le deuxieme arg
         }
         else
-        {   out ("lolt")
+        {  
             (*a)(s, user, ""); 
         }
     }  

@@ -4,7 +4,7 @@
 
 SOURCES		+=           		\
 		User.cpp            	\
-		ibm.cpp             	\
+		main.cpp             	\
 		Server.cpp          	\
 		utils.cpp           	\
 		Channel.cpp         	\
