@@ -7,6 +7,7 @@
 class User {
     public:
         int         socket_descriptor;
+        int registered;
         std::string name;
         std::string nickname;
 
