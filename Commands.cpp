@@ -8,7 +8,7 @@
 
 void nick(Server &s, User &u, std::vector<std::string> arg)
 {
-    out ("NICK CMD" << *arg.begin())
+    out ("NICK CMD with nick = " << *(arg.begin() + 1));
     u.setNickName(*(arg.begin() + 1));
 
     send(u.socket_descriptor, ":irc.hackerzvoice.net 001 claire :Welcome to the HackerzVoice IRC Network claire!c@62.210.34.48", 96, 0);
@@ -21,4 +21,19 @@ void quit_s(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
 {
     out ("QUIT CMD" << *arg.begin())
     s.quit_server(u);
+}
+
+void join(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
+{
+    out ("JOIN THSI CHANN CMD" << *(arg.begin() + 1))
+    // try (s.chans[arg.begin() + 1])
+    // {
+    //     s.chans[arg.begin() + 1].join(u); // simple join
+    // }
+    // catch 
+    // {
+    //     s.chans.push_back(arg.begin() + 1);
+    //     s.chans[arg.begin() + 1].join(u); //lemettre en admin car nb user de ce chan == 0
+    // }
+
 }

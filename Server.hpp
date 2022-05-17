@@ -19,6 +19,8 @@
 
 #define out(x) std::cout << x << std::endl;
 
+struct Channel; // penser a inclure le Channel.hpp ! 
+
 class Server {
 
     public:
@@ -31,6 +33,8 @@ class Server {
     struct        sockaddr_in6   addr;
     struct        timeval       timeout;
     fd_set        master_set, working_set;
+
+    std::vector<Channel>        chans;
 
 
 

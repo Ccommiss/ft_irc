@@ -7,6 +7,8 @@ std::string trim(const std::string &s);
 void nick(Server &s, User &u, std::vector<std::string> arg);
 
 void quit_s(Server &s, User &u, std::vector<std::string> nick); // exit ou quit
+void join(Server &s, User &u, std::vector<std::string> arg);
+
 std::string ltrim(const std::string &s);
 void parse_cmd(User &user, Server &s);
 
