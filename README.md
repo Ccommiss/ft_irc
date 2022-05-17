@@ -373,7 +373,7 @@ USER guest 0 * :Ronnie Reagan
 - **STEP 2 : SERVER ANSWER** ```:irc.hackerzvoice.net 001 c :``` : this is the answer from the server. Not all commands request replies from server ; but for user registration, our current study case, this is mandatory.[^3] It complies to the BNF requirements seen above. Remember a message is formmated this way:     ```message    =  [ ":" prefix SPACE ] command [ params ] crlf```
 
   - ```:irc.hackerzvoice.net``` : servername (in macro prefix), tells the origin of a message.
-  - ```001``` : numeric reply code (3 digits, in macro command). Stands for ```RPL WELCOME```.
+  - `````` : numeric reply code (3 digits, in macro command). Stands for ```RPL WELCOME```.
   - ```c``` : my nick but I genuinely do not know which BNF standard it complies to, sorry.
 
 - **STEP 2 : SERVER COMMAND** ```:c!guest@hzv-9qh.hrv.26em53.IP MODE c +x``` : another way if formatting with

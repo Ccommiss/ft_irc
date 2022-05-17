@@ -12,10 +12,14 @@
 #include <netinet/in.h>
 #include <sys/select.h>
 #include "User.hpp"
+#include <vector>
+#include <map>
 #define SERVER_PORT 6667
 
 
 #define out(x) std::cout << x << std::endl;
+
+struct Channel; // penser a inclure le Channel.hpp ! 
 
 class Server {
 
@@ -29,6 +33,8 @@ class Server {
     struct        sockaddr_in6   addr;
     struct        timeval       timeout;
     fd_set        master_set, working_set;
+
+    std::vector<Channel>        chans;
 
 
 
