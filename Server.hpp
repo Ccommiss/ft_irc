@@ -12,10 +12,22 @@
 #include <netinet/in.h>
 #include <sys/select.h>
 #include "User.hpp"
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <utility>
+
+
+#include "Channel.hpp"
+#include "User.hpp"
+#include "Commands.hpp"
 #define SERVER_PORT 6667
 
 
 #define out(x) std::cout << x << std::endl;
+
+class Channel;
+//struct Channel; // penser a inclure le Channel.hpp ! 
 
 class Server {
 
@@ -30,7 +42,7 @@ class Server {
     struct        timeval       timeout;
     fd_set        master_set, working_set;
 
-
+    std::map<std::string, Channel>        chans;
 
     Server();
     Server &	operator=(Server const & rhs);

@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/17 13:28:28 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/17 14:35:08 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ std::ostream &			operator<<( std::ostream & o, Channel const & i )
 void Channel::ban(User &kicked)
 {
 	_banned.push_back(kicked);
-	std::vector<User &>::iterator kick;
+	std::vector<User>::iterator kick;
 	kick = std::find(_users.begin(), _users.end(), kicked);
 	if (kick != _users.end())
 		_users.erase(kick);
@@ -93,10 +93,13 @@ void Channel::ban(User &kicked)
 //add a new_user, what happends if the name already exists ?
 void Channel::add_user(User &new_user)
 {
-	std::vector<User &>::iterator add;
+	std::vector<User>::iterator add;
 	add = std::find(_users.begin(), _users.end(), add);
 	if (add != _users.end())
+	{
 		_users.push_back(new_user);
+		std::cout << "a wild user appeared " << std::endl;
+	}
 	else
 		std::cout << "this user already exist" << std::endl;	
 	
@@ -104,7 +107,7 @@ void Channel::add_user(User &new_user)
 
 void Channel::add_operator(User &admin)
 {
-	std::vector<User &>::iterator add;
+	std::vector<User>::iterator add;
 	add = std::find(_operators.begin(), _operators.end(), admin);
 	if (add != _operators.end())
 		_operators.push_back(admin);
@@ -114,9 +117,9 @@ void Channel::add_operator(User &admin)
 
 void	Channel::me()
 {
-	std::vector<User &>::iterator it;
-	for (it = _users.begin(); it < _users.end(); it++)
-		std::cout << *it << std::endl;
+	// std::vector<User>::iterator it;
+	// for (it = _users.begin(); it < _users.end(); it++)
+	// 	std::cout << *it << std::endl;
 }
 
 void	Channel::set_topic(std::string topic)

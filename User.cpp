@@ -6,7 +6,7 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-User::User() : socket_descriptor(0)
+User::User() : socket_descriptor(0), registered(0)
 {
     this->name = "Guest";
     nickname = "Guest";

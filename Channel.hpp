@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:04 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/17 12:30:49 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/17 14:33:49 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ class Channel
 		void	me();
 		
 	private:
-		std::vector<User &>		_operators;
-		std::vector<User &>		_users;
+		std::vector<User >		_operators;
+		std::vector<User >		_users;
 		//std::vector<User &>		_invite;
 		//std::vector<User &>		_voice;
-		std::vector<User &> 	_banned;
+		std::vector<User > 		_banned;
 		User & 					_owner;
 		std::string				_name;
 		std::string				_topic;

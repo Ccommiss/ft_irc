@@ -98,7 +98,10 @@ int    main()
 						out (s.end_server);
 						break;
 					}
+					//std::string res = users[i].nickname << " says : " << s.buffer;
 					std::cout << users[i].nickname << " says : " << s.buffer;
+					//echo back 
+					send(i, s.buffer, strlen(s.buffer), 0);
 					parse_cmd(users[i], s);
 					bzero(s.buffer, 80);
 					if (FD_ISSET(i, &s.master_set))
