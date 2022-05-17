@@ -16,6 +16,7 @@
 #include <map>
 #include <algorithm>
 #include <utility>
+#include <numeric>
 
 
 #include "Channel.hpp"
@@ -43,6 +44,7 @@ class Server {
     fd_set        master_set, working_set;
 
     std::map<std::string, Channel>        chans;
+    //std::vector<Channel> chans;
 
     Server();
     Server &	operator=(Server const & rhs);

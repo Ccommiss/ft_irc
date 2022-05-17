@@ -1,7 +1,9 @@
 #ifndef COMMANDS_HPP
 # define COMMANDS_HPP
 # include "Server.hpp"
-// # include "User.hpp"
+# include "User.hpp"
+
+class Server;
 
 std::string     trim(const std::string &s);
 void            nick(Server &s, User &u, std::vector<std::string> arg);
