@@ -13,6 +13,7 @@ void join(Server &s, User &u, std::vector<std::string> arg);
 
 std::string ltrim(const std::string &s);
 void parse_cmd(User &user, Server &s);
+void server_reply(User *u, std::string code);
 
 
 

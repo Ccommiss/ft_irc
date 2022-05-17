@@ -19,7 +19,7 @@
 
 #define out(x) std::cout << x << std::endl;
 
-struct Channel; // penser a inclure le Channel.hpp ! 
+//struct Channel; // penser a inclure le Channel.hpp ! 
 
 class Server {
 
@@ -34,7 +34,7 @@ class Server {
     struct        timeval       timeout;
     fd_set        master_set, working_set;
 
-    std::vector<Channel>        chans;
+  //  std::vector<Channel>        chans;
 
 
 
