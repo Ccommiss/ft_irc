@@ -403,7 +403,7 @@ What does it mean ? Let's take a look back step by step.
 
 #### &emsp; 3. Study case 3 : channel chatting
 
-Telnet side (in order to be able to see server answers)
+Telnet side (in order to be able to see server answers - user is lol)
 
 ``` txt
 :lol!c@hzv-b03.hrv.26em53.IP MODE lol +x
@@ -423,7 +423,7 @@ hahaha
 PRIVMSG #LOL : MDR 
 ```
 
-Meanwhile, irssi side
+Meanwhile, irssi side (user is louveet)
 
 ``` txt
 18:01 -!- louveet [louveet@hzv-b03.hrv.26em53.IP] has joined #LOL
@@ -441,6 +441,11 @@ Meanwhile, irssi side
 18:04 <@lol>  MDR
 
 ```
+
+A few highlights :
+
+- ```:Claire!louveet@hzv-b03.hrv.26em53.IP PRIVMSG #LOL :Coucou``` : when a message is received from Claire to lol, this is a "server prefix-like" reply specifying the origin of the message.
+- Hypothesis : server tells PRIV MSG has been sent to all users in his specific channel. Send this specific message to all SD present in channel list of users. 
 
 
 

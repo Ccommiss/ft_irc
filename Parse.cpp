@@ -44,7 +44,6 @@ std::vector<std::string> split(std::string x)
 void parse_cmd(User &user, Server &s) // envoyer users[i]
 {
     std::string buff(s.buffer);
-	out ("RECEIVED BUFFER = " << buff)
 
     typedef void (*Cmd)(Server & s, User & user, std::vector<std::string> arg);
 

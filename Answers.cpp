@@ -24,7 +24,6 @@ std::string set_prefix(User *u, std::vector<std::string> cmd)
      txt.append("\r\n");
     out(FG2("Server Reply to be sent:"));
     out (txt)
-    out ("lol")
     return ((txt));
 }
 
@@ -52,14 +51,9 @@ void server_reply(User *u, std::string code)
     txt.append("\r\n");
     
     out(FG2("Server Reply to be sent:") << code);
-    out(u->socket_descriptor << " ->" << txt.c_str() << " with length " << txt.length());
+    out(txt.c_str());
     if (send(u->socket_descriptor, txt.c_str(), txt.length(), 0) < 0)
     {
         perror("SEND FAILED");
     }
-
-    // send(dest, ":localhost 001 louveet :Welcome to the HackerzVoice IRC Network louveet!louveet@127.0.0.1\n", 91, 0);
-    //  send(u.socket_descriptor, ":localhost 002 louveet :Your host is irc.hackerzvoice.net, running version InspIRCd-2.0\n", 89, 0);
-    // send(u.socket_descriptor, ":localhost 003 louveet :This server was created 19:52:09 Aug 12 2013\n", 70, 0);
-    // send(u.socket_descriptor, ":localhost 004 louveet irc.hackerzvoice.net InspIRCd-2.0 BHIRSWcghiorswx FLMNPRSYabcefhijklmnopqrstvz FLYabefhjkloqv\n", 118, 0);
 }

@@ -7,14 +7,15 @@
 
 void nick(Server &s, User &u, std::vector<std::string> arg)
 {
-    out("NICK CMD with nick = " << *(arg.begin() + 1));
+    if (u.registered == 0)
+        out (BOLD("Setting nickname to ") << *(arg.begin() + 1));
+
 
 
     if (u.registered == 1)
     {
         std::string txt = set_prefix(&u, arg); // password for nick
-        out ("Changing NICK");
-        out (txt);
+        out (BOLD("Changing nick name from ") << u.nickname << " to " << *(arg.begin() + 1));
         if (send(u.socket_descriptor, txt.c_str(), txt.length(), 0) < 0)
         perror ("Fail send");
     }
