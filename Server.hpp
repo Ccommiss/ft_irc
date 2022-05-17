@@ -18,8 +18,7 @@
 
 
 #define out(x) std::cout << x << std::endl;
-
-struct Channel; // penser a inclure le Channel.hpp ! 
+//struct Channel; // penser a inclure le Channel.hpp ! 
 
 class Server {
 
@@ -29,12 +28,12 @@ class Server {
     int           max_sd; //va compter le nb de SD
     int           desc_ready, end_server; 
     int           close_conn;
-    char          buffer[80];
+    char          buffer[120];
     struct        sockaddr_in6   addr;
     struct        timeval       timeout;
     fd_set        master_set, working_set;
 
-    std::vector<Channel>        chans;
+  //  std::vector<Channel>        chans;
 
 
 

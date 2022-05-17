@@ -30,6 +30,7 @@ _Make your own Internet Relay Chat_
   - [&emsp; <st> C. Grammar</st>](#-st-c-grammarst)
     - [&emsp; 1. Study case 1 : User registration](#-1-study-case-1--user-registration)
     - [&emsp; 2. Study case 2 : Failing and server replies](#-2-study-case-2--failing-and-server-replies)
+    - [&emsp; 3. Study case 3 : channel chatting](#-3-study-case-3--channel-chatting)
 
 ## <t> I. Introduction </t>
 
@@ -398,6 +399,55 @@ What does it mean ? Let's take a look back step by step.
 - ```433```: numeric reply, code for ```ERR_NICKNAMEINUSE``` returned by NICK as mentionned in [RFC 2812](https://www.rfcreader.com/#rfc2812_line450)
 - ```*``` : usually the nick name, but it could not be set, thus it is not written and replaced by a wildcard
 - ```"<nick> :Nickname is already in use"``` i the formatted message for error 433 specified in RFC. 
+
+
+#### &emsp; 3. Study case 3 : channel chatting
+
+Telnet side (in order to be able to see server answers - user is lol)
+
+``` txt
+:lol!c@hzv-b03.hrv.26em53.IP MODE lol +x
+JOIN #LOL
+:lol!c@hzv-b03.hrv.26em53.IP JOIN :#LOL
+:irc.hackerzvoice.net 353 lol = #LOL :@lol 
+:irc.hackerzvoice.net 366 lol #LOL :End of /NAMES list.
+:louveet!louveet@hzv-b03.hrv.26em53.IP JOIN :#LOL
+:louveet!louveet@hzv-b03.hrv.26em53.IP PRIVMSG #LOL :Hey
+PRIVMSG #LOL : Coucou
+PRIVMSG #LOL : Hey .
+PRIVMSG #LOL : Plop
+:louveet!louveet@hzv-b03.hrv.26em53.IP NICK Claire
+:Claire!louveet@hzv-b03.hrv.26em53.IP PRIVMSG #LOL :Coucou 
+hahaha
+:irc.hackerzvoice.net 421 lol HAHAHA :Unknown command
+PRIVMSG #LOL : MDR 
+```
+
+Meanwhile, irssi side (user is louveet)
+
+``` txt
+18:01 -!- louveet [louveet@hzv-b03.hrv.26em53.IP] has joined #LOL
+18:01 [Users #lol]
+18:01 [@lol] [ louveet] 
+18:01 -!- Irssi: #lol: Total of 2 nicks [1 ops, 0 halfops, 0 voices, 1 normal]
+18:01 -!- Channel #LOL created Tue May 17 17:56:10 2022
+18:01 -!- Irssi: Join to #lol was synced in 0 secs
+18:02 < louveet> Hey
+18:02 <@lol>  Coucou
+18:02 <@lol>  Hey .
+18:03 <@lol>  Plop
+18:03 -!- You're now known as Claire
+18:03 < Claire> Coucou 
+18:04 <@lol>  MDR
+
+```
+
+A few highlights :
+
+- ```:Claire!louveet@hzv-b03.hrv.26em53.IP PRIVMSG #LOL :Coucou``` : when a message is received from Claire to lol, this is a "server prefix-like" reply specifying the origin of the message.
+- Hypothesis : server tells PRIV MSG has been sent to all users in his specific channel. Send this specific message to all SD present in channel list of users. 
+
+
 
 **More info about replies formatting :**
 <iframe

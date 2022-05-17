@@ -43,6 +43,7 @@ int    main()
 
 	while (s.end_server == 0)
 	{
+		bzero(s.buffer, 120);
 		memcpy(&s.working_set, &s.master_set, sizeof(s.master_set));
 		int rc = select(s.max_sd + 1, &s.working_set, NULL, NULL, &s.timeout);
 		if (rc < 0)
@@ -79,7 +80,7 @@ int    main()
 				else
 				{
 					s.close_conn = FALSE;
-					rc = recv(i, s.buffer, sizeof(s.buffer), 0);
+					rc = recv(i, s.buffer, 120, 0);
 					if (rc < 0)
 					{
 						if (errno != EWOULDBLOCK)
@@ -102,12 +103,12 @@ int    main()
 					std::cout << users[i].nickname << " says : " << s.buffer;
 					//echo back 
 					parse_cmd(users[i], s);
-					bzero(s.buffer, 80);
-					if (FD_ISSET(i, &s.master_set))
-						rc = send(i, "Message recu !", 15, 0);
+					bzero(s.buffer, 120);
+					//if (FD_ISSET(i, &s.master_set))
+					//	rc = send(i, "Message recu !", 15, 0);
 					if (rc < 0)
 					{
-						perror("  send() failed");
+						perror("send() failed");
 						s.close_conn = TRUE;
 						break;
 					}
