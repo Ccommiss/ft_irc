@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/17 12:31:28 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/17 13:28:28 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,6 @@ void	Channel::set_topic(std::string topic)
 	this->_topic = topic;
 }
 //Channel::invite 
-//Channel::topic set the topic of the channel
+//Channel::names ==> list connected users 
 
 /* ************************************************************************** */
