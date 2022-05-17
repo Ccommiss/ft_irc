@@ -405,11 +405,11 @@ What does it mean ? Let's take a look back step by step.
   style="width:100%; height:400px;"
 ></iframe>
 
-**Other resources**
-  
-list of commands : https://linux.developpez.com/formation_debian/irc.html
+**Other resources :** 
 
-operators' level : https://wiki.mibbit.com/index.php/Channel_operator
+list of commands :  https://linux.developpez.com/formation_debian/irc.html  
+                    https://fr.wikipedia.org/wiki/Aide:IRC/commandes
+operators' level :  https://wiki.mibbit.com/index.php/Channel_operator
 
 
 [^1]: See <https://ircgod.com/posts/ircserver1/building-an-irc-server-1/>

@@ -2,6 +2,7 @@
 # define USER_HPP
 
 #include <iostream> 
+#include <vector>
  
 
 class User {
