@@ -29,7 +29,7 @@ class Server {
     int           max_sd; //va compter le nb de SD 
     int           desc_ready, end_server; 
     int           close_conn;
-    char          buffer[80];
+    char          buffer[120];
     struct        sockaddr_in6   addr;
     struct        timeval       timeout;
     fd_set        master_set, working_set;
