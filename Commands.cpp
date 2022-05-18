@@ -7,13 +7,13 @@
 
 void nick(Server &s, User &u, std::vector<std::string> arg)
 {
+    start;
     if (u.registered == 0)
         out (BOLD("Setting nickname to ") << *(arg.begin() + 1));
     if (u.registered == 1)
     {
         std::string txt = set_prefix(&u, arg); // password for nick
         out (BOLD("Changing nick name from ") << u.nickname << " to " << *(arg.begin() + 1));
-        
         std::map<const std::string &, const User &>::iterator it = s.server_users.begin();
         while (it !=  s.server_users.end())
         {
@@ -21,11 +21,6 @@ void nick(Server &s, User &u, std::vector<std::string> arg)
                  perror ("Fail send");
             it++;
         }
-
-
-
-        //if (send(u.socket_descriptor, txt.c_str(), txt.length(), 0) < 0)
-       // perror ("Fail send");
     }
     u.setNickName(*(arg.begin() + 1));
 }
@@ -34,7 +29,6 @@ void setUser(Server &s, User &u, std::vector<std::string> arg)
 {
     out("Setting name to : " << *(arg.begin() + 1));
     u.setName(*(arg.begin() + 1));
-
     if (u.registered == 0)
     {
         server_reply(&u, "001");
@@ -56,8 +50,7 @@ void quit_s(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
 
 void join(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
 {
-
-    out ("JOIN THIS CHANN CMD" << *(arg.begin() + 1))
+    start;
     std::string chan_name = *(arg.begin() + 1);
     std::map<std::string, Channel>::const_iterator	it = s.chans.find(chan_name);
     if ( it == s.chans.end())
@@ -87,6 +80,7 @@ void join(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
 */
 void            priv_msg(Server &s, User &u, std::vector<std::string> arg)
 {
+    start;
     std::string arg_1 = *(arg.begin() + 1);
     out ("Sending priv msg to " << arg_1)
     // Arg : soit personne, soit channe ?
@@ -102,20 +96,20 @@ void            priv_msg(Server &s, User &u, std::vector<std::string> arg)
     {
         out ("Sending to people " << arg_1);
         std::map<const std::string &, const User &>::iterator it = s.server_users.begin();
-        while (it !=  s.server_users.end())
+         out ("USERS " << it->first);
+        while (it != s.server_users.end())
         {
-            out ("IN SERVER : " << it->first);
+            if (arg_1 == it->second.nickname)
+            {
+                //out ("found user !" << s.server_users.at(arg_1).socket_descriptor);
+                std::string txt = set_prefix(&u, arg);
+                send (it->second.socket_descriptor, txt.c_str(), txt.length(), 0);
+                return ;
+            }
             it++;
         }
-
-        if (s.server_users.count(arg_1)) // donner le nick 
-        {
-            out ("found user !" << s.server_users.at(arg_1).socket_descriptor);
-            std::string txt = set_prefix(&u, arg);
-            send (s.server_users.at(arg_1).socket_descriptor, txt.c_str(), txt.length(), 0);
-        }
-        else
-            out ("unfound user")
+        
+        out ("unfound user" << arg_1)
     }
 
     
