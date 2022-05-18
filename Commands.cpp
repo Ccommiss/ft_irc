@@ -59,14 +59,9 @@ void join(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
     }
     else
     {
-        std::cout << "adding_user " << u.getName() << std::endl;
-        s.chans[chan_name].add_user(chan_name, u);    
+        std::cout << "adding_user " << u.nickname << std::endl;
+        s.chans[chan_name].add_user(u);    
     }
-    std::map<std::string, Channel>::const_iterator titi;
-    // for (titi = s.chans.begin(); titi != s.chans.end(); titi++)
-    // {
-    //     std::cout << titi->first << std::endl;
-    //     for (std::map<std::string, User>::const_iterator it = s.chans[titi->second].get_users()
-    // }
+    
 
 }

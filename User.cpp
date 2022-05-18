@@ -12,9 +12,11 @@ User::User() : socket_descriptor(0), registered(0)
     nickname = "Guest";
 }
 
-User::User( const User & src )
+User::User( const User & src ): socket_descriptor(src.socket_descriptor), registered(src.registered)
 {
-    (void)src;
+    this->name = src.name;
+    this->nickname = src.nickname;
+    *this = src;
 }
 
 
@@ -34,10 +36,13 @@ User::~User()
 User &				User::operator=( User const & rhs )
 {
     (void)rhs;
-	//if ( this != &rhs )
-	//{
-		//this->_value = rhs.getValue();
-	//}
+	if ( this != &rhs )
+	{
+		this->name = rhs.name;
+        this->nickname = rhs.nickname;
+        this->socket_descriptor = rhs.socket_descriptor;
+        this->registered = rhs.registered;
+	}
 	return *this;
 }
 
@@ -74,9 +79,14 @@ void        User::setSocket(int sd)
     this->socket_descriptor = sd;
 }
 
-std::string const & User::getName()
+std::string User::getName() const 
 {
     return (this->name);
 }
+std::string User::getNick() const 
+{
+    return (this->nickname);
+}
+
 
 /* ************************************************************************** */

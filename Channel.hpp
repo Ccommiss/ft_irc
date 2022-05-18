@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:04 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 12:05:51 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:49:11 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ class Channel
 		Channel &		operator=( Channel const & src );
 
 		void								ban(User kicked);
-		void								add_user(std::string name, User &new_user);
+		void								add_user(User &new_user);
 		void								add_operator(User ope);
 		void 								set_topic(std::string topic);
 		void								me();
-		std::string const &					get_name();
-		std::map<std::string, User> const &	get_users();
+		std::string &						get_name(); 
+		std::map<std::string*, User> &		get_users(); 
 		
 		
 	private:
-		std::map<std::string, User> 		_users;
+		std::map<std::string*, User> 		_users;
 		std::string							_name;
 		std::vector<User>					_operators;
 		std::vector<User> 					_banned;

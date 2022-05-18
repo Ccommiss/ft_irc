@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 12:07:31 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:58:57 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ Channel::Channel()
 Channel::Channel(std::string name, User &creator): _name(name), _owner(creator) 
 {
 	
-	_users.insert(std::pair<std::string, User&>(_name, _owner));
+	_users.insert(std::make_pair(&_owner.nickname, _owner));
 	_operators.push_back(_owner);
 	std::cout << "a new chan " << *this << " has been created" << std::endl;
+	for (std::map<std::string*, User>::iterator it = _users.begin(); it != _users.end(); it++)
+        out ("USERS : " << *it->first);
 }
 
 Channel::Channel( const Channel & src ): _owner(src._owner), _name(src._name)
@@ -75,12 +77,12 @@ std::ostream &			operator<<( std::ostream & o, Channel& i )
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
-std::string const & Channel::get_name()
+std::string & Channel::get_name() 
 {
 	return this->_name;
 	
 }
-std::map<std::string, User> const & Channel::get_users()
+std::map<std::string*, User> & Channel::get_users()
 {
 	return this->_users;
 }
@@ -99,11 +101,12 @@ std::map<std::string, User> const & Channel::get_users()
 // }
 
 //add a new_user, what happends if the name already exists ?
-void Channel::add_user(std::string name, User &new_user)
+void Channel::add_user(User &new_user)
 {
-	std::cout << name << std::endl;
-	_users.insert(std::make_pair(name, new_user));
-	std::cout << "ok on est la !!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+	_users.insert(std::make_pair(&new_user.nickname, new_user));
+	std::cout << new_user.getNick() << " has appeared " << std::endl;
+	for (std::map<std::string*, User>::iterator it = _users.begin(); it != _users.end(); it++)
+        out ("USERS : " << *it->first);
 }
 
 // void Channel::add_operator(User admin)
