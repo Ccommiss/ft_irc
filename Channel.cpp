@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 16:05:56 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/18 16:19:43 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,6 @@ Channel::~Channel()
 
 Channel &				Channel::operator=( Channel const & rhs )
 {
-	// if ( this != &rhs )
-	// {
-	// 	this->_value = rhs.getValue();
-	// }
 	return *this;
 }
 
@@ -77,7 +73,7 @@ std::ostream &			operator<<( std::ostream & o, Channel& i )
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
-std::string & Channel::get_name() 
+std::string & Channel::get_name()
 {
 	return this->_name;
 	

@@ -35,6 +35,7 @@ User::~User()
 
 User &				User::operator=( User const & rhs )
 {
+
     (void)rhs;
 	if ( this != &rhs )
 	{
