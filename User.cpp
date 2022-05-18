@@ -33,11 +33,8 @@ User::~User()
 
 User &				User::operator=( User const & rhs )
 {
+
     (void)rhs;
-	//if ( this != &rhs )
-	//{
-		//this->_value = rhs.getValue();
-	//}
 	return *this;
 }
 

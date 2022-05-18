@@ -42,6 +42,7 @@ class Server {
     fd_set        master_set, working_set;
 
     std::map<std::string, Channel>        chans;
+    std::map<const std::string &, const User &>           server_users; // sd et ref
 
     Server();
     Server &	operator=(Server const & rhs);

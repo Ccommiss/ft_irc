@@ -24,8 +24,12 @@ Channel::Channel()
 
 Channel::Channel(std::string name, User &creator): _name(name), _owner(creator) 
 {
-	
-	_users.insert(std::pair<std::string, User&>(_name, _owner));
+	_owner = creator;
+	out ("Creator :" << _owner.nickname)
+	out ("Creator :" << creator.nickname)
+	_users.insert(std::make_pair(_owner.nickname, _owner));
+	for (std::map<std::string, User>::iterator it = _users.begin(); it != _users.end(); it++)
+		out ("USERS : " << it->first);
 	_operators.push_back(_owner);
 	std::cout << "a new chan " << *this << " has been created" << std::endl;
 }
@@ -57,10 +61,7 @@ Channel::~Channel()
 
 Channel &				Channel::operator=( Channel const & rhs )
 {
-	//if ( this != &rhs )
-	//{
-		//this->_value = rhs.getValue();
-	//}
+
 	return *this;
 }
 
@@ -75,12 +76,12 @@ std::ostream &			operator<<( std::ostream & o, Channel& i )
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
-std::string const & Channel::get_name()
+std::string& 				Channel::get_name() //const 
 {
 	return this->_name;
 	
 }
-std::map<std::string, User> const & Channel::get_users()
+std::map<std::string, User>& 	Channel::get_users() //const 
 {
 	return this->_users;
 }

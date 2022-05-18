@@ -31,8 +31,8 @@ class Channel
 		void								add_operator(User ope);
 		void 								set_topic(std::string topic);
 		void								me();
-		std::string const &					get_name();
-		std::map<std::string, User> const &	get_users();
+		std::string  &						get_name() ;
+		std::map<std::string, User>  &		get_users()  ;
 		
 		
 	private:

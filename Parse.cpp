@@ -53,6 +53,7 @@ void parse_cmd(User &user, Server &s) // envoyer users[i]
 	cmd_map.insert(std::make_pair("CAP", &nick));
     cmd_map.insert(std::make_pair("USER", &setUser));
     cmd_map.insert(std::make_pair("JOIN", &join));
+    cmd_map.insert(std::make_pair("PRIVMSG", &priv_msg));
     cmd_map.insert(std::make_pair("EXIT", &quit_s));
 
     std::vector<std::string> res = split(buff);
