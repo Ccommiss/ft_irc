@@ -44,22 +44,21 @@ void join(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
     out ("JOIN THIS CHANN CMD" << *(arg.begin() + 1))
     std::string chan_name = *(arg.begin() + 1);
     std::map<std::string, Channel>::const_iterator	it = s.chans.find(chan_name);
-    if ( it != s.chans.end())
-    {
-        std::cout << "adding_user" << std::endl;
-        s.chans[chan_name].add_user(chan_name, u);
-        
-    }
-    else
-    {
+    if ( it == s.chans.end())
+    {    
         Channel chan(chan_name, u);
         s.chans.insert(std::pair<std::string, Channel>(chan_name, chan));
     }
-    // std::map<std::string, Channel>::const_iterator titi;
-    // for (titi = s.chans.begin(); titi != s.chans.end(); titi++)
-    // {
-    //     std::cout << titi->first << std::endl;
-    // }
-    //std::vector<Channel>::iterator it = std::find(s.chans.begin(), s.chans.end(), )
+    else
+    {
+        std::cout << "adding_user " << u.getName() << std::endl;
+        s.chans[chan_name].add_user(chan_name, u);    
+    }
+    std::map<std::string, Channel>::const_iterator titi;
+    for (titi = s.chans.begin(); titi != s.chans.end(); titi++)
+    {
+        std::cout << titi->first << std::endl;
+        for (std::map<std::string, User>::const_iterator it = s.chans[titi->second].get_users()
+    }
 
 }

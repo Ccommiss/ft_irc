@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/17 18:34:03 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/18 12:07:31 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ Channel::Channel(std::string name, User &creator): _name(name), _owner(creator)
 	
 	_users.insert(std::pair<std::string, User&>(_name, _owner));
 	_operators.push_back(_owner);
-	std::cout << *this << std::endl;
+	std::cout << "a new chan " << *this << " has been created" << std::endl;
 }
 
 Channel::Channel( const Channel & src ): _owner(src._owner), _name(src._name)
@@ -66,10 +66,7 @@ Channel &				Channel::operator=( Channel const & rhs )
 
 std::ostream &			operator<<( std::ostream & o, Channel& i )
 {
-	o << "VChan = " << i.get_name() << std::endl;
-	std::map<std::string, User>::const_iterator it;
-	for (it = i.get_users().begin(); it  != i.get_users().end(); it++)
-		o << "Users " << i << it->first << std::endl; 
+	o << i.get_name() << std::endl;
 	return o;
 }
 
@@ -86,7 +83,6 @@ std::string const & Channel::get_name()
 std::map<std::string, User> const & Channel::get_users()
 {
 	return this->_users;
-	
 }
 /*
 ** --------------------------------- OTHERS ----------------------------------

@@ -74,4 +74,9 @@ void        User::setSocket(int sd)
     this->socket_descriptor = sd;
 }
 
+std::string const & User::getName()
+{
+    return (this->name);
+}
+
 /* ************************************************************************** */

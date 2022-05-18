@@ -22,6 +22,7 @@ class User {
     // COMMANDES 
     void        setNickName(std::string newNickName);
     void        setName(std::string newName);
+    std::string const &getName();
 
     
 };
