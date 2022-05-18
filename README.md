@@ -22,7 +22,9 @@ _Make your own Internet Relay Chat_
 - [<t> II. TCP protocol and socket programming </t>](#t-ii-tcp-protocol-and-socket-programming-t)
   - [&emsp; <st> A. What is a socket ? </st>](#-st-a-what-is-a-socket--st)
     - [AF_INET](#af_inet)
-  - [&emsp; <st> B. Netcat tool </st>](#-st-b-netcat-tool-st)
+    - [Non-blocking and multiplexing](#non-blocking-and-multiplexing)
+  - [&emsp; <st> B. Netcat/Telnet tools </st>](#-st-b-netcattelnet-tools-st)
+  - [&emsp; <st> C. Communication schema </st>](#-st-c-communication-schema-st)
 - [<t> III. IRC Specs, commands and grammar </t>](#t-iii-irc-specs-commands-and-grammar-t)
   - [&emsp; <st> A. IRC definitions </st>](#-st-a-irc-definitions-st)
     - [Channels and operators](#channels-and-operators)
@@ -146,7 +148,7 @@ A socket is always defined by
 
 >A socket address in the Internet address family comprises the following fields: the address family (AF_INET), an Internet address, the length of that Internet address, a port, and a character array. The structure of the Internet socket address is defined by the following sockaddr_in structure, which is found in the netinet/in.h include file:
 
-```
+``` cpp
  struct in_addr {
      ip_addr_t s_addr;
 
@@ -159,8 +161,24 @@ A socket is always defined by
 };
 ```
 
-### &emsp; <st> B. Netcat tool </st>
+#### Non-blocking and multiplexing 
 
+Defintiion : maon thread is not stuck while I/O operations are being performed.
+
+Problem : we do not want to block other sockets will waiting for information from other sockets.
+
+Non blocking I/O is like an alternative to multithreading. 
+
+I/O Monitorign calls : select, poll, epoll. 
+
+See select definition below.
+- Multiplexing : multiple sockets
+- Not very effeicient cause 5 to 220 ima
+
+
+### &emsp; <st> B. Netcat/Telnet tools </st>
+
+1/ Netcat 
 <def>**Definition** </def> tool establishing connections using TCP/UDP tranor protocol. Copies ata coming through STDOUT and wrtites in STDIN.
 
 Open a connection to the port of host :
@@ -183,13 +201,17 @@ BSD scokets
 
 - See more examples : [wiki](https://fr.wikipedia.org/wiki/Aide:IRC/commandes)
 
+
+
+### &emsp; <st> C. Communication schema </st>
+
 ```
       Client              Server
     ┌─────────┐         ┌─────────┐
     │socket() │         │socket() │ => Initial creation of socket 
     └───┬─────┘         ├─────────┤
         │               ├────▼────┤
-        │               │ bind()  │ => bindin to service point (IP + port) where client will connect 
+        │               │ bind()  │ => binding to service point (IP + port) where client will connect 
         │               ├─────────┤
         │               ├────▼────┤
         │               │ listen()│ => socket set as listening socket 

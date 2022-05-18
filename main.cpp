@@ -57,15 +57,19 @@ int    main()
 			break;
 		}
 		s.desc_ready = rc; // descriptor ready 
+		// we have to see step by step, 
+		// after return socme sockets are ready 
 		for (int i = 0; i <= s.max_sd && s.desc_ready > 0; ++i)
 		{
 			if (FD_ISSET(i, &s.working_set))
 			{
 				s.desc_ready -= 1;
+				// means it is a connection request 
 				if (i == s.listen_sd)
 				{
 					int new_sd = 0;
 					new_sd = accept(s.listen_sd, NULL, NULL);
+					// accetpted 
 					if (new_sd < 0)
 					{
 						if (errno != EWOULDBLOCK)
@@ -77,7 +81,7 @@ int    main()
 					// See Server 
 					s.welcome_user(new_sd, users[new_sd]);
 				}
-				else
+				else // we are receiving 
 				{
 					s.close_conn = FALSE;
 					rc = recv(i, s.buffer, 120, 0);
@@ -90,7 +94,7 @@ int    main()
 						}
 						break;
 					}
-					if (rc == 0)
+					if (rc == 0) // 0 bytes, it closed 
 					{
 						printf(" Connection closed\n");
 						s.close_conn = TRUE;
