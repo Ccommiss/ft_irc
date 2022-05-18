@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 15:58:57 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/18 16:05:56 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ Channel::~Channel()
 
 Channel &				Channel::operator=( Channel const & rhs )
 {
-	//if ( this != &rhs )
-	//{
-		//this->_value = rhs.getValue();
-	//}
+	// if ( this != &rhs )
+	// {
+	// 	this->_value = rhs.getValue();
+	// }
 	return *this;
 }
 
@@ -100,7 +100,6 @@ std::map<std::string*, User> & Channel::get_users()
 // 		std::cout << "this users doesn't exist" << std::endl;
 // }
 
-//add a new_user, what happends if the name already exists ?
 void Channel::add_user(User &new_user)
 {
 	_users.insert(std::make_pair(&new_user.nickname, new_user));

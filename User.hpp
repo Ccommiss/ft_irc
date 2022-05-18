@@ -23,9 +23,7 @@ class User {
     void        setNickName(std::string newNickName);
     void        setName(std::string newName);
     std::string getName() const;
-    std::string getNick() const;
-
-    
+    std::string getNick() const;    
 };
 
 
