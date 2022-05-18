@@ -22,7 +22,9 @@ _Make your own Internet Relay Chat_
 - [<t> II. TCP protocol and socket programming </t>](#t-ii-tcp-protocol-and-socket-programming-t)
   - [&emsp; <st> A. What is a socket ? </st>](#-st-a-what-is-a-socket--st)
     - [AF_INET](#af_inet)
-  - [&emsp; <st> B. Netcat tool </st>](#-st-b-netcat-tool-st)
+    - [Non-blocking and multiplexing](#non-blocking-and-multiplexing)
+  - [&emsp; <st> B. Netcat/Telnet tools </st>](#-st-b-netcattelnet-tools-st)
+  - [&emsp; <st> C. Communication schema </st>](#-st-c-communication-schema-st)
 - [<t> III. IRC Specs, commands and grammar </t>](#t-iii-irc-specs-commands-and-grammar-t)
   - [&emsp; <st> A. IRC definitions </st>](#-st-a-irc-definitions-st)
     - [Channels and operators](#channels-and-operators)
@@ -30,6 +32,7 @@ _Make your own Internet Relay Chat_
   - [&emsp; <st> C. Grammar</st>](#-st-c-grammarst)
     - [&emsp; 1. Study case 1 : User registration](#-1-study-case-1--user-registration)
     - [&emsp; 2. Study case 2 : Failing and server replies](#-2-study-case-2--failing-and-server-replies)
+    - [&emsp; 3. Study case 3 : channel chatting](#-3-study-case-3--channel-chatting)
 
 ## <t> I. Introduction </t>
 
@@ -145,7 +148,7 @@ A socket is always defined by
 
 >A socket address in the Internet address family comprises the following fields: the address family (AF_INET), an Internet address, the length of that Internet address, a port, and a character array. The structure of the Internet socket address is defined by the following sockaddr_in structure, which is found in the netinet/in.h include file:
 
-```
+``` cpp
  struct in_addr {
      ip_addr_t s_addr;
 
@@ -158,8 +161,24 @@ A socket is always defined by
 };
 ```
 
-### &emsp; <st> B. Netcat tool </st>
+#### Non-blocking and multiplexing 
 
+Defintiion : maon thread is not stuck while I/O operations are being performed.
+
+Problem : we do not want to block other sockets will waiting for information from other sockets.
+
+Non blocking I/O is like an alternative to multithreading. 
+
+I/O Monitorign calls : select, poll, epoll. 
+
+See select definition below.
+- Multiplexing : multiple sockets
+- Not very effeicient cause 5 to 220 ima
+
+
+### &emsp; <st> B. Netcat/Telnet tools </st>
+
+1/ Netcat 
 <def>**Definition** </def> tool establishing connections using TCP/UDP tranor protocol. Copies ata coming through STDOUT and wrtites in STDIN.
 
 Open a connection to the port of host :
@@ -182,13 +201,17 @@ BSD scokets
 
 - See more examples : [wiki](https://fr.wikipedia.org/wiki/Aide:IRC/commandes)
 
+
+
+### &emsp; <st> C. Communication schema </st>
+
 ```
       Client              Server
     ┌─────────┐         ┌─────────┐
     │socket() │         │socket() │ => Initial creation of socket 
     └───┬─────┘         ├─────────┤
         │               ├────▼────┤
-        │               │ bind()  │ => bindin to service point (IP + port) where client will connect 
+        │               │ bind()  │ => binding to service point (IP + port) where client will connect 
         │               ├─────────┤
         │               ├────▼────┤
         │               │ listen()│ => socket set as listening socket 
@@ -399,13 +422,67 @@ What does it mean ? Let's take a look back step by step.
 - ```*``` : usually the nick name, but it could not be set, thus it is not written and replaced by a wildcard
 - ```"<nick> :Nickname is already in use"``` i the formatted message for error 433 specified in RFC. 
 
+
+#### &emsp; 3. Study case 3 : channel chatting
+
+Telnet side (in order to be able to see server answers - user is lol)
+
+``` txt
+:lol!c@hzv-b03.hrv.26em53.IP MODE lol +x
+JOIN #LOL
+:lol!c@hzv-b03.hrv.26em53.IP JOIN :#LOL
+:irc.hackerzvoice.net 353 lol = #LOL :@lol 
+:irc.hackerzvoice.net 366 lol #LOL :End of /NAMES list.
+:louveet!louveet@hzv-b03.hrv.26em53.IP JOIN :#LOL
+:louveet!louveet@hzv-b03.hrv.26em53.IP PRIVMSG #LOL :Hey
+PRIVMSG #LOL : Coucou
+PRIVMSG #LOL : Hey .
+PRIVMSG #LOL : Plop
+:louveet!louveet@hzv-b03.hrv.26em53.IP NICK Claire
+:Claire!louveet@hzv-b03.hrv.26em53.IP PRIVMSG #LOL :Coucou 
+hahaha
+:irc.hackerzvoice.net 421 lol HAHAHA :Unknown command
+PRIVMSG #LOL : MDR 
+```
+
+Meanwhile, irssi side (user is louveet)
+
+``` txt
+18:01 -!- louveet [louveet@hzv-b03.hrv.26em53.IP] has joined #LOL
+18:01 [Users #lol]
+18:01 [@lol] [ louveet] 
+18:01 -!- Irssi: #lol: Total of 2 nicks [1 ops, 0 halfops, 0 voices, 1 normal]
+18:01 -!- Channel #LOL created Tue May 17 17:56:10 2022
+18:01 -!- Irssi: Join to #lol was synced in 0 secs
+18:02 < louveet> Hey
+18:02 <@lol>  Coucou
+18:02 <@lol>  Hey .
+18:03 <@lol>  Plop
+18:03 -!- You're now known as Claire
+18:03 < Claire> Coucou 
+18:04 <@lol>  MDR
+
+```
+
+A few highlights :
+
+- ```:Claire!louveet@hzv-b03.hrv.26em53.IP PRIVMSG #LOL :Coucou``` : when a message is received from Claire to lol, this is a "server prefix-like" reply specifying the origin of the message.
+- Hypothesis : server tells PRIV MSG has been sent to all users in his specific channel. Send this specific message to all SD present in channel list of users. 
+
+
+
 **More info about replies formatting :**
 <iframe
   src="http://chi.cs.uchicago.edu/chirc/irc_examples.html"
   style="width:100%; height:400px;"
 ></iframe>
 
+<<<<<<< HEAD
 **Other resources :** 
+=======
+**Other resources **  
+list of commands : https://linux.developpez.com/formation_debian/irc.html
+>>>>>>> origin/main
 
 list of commands :  https://linux.developpez.com/formation_debian/irc.html  
                     https://fr.wikipedia.org/wiki/Aide:IRC/commandes

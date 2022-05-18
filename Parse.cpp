@@ -44,7 +44,6 @@ std::vector<std::string> split(std::string x)
 void parse_cmd(User &user, Server &s) // envoyer users[i]
 {
     std::string buff(s.buffer);
-	out ("RECEIVED BUFFER = " << buff)
 
     typedef void (*Cmd)(Server & s, User & user, std::vector<std::string> arg);
 
@@ -52,7 +51,7 @@ void parse_cmd(User &user, Server &s) // envoyer users[i]
 
     cmd_map.insert(std::make_pair("NICK", &nick));
 	cmd_map.insert(std::make_pair("CAP", &nick));
-   // cmd_map.insert(std::make_pair("USER", &setUser));
+    cmd_map.insert(std::make_pair("USER", &setUser));
     cmd_map.insert(std::make_pair("JOIN", &join));
     cmd_map.insert(std::make_pair("EXIT", &quit_s));
 

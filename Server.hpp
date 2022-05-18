@@ -27,8 +27,6 @@
 
 #define out(x) std::cout << x << std::endl;
 
-class Channel;
-//struct Channel; // penser a inclure le Channel.hpp ! 
 
 class Server {
 

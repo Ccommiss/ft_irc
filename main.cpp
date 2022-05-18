@@ -43,6 +43,7 @@ int    main()
 
 	while (s.end_server == 0)
 	{
+		bzero(s.buffer, 80);
 		memcpy(&s.working_set, &s.master_set, sizeof(s.master_set));
 		int rc = select(s.max_sd + 1, &s.working_set, NULL, NULL, &s.timeout);
 		if (rc < 0)
@@ -56,15 +57,19 @@ int    main()
 			break;
 		}
 		s.desc_ready = rc; // descriptor ready 
+		// we have to see step by step, 
+		// after return socme sockets are ready 
 		for (int i = 0; i <= s.max_sd && s.desc_ready > 0; ++i)
 		{
 			if (FD_ISSET(i, &s.working_set))
 			{
 				s.desc_ready -= 1;
+				// means it is a connection request 
 				if (i == s.listen_sd)
 				{
 					int new_sd = 0;
 					new_sd = accept(s.listen_sd, NULL, NULL);
+					// accetpted 
 					if (new_sd < 0)
 					{
 						if (errno != EWOULDBLOCK)
@@ -76,10 +81,10 @@ int    main()
 					// See Server 
 					s.welcome_user(new_sd, users[new_sd]);
 				}
-				else
+				else // we are receiving 
 				{
 					s.close_conn = FALSE;
-					rc = recv(i, s.buffer, sizeof(s.buffer), 0);
+					rc = recv(i, s.buffer, 80, 0);
 					if (rc < 0)
 					{
 						if (errno != EWOULDBLOCK)
@@ -89,7 +94,7 @@ int    main()
 						}
 						break;
 					}
-					if (rc == 0)
+					if (rc == 0) // 0 bytes, it closed 
 					{
 						printf(" Connection closed\n");
 						s.close_conn = TRUE;
@@ -103,11 +108,11 @@ int    main()
 					//echo back 
 					parse_cmd(users[i], s);
 					bzero(s.buffer, 80);
-					if (FD_ISSET(i, &s.master_set))
-						rc = send(i, "Message recu !", 15, 0);
+					//if (FD_ISSET(i, &s.master_set))
+					//	rc = send(i, "Message recu !", 15, 0);
 					if (rc < 0)
 					{
-						perror("  send() failed");
+						perror("send() failed");
 						s.close_conn = TRUE;
 						break;
 					}
