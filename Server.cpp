@@ -93,7 +93,8 @@ void                    Server::welcome_user(int new_sd, User &u)
 		max_sd = new_sd;
     FD_SET(u.socket_descriptor, &master_set);  // add new SD to master set 
 	out(u.nickname << " joined the chat !");
-    server_users.insert(std::pair<std::string &, User &>(u.nickname, u));
+    User *tmp = new User(u);
+    server_users.insert(std::make_pair(u.nickname, tmp));
 
     out ("Adding " << server_users.begin()->first << " with nick " << server_users.begin()->second.nickname <<" to database");
 }
@@ -135,6 +136,12 @@ std::ostream &			operator<<( std::ostream & o, Server const & i )
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
+void	Server::add_user ( int sd, std::string name )
+{
+	User*	new_user = new User(name, sd);
+
+	this->users.insert(std::make_pair(sd, new_user));
+}
 
 
 /* ************************************************************************** */

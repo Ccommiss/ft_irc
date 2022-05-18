@@ -38,7 +38,8 @@ int    main()
 {
 
 	Server     	s;
-	User     	users[100];
+	User     	users[100];//creer une fonction qui ajoute un user au vector de user et recuperer la reference du user pour le mettre dans la classe
+	//User* new_user = new User()
 
 
 	while (s.end_server == 0)

@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 16:19:43 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/18 20:11:19 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ Channel::Channel()
 Channel::Channel(std::string name, User &creator): _name(name), _owner(creator) 
 {
 	
-	_users.insert(std::make_pair(&_owner.nickname, _owner));
+	User *tmp = new User(creator);
+	_users.insert(std::make_pair(_owner.nickname, tmp));
 	_operators.push_back(_owner);
 	std::cout << "a new chan " << *this << " has been created" << std::endl;
-	for (std::map<std::string*, User>::iterator it = _users.begin(); it != _users.end(); it++)
-        out ("USERS : " << *it->first);
+	for (std::map<std::string, User*>::iterator it = _users.begin(); it != _users.end(); it++)
+        out ("USERS : " << it->first);
 }
 
 Channel::Channel( const Channel & src ): _owner(src._owner), _name(src._name)
@@ -78,7 +79,7 @@ std::string & Channel::get_name()
 	return this->_name;
 	
 }
-std::map<std::string*, User> & Channel::get_users()
+std::map<std::string, User*> & Channel::get_users()
 {
 	return this->_users;
 }
@@ -98,10 +99,11 @@ std::map<std::string*, User> & Channel::get_users()
 
 void Channel::add_user(User &new_user)
 {
-	_users.insert(std::make_pair(&new_user.nickname, new_user));
+	User*	tmp = new User(new_user);
+	_users.insert(std::make_pair(new_user.nickname, tmp));
 	std::cout << new_user.getNick() << " has appeared " << std::endl;
-	for (std::map<std::string*, User>::iterator it = _users.begin(); it != _users.end(); it++)
-        out ("USERS : " << *it->first);
+	for (std::map<std::string, User*>::iterator it = _users.begin(); it != _users.end(); it++)
+        out ("USERS : " << it->first);
 }
 
 // void Channel::add_operator(User admin)

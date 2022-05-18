@@ -15,6 +15,8 @@ class User {
 
     User();
     User(User const & src);
+    User(int sd, std::string name);
+    User(const std::string & user_name, const std::string & nick_name, const int fd );
     ~User();
     User &	operator=(User const & rhs);
 

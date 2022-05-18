@@ -11,6 +11,10 @@ User::User() : socket_descriptor(0), registered(0)
     this->name = "Guest";
     nickname = "Guest";
 }
+User::User(int sd, std::string name): name(name), socket_descriptor(sd), registered(0)
+{
+    nickname = "Guest";
+}
 
 User::User( const User & src ): socket_descriptor(src.socket_descriptor), registered(src.registered)
 {
@@ -18,8 +22,11 @@ User::User( const User & src ): socket_descriptor(src.socket_descriptor), regist
     this->nickname = src.nickname;
     *this = src;
 }
-
-
+User::User(const std::string & user_name, const std::string & nick_name, const int sd):
+    name(user_name),
+	nickname(nick_name),
+	socket_descriptor(sd)
+{}
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
 */

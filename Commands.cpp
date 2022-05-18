@@ -59,16 +59,16 @@ void join(Server &s, User &u, std::vector<std::string> arg) // exit ou quit
 
     out ("JOIN THIS CHANN CMD" << *(arg.begin() + 1))
     std::string chan_name = *(arg.begin() + 1);
-    std::map<std::string, Channel>::const_iterator	it = s.chans.find(chan_name);
+    std::map<std::string, Channel*>::const_iterator	it = s.chans.find(chan_name);
     if ( it == s.chans.end())
     {    
-        Channel chan(chan_name, u);
-        s.chans.insert(std::pair<std::string, Channel>(chan_name, chan));
+        Channel*  chan = new Channel(chan_name, u);
+        s.chans.insert(std::make_pair(chan_name, chan));
     }
     else
     {
         std::cout << "adding_user " << u.nickname << std::endl;
-        s.chans[chan_name].add_user(u);    
+        s.chans[chan_name]->add_user(u);    
     }
     
 

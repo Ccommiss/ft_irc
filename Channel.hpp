@@ -6,7 +6,7 @@
 /*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:04 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 16:16:59 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/05/18 20:09:07 by ldes-cou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ class Channel
 		void 								set_topic(std::string topic);
 		void								me();
 		std::string &						get_name(); 
-		std::map<std::string*, User> &		get_users(); 
+		std::map<std::string, User*> &		get_users(); 
 		
 		
 	private:
-		std::map<std::string*, User> 		_users;
+		std::map<std::string, User*> 		_users;
 		std::string							_name;
 		std::vector<User>					_operators;
 		std::vector<User> 					_banned;
