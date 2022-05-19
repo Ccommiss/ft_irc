@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:50:03 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/18 16:59:06 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:50:14 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //Class_Name = Server_tcp
@@ -55,11 +55,14 @@
 
 //for inet_top
 #include <arpa/inet.h>
+
 #include "cs_utils.hpp"
+#include "define.hpp"
 //define - END}
 
 class	Server_tcp {
 
+	//TODO::password comp
 	public:
 		//pub_constructor{
 		Server_tcp( const char * port, const char *pass);
@@ -82,7 +85,7 @@ class	Server_tcp {
 
 		//pub_setter{
 		//pub_setter - END}
-		
+
 		//pub_exception{
 		//pub_exception - END}
 
@@ -95,7 +98,18 @@ class	Server_tcp {
 	private:
 		//priv_debug{
 		//priv_debug - END}
-		
+
+		//priv_fct{
+		//out_loop
+		void get_addr( void );
+		void start_listening( void );
+		void set_monitoring( void );
+
+		//in_loop
+		void new_connection( void );
+		void existing_connection( struct epoll_event &ev );
+		//priv_fct - END}
+
 		//priv_constructor{
 		Server_tcp( void );
 		//priv_constructor - END}
@@ -104,13 +118,21 @@ class	Server_tcp {
 		//priv_static - END}
 
 		//priv_var{
-		int			_port;
-		std::string	_pass;
+		int							_port;
+		std::string					_pass;
+		struct addrinfo			*	_addrs;
+		int 						_listener;
+		char					*	_ip;
+		int							_efd;
+		struct 						epoll_event ep_event[MAX_EVENTS];
+		int							_nb_ev;
+		struct sockaddr_storage 	client_saddr;
+		char 						recv_message[RECV_BUFF_SIZE];
 		//priv_var - END}
 };
 
 //out_class{
-	//std::ostream &	operator<<(std::ostream &os, Server_tcp &to_print);
+//std::ostream &	operator<<(std::ostream &os, Server_tcp &to_print);
 //out_class - END}
 
 #endif
