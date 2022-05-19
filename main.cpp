@@ -23,10 +23,9 @@
 #define TRUE             1
 #define FALSE            0
 
+#include "Commands.hpp"
 #include "Server.hpp"
 #include "User.hpp"
-#include "Commands.hpp"
-
 
 
 
@@ -106,7 +105,7 @@ int    main()
 					//std::string res = users[i].nickname << " says : " << s.buffer;
 					std::cout << users[i].nickname << " says : " << s.buffer;
 					//echo back 
-					parse_cmd(users[i], s);
+					s.cmds.parse_cmd(users[i], s);
 					bzero(s.buffer, 80);
 					//if (FD_ISSET(i, &s.master_set))
 					//	rc = send(i, "Message recu !", 15, 0);

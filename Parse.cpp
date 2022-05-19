@@ -41,12 +41,11 @@ std::vector<std::string> split(std::string x)
 /*
 **
 */
-void parse_cmd(User &user, Server &s) // envoyer users[i]
+void Commands::parse_cmd(User &user, Server &s) // envoyer users[i]
 {
     std::string buff(s.buffer);
 
     out ("YO " << user.nickname);
-    std::map<std::string, Commands::Cmd> cmd_map = s.cmds.cmd_map;
     std::vector<std::string> res = split(buff);
     std::vector<std::string>::iterator it = res.begin(); // on garde les /n
 
@@ -65,7 +64,7 @@ void parse_cmd(User &user, Server &s) // envoyer users[i]
         {
             Commands::Cmd a = cmd_map.at(*it);
 			std::vector<std::string> new_res(res.begin() + std::distance(res.begin(), it), res.end());
-            (*a)(s, user, new_res); // on envoie le deuxieme arg
+            (this->*a)(s, user, new_res); // on envoie le deuxieme arg
         }                       // pour les messages slt  ; page accueil on peut que faire des cmd !!!
         while (it != res.end())
         {

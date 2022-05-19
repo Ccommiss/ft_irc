@@ -49,7 +49,7 @@ class Server {
 
     std::map<std::string, Channel>                          chans;
     std::map<const std::string &, const User &>           server_users; // sd et ref
-    Commands                                cmds; // creating commands object 
+    Commands                                cmds; 
 
     Server();
     Server &	operator=(Server const & rhs);
