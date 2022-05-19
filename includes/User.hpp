@@ -23,6 +23,7 @@ class User {
     void        setNickName(std::string newNickName);
     void        setName(std::string newName);
     std::string const &getName();
+    static std::string getNickName(); //{ return nickname; }
 
     
 };
