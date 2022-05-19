@@ -93,9 +93,9 @@ void                    Server::welcome_user(int new_sd, User &u)
 		max_sd = new_sd;
     FD_SET(u.socket_descriptor, &master_set);  // add new SD to master set 
 	out(u.nickname << " joined the chat !");
-    server_users.insert(std::pair<std::string &, User &>(u.nickname, u));
+    server_users.insert(std::pair<std::string *, User *>(&(u.nickname), &u));
 
-    out ("Adding " << server_users.begin()->first << " with nick " << server_users.begin()->second.nickname <<" to database");
+    out ("Adding " << server_users.begin()->first << " with nick " << server_users.begin()->second->nickname <<" to database");
 }
 
 

@@ -35,11 +35,11 @@ class Channel
 		void 								set_topic(std::string topic);
 		void								me();
 		std::string  &						get_name() ;
-		std::map<std::string, User>  &		get_users()  ;
+		std::map<std::string *, User *>  &		get_users()  ;
 		
 		
 	private:
-		std::map<std::string, User> 		_users;
+		std::map<std::string *, User *> 		_users;
 		std::string							_name;
 		std::vector<User>					_operators;
 		std::vector<User> 					_banned;

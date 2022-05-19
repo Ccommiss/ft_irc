@@ -16,7 +16,8 @@ void            Commands::priv_msg(Server &s, User &u, std::vector<std::string> 
     if (arg_1.compare(0, 1, "#", 0 , 1) == 0)
     {
         out ("Sending to channel" << arg_1)
-        for (std::map<std::string, User>::iterator it = s.chans[arg_1].get_users().begin(); it != s.chans[arg_1].get_users().begin(); it++)
+        out ("Does exist ? " << s.chans.count(arg_1))
+        for (std::map<std::string *, User *>::iterator it = s.chans[arg_1]->get_users().begin(); it != s.chans[arg_1]->get_users().begin(); it++)
         {
             out ("USERS" << it->first);
         }
@@ -24,15 +25,15 @@ void            Commands::priv_msg(Server &s, User &u, std::vector<std::string> 
     else 
     {
         out ("Sending to people " << arg_1);
-        std::map<const std::string &, const User &>::iterator it = s.server_users.begin();
+        std::map<const std::string *, const User *>::iterator it = s.server_users.begin();
          out ("USERS " << it->first);
         while (it != s.server_users.end())
         {
-            if (arg_1 == it->second.nickname)
+            if (arg_1 == it->second->nickname)
             {
                 //out ("found user !" << s.server_users.at(arg_1).socket_descriptor);
                 std::string txt = set_prefix(&u, arg);
-                send (it->second.socket_descriptor, txt.c_str(), txt.length(), 0);
+                send (it->second->socket_descriptor, txt.c_str(), txt.length(), 0);
                 return ;
             }
             it++;

@@ -47,8 +47,8 @@ class Server {
     struct        timeval       timeout;
     fd_set        master_set, working_set;
 
-    std::map<std::string, Channel>                          chans;
-    std::map<const std::string &, const User &>           server_users; // sd et ref
+    std::map<std::string, Channel *>                          chans;
+    std::map<const std::string *, const User *>           server_users; // sd et ref
     Commands                                cmds; 
 
     Server();

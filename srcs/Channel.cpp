@@ -27,8 +27,8 @@ Channel::Channel(std::string name, User &creator):  _name(name), _owner(creator)
 	_owner = creator;
 	out ("Creator :" << _owner.nickname)
 	out ("Creator :" << creator.nickname)
-	_users.insert(std::make_pair(_owner.nickname, _owner));
-	for (std::map<std::string, User>::iterator it = _users.begin(); it != _users.end(); it++)
+	_users.insert(std::make_pair(&creator.nickname, &creator));
+	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
 		out ("USERS : " << it->first);
 	_operators.push_back(_owner);
 	std::cout << "a new chan " << *this << " has been created" << std::endl;
@@ -81,8 +81,10 @@ std::string& 				Channel::get_name() //const
 	return this->_name;
 	
 }
-std::map<std::string, User>& 	Channel::get_users() //const 
+std::map<std::string *, User *>& 	Channel::get_users() //const 
 {
+	start;
+	out (*this->_users.begin()->first)
 	return this->_users;
 }
 /*
@@ -102,8 +104,9 @@ std::map<std::string, User>& 	Channel::get_users() //const
 //add a new_user, what happends if the name already exists ?
 void Channel::add_user(std::string name, User &new_user)
 {
+	start;
 	std::cout << name << std::endl;
-	_users.insert(std::make_pair(name, new_user));
+	_users.insert(std::make_pair(&name, &new_user));
 	std::cout << "ok on est la !!!!!!!!!!!!!!!!!!!!!!" << std::endl;
 }
 
