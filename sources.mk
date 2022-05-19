@@ -1,20 +1,22 @@
 ## SOURCES.MK ##
 
-## . ##
+## SRCS ##
 
-SOURCES		+=           		\
-		Answers.cpp         	\
-		main.cpp            	\
-		User.cpp            	\
-		Server.cpp          	\
-		Channel.cpp         	\
-		utils.cpp           	\
-		Parse.cpp           	\
-		commands/exit.cpp	\
-		commands/join.cpp	\
-		commands/nick.cpp	\
-		commands/priv_msg.cpp	\
-		commands/user.cpp	\
-		commands/Commands.cpp
+SOURCES		+=             		\
+		srcs/Channel.cpp      	\
+		srcs/Answers.cpp      	\
+		srcs/utils.cpp        	\
+		srcs/main.cpp         	\
+		srcs/User.cpp         	\
+		srcs/Server.cpp       	\
+		srcs/commands/Commands.cpp       	\
+		srcs/commands/Parse.cpp       	\
+		srcs/commands/exit.cpp       	\
+		srcs/commands/join.cpp       	\
+		srcs/commands/nick.cpp       	\
+		srcs/commands/priv_msg.cpp       	\
+		srcs/commands/user.cpp       	\
 
-			
+
+
+

@@ -14,6 +14,12 @@ void print(std::vector<std::string> vec)
         out("PARSE CMD = " << *it)
 }
 
+/*
+**  split
+**  @brief parses the commands as received for example : NICK <newname>
+**  @param x the string to be parsed 
+**  @returns a vector of string containeing the totality of the given string
+*/
 std::vector<std::string> split(std::string x)
 {
     char delim = ' ';
@@ -39,7 +45,11 @@ std::vector<std::string> split(std::string x)
 }
 
 /*
-**
+**  parse_cmd
+**  @brief parses the commands as received for example : NICK <newname>
+**  @param user the user (client) that initiated the request
+**  @param s the server instance
+**  @returns none
 */
 void Commands::parse_cmd(User &user, Server &s) // envoyer users[i]
 {
@@ -56,7 +66,6 @@ void Commands::parse_cmd(User &user, Server &s) // envoyer users[i]
             it++;
        	 	if (it == res.end())
 			{
-				//out ("end parse");
 				return ;
 			}
 		}
