@@ -1,16 +1,4 @@
 {
-    "editor.tokenColorCustomizations": {
-        "textMateRules": [
-            {
-                "scope": "comment",
-                "settings": {
-                    "fontStyle": "bold",
-                    "foreground": "#8580c0"
-                }
-            }
-        ],
-        "comments": ""
-    },
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",
@@ -29,6 +17,7 @@
         "cwchar": "cpp",
         "cwctype": "cpp",
         "deque": "cpp",
+        "map": "cpp",
         "unordered_map": "cpp",
         "vector": "cpp",
         "exception": "cpp",

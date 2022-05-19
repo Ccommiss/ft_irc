@@ -1,12 +1,12 @@
 
 
+#include "Server.hpp"
 #include "User.hpp"
-#include "Commands.hpp"
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-User::User() : socket_descriptor(0)
+User::User() : socket_descriptor(0), registered(0)
 {
     this->name = "Guest";
     nickname = "Guest";
@@ -33,11 +33,8 @@ User::~User()
 
 User &				User::operator=( User const & rhs )
 {
+
     (void)rhs;
-	//if ( this != &rhs )
-	//{
-		//this->_value = rhs.getValue();
-	//}
 	return *this;
 }
 
@@ -72,6 +69,11 @@ void        User::setNickName(std::string newNickName)
 void        User::setSocket(int sd)
 {
     this->socket_descriptor = sd;
+}
+
+std::string const & User::getName()
+{
+    return (this->name);
 }
 
 /* ************************************************************************** */

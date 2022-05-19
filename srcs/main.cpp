@@ -23,37 +23,30 @@
 #define TRUE             1
 #define FALSE            0
 
+#include "Commands.hpp"
 #include "Server.hpp"
 #include "User.hpp"
-#include "Commands.hpp"
-
-void parse_cmd(User &user, Server &s);
-
-void check_connection(fd_set master_set, int listen_sd, int max_sd)
-{
-	for (int x = listen_sd; x <= max_sd + 1; x++)
-	{
-		if (FD_ISSET(x, &master_set) == 1 && x == listen_sd) // new_sd > max_sd))
-			printf("Listening socket : %d is connected\n", x);
-		else if (FD_ISSET(x, &master_set) == 1)
-			printf("SD %d is connected\n", x);
-		else
-			std::cout << "SD " << x << "not set" << std::endl;
-	}
-}
 
 
 
-int    main()//int argc, char* argv[])
+/*
+**	All credits to : 
+**	https://www.ibm.com/docs/en/i/7.1?topic=designs-example-nonblocking-io-select  
+*/
+int    main()
 {
 
 	Server     	s;
-	User     	users[10]; // 10 user 
+	User     	users[100];
+
 
 	while (s.end_server == 0)
 	{
+		bzero(s.buffer, 80);
 		memcpy(&s.working_set, &s.master_set, sizeof(s.master_set));
+		out ("Waiting select")
 		int rc = select(s.max_sd + 1, &s.working_set, NULL, NULL, &s.timeout);
+		out ("Waiting")
 		if (rc < 0)
 		{
 			perror("select() failed");
@@ -65,29 +58,35 @@ int    main()//int argc, char* argv[])
 			break;
 		}
 		s.desc_ready = rc; // descriptor ready 
+		// we have to see step by step, 
+		// after return socme sockets are ready
+			out ("RC" << s.desc_ready)
 		for (int i = 0; i <= s.max_sd && s.desc_ready > 0; ++i)
 		{
 			if (FD_ISSET(i, &s.working_set))
 			{
 				s.desc_ready -= 1;
+				// means it is a connection request 
 				if (i == s.listen_sd)
 				{
 					int new_sd = 0;
 					new_sd = accept(s.listen_sd, NULL, NULL);
+					// accetpted 
 					if (new_sd < 0)
 					{
-						if (errno != EWOULDBLOCK)// ca c gere par le non blocking
+						if (errno != EWOULDBLOCK)
 						{
 							perror("  accept() failed");
 							s.end_server = TRUE;
 						}
 					}
+					// See Server 
 					s.welcome_user(new_sd, users[new_sd]);
 				}
-				else
+				else // we are receiving 
 				{
 					s.close_conn = FALSE;
-					rc = recv(i, s.buffer, sizeof(s.buffer), 0);
+					rc = recv(i, s.buffer, 80, 0);
 					if (rc < 0)
 					{
 						if (errno != EWOULDBLOCK)
@@ -97,26 +96,28 @@ int    main()//int argc, char* argv[])
 						}
 						break;
 					}
-					if (rc == 0)
+					if (rc == 0) // 0 bytes, it closed 
 					{
-						printf(" Connection closed\n");
+						printf("Connection closed\n");
 						s.close_conn = TRUE;
 						out (i);
 						out (s.listen_sd)
 						out (s.end_server);
-						break;
+						if (FD_ISSET(i, &s.master_set))
+							close(i);
+						if (i == s.max_sd)
+							s.max_sd -= 1;
+						//break;
 					}
-					std::cout << users[i].nickname << " says : " << s.buffer;
-					parse_cmd(users[i], s);
-					bzero(s.buffer, 80);
-					if (FD_ISSET(i, &s.master_set))
-						rc = send(i, "Message recu !", 15, 0);
-					if (rc < 0)
+					else 
 					{
-						perror("  send() failed");
-						s.close_conn = TRUE;
-						break;
+					//std::string res = users[i].nickname << " says : " << s.buffer;
+					std::cout << users[i].nickname << " says : " << s.buffer;
+					//echo back 
+					s.cmds.parse_cmd(users[i], s);
+					bzero(s.buffer, 80);
 					}
+	
 			
 				} /* End of existing connection is readable */
 			} /* End of if (FD_ISSET(i, &working_set)) */

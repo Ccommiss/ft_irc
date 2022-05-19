@@ -1,6 +1,6 @@
 # Generated with GenMake
 # Arthur-TRT - https://github.com/arthur-trt/genMake
-# genmake vv1.1.4
+# genmake v1.1.6
 
 #Compiler and Linker
 CC					:= clang
@@ -19,8 +19,8 @@ BUILD				:= release
 include sources.mk
 
 #The Directories, Source, Includes, Objects, Binary and Resources
-SRCDIR				:= .
-INCDIR				:= .
+SRCDIR				:= srcs
+INCDIR				:= includes
 BUILDDIR			:= obj
 TARGETDIR			:= .
 SRCEXT				:= cpp
@@ -31,7 +31,7 @@ OBJECTS				:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEX
 OBJECTS_BONUS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES_BONUS:.$(SRCEXT)=.$(OBJEXT)))
 
 #Flags, Libraries and Includes
-cflags.release		:= 
+cflags.release		:= -Wall -Werror -Wextra -I./includes/
 cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -ggdb
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))
@@ -84,7 +84,7 @@ clean:
 
 # Full Clean, Objects and Binaries
 fclean: clean
-	@$(RM) -rf $(TARGET)
+	@$(RM) -rf $(TARGETDIR)
 
 
 # Pull in dependency info for *existing* .o files

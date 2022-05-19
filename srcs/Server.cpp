@@ -7,7 +7,7 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Server::Server() : max_sd(0), desc_ready(0), end_server(0), on(1)
+Server::Server() : on(1), max_sd(0), desc_ready(0),  end_server(0)
 {
     int rc = 0;
     listen_sd = socket(AF_INET6, SOCK_STREAM, 0);
@@ -22,7 +22,6 @@ Server::Server() : max_sd(0), desc_ready(0), end_server(0), on(1)
         close(listen_sd);
         exit(-1);
     }
-    out ("ok")
     int lol = ioctl(listen_sd, FIONBIO, (char*)&on);
     if (lol < 0)
     {
@@ -47,7 +46,6 @@ Server::Server() : max_sd(0), desc_ready(0), end_server(0), on(1)
         close(listen_sd);
         exit(-1);
     }
-    out ("ok2")
     FD_ZERO(&master_set); // initilize FD set 
     max_sd = listen_sd;
     FD_SET(listen_sd, &master_set);
@@ -74,14 +72,14 @@ Server::~Server()
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-Server &				Server::operator=( Server const & rhs )
-{
-	//if ( this != &rhs )
-	//{
-		//this->_value = rhs.getValue();
-	//}
-	return *this;
-}
+// Server &				Server::operator=( Server const & rhs )
+// {
+// 	//if ( this != &rhs )
+// 	//{
+// 		//this->_value = rhs.getValue();
+// 	//}
+// 	return *this;
+// }
 
 void                    Server::welcome_user(int new_sd, User &u)
 {
@@ -94,7 +92,10 @@ void                    Server::welcome_user(int new_sd, User &u)
 	if (new_sd > max_sd)
 		max_sd = new_sd;
     FD_SET(u.socket_descriptor, &master_set);  // add new SD to master set 
-	out(u.nickname << " joined the chat !"); 
+	out(u.nickname << " joined the chat !");
+    server_users.insert(std::pair<std::string *, User *>(&(u.nickname), &u));
+
+    out ("Adding " << server_users.begin()->first << " with nick " << server_users.begin()->second->nickname <<" to database");
 }
 
 
@@ -119,11 +120,11 @@ void                    Server::quit_server(User &u)
 // }
 
 
-std::ostream &			operator<<( std::ostream & o, Server const & i )
-{
-	//o << "Value = " << i.getValue();
-	return o;
-}
+// std::ostream &			operator<<( std::ostream & o, Server const & i )
+// {
+// 	//o << "Value = " << i.getValue();
+// 	return o;
+// }
 
 
 /*
