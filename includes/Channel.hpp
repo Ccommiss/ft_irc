@@ -13,7 +13,10 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-#include "Server.hpp"
+#include "User.hpp"
+#include <map>
+#include <vector>
+#include <iostream>
 
 class Channel
 {

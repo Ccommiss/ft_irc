@@ -3,14 +3,18 @@
 ## . ##
 
 SOURCES		+=           		\
+		Answers.cpp         	\
+		main.cpp            	\
 		User.cpp            	\
-		main.cpp             	\
-		Answers.cpp             \
 		Server.cpp          	\
-		utils.cpp           	\
 		Channel.cpp         	\
-		Commands.cpp        	\
+		utils.cpp           	\
 		Parse.cpp           	\
-		
+		commands/exit.cpp	\
+		commands/join.cpp	\
+		commands/nick.cpp	\
+		commands/priv_msg.cpp	\
+		commands/user.cpp	\
+		commands/Commands.cpp
 
-
+			

@@ -1,4 +1,12 @@
 
+#include "User.hpp"
+#include "Commands.hpp"
+#include "Channel.hpp"
+#include "Debug.hpp"
+
+
+
+
 #ifndef SERVER_HPP
 # define SERVER_HPP 
 
@@ -11,7 +19,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/select.h>
-#include "User.hpp"
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -19,14 +26,13 @@
 #include <numeric>
 
 
-#include "Channel.hpp"
-#include "User.hpp"
-#include "Commands.hpp"
+
 #define SERVER_PORT 6667
 
 
 #define out(x) std::cout << x << std::endl;
 
+class Channel;
 
 class Server {
 
@@ -41,8 +47,9 @@ class Server {
     struct        timeval       timeout;
     fd_set        master_set, working_set;
 
-    std::map<std::string, Channel>        chans;
+    std::map<std::string, Channel>                          chans;
     std::map<const std::string &, const User &>           server_users; // sd et ref
+    Commands                                cmds; // creating commands object 
 
     Server();
     Server &	operator=(Server const & rhs);

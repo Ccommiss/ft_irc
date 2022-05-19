@@ -1,7 +1,7 @@
 
 
+#include "Server.hpp"
 #include "User.hpp"
-#include "Commands.hpp"
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */

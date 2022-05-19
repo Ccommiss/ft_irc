@@ -7,7 +7,7 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Server::Server() : max_sd(0), desc_ready(0), end_server(0), on(1)
+Server::Server() : on(1), max_sd(0), desc_ready(0),  end_server(0)
 {
     int rc = 0;
     listen_sd = socket(AF_INET6, SOCK_STREAM, 0);
@@ -72,14 +72,14 @@ Server::~Server()
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-Server &				Server::operator=( Server const & rhs )
-{
-	//if ( this != &rhs )
-	//{
-		//this->_value = rhs.getValue();
-	//}
-	return *this;
-}
+// Server &				Server::operator=( Server const & rhs )
+// {
+// 	//if ( this != &rhs )
+// 	//{
+// 		//this->_value = rhs.getValue();
+// 	//}
+// 	return *this;
+// }
 
 void                    Server::welcome_user(int new_sd, User &u)
 {
@@ -120,11 +120,11 @@ void                    Server::quit_server(User &u)
 // }
 
 
-std::ostream &			operator<<( std::ostream & o, Server const & i )
-{
-	//o << "Value = " << i.getValue();
-	return o;
-}
+// std::ostream &			operator<<( std::ostream & o, Server const & i )
+// {
+// 	//o << "Value = " << i.getValue();
+// 	return o;
+// }
 
 
 /*

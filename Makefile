@@ -1,6 +1,6 @@
 # Generated with GenMake
 # Arthur-TRT - https://github.com/arthur-trt/genMake
-# genmake vv1.1.4
+# genmake v1.1.6
 
 #Compiler and Linker
 CC					:= clang
@@ -20,7 +20,7 @@ include sources.mk
 
 #The Directories, Source, Includes, Objects, Binary and Resources
 SRCDIR				:= .
-INCDIR				:= .
+INCDIR				:= ./includes
 BUILDDIR			:= obj
 TARGETDIR			:= .
 SRCEXT				:= cpp
@@ -31,11 +31,12 @@ OBJECTS				:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEX
 OBJECTS_BONUS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES_BONUS:.$(SRCEXT)=.$(OBJEXT)))
 
 #Flags, Libraries and Includes
-cflags.release		:= 
+cflags.release		:= -Wall -Werror -Wextra -I./includes
 cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -ggdb
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))
 CPPFLAGS			:= $(cflags.$(BUILD)) -std=c++98
+
 lib.release			:= 
 lib.valgrind		:= $(lib.release)
 lib.debug			:= $(lib.release) -fsanitize=address -fno-omit-frame-pointer

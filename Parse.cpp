@@ -20,7 +20,7 @@ std::vector<std::string> split(std::string x)
     x += delim; // includes a delimiter at the end so last word is also read
     std::vector<std::string> splitted;
     std::string temp = "";
-    for (int i = 0; i < x.length(); i++)
+    for (unsigned long i = 0; i < x.length(); i++)
     {
         if (x[i] == delim || x[i] == '\n')
         {
@@ -45,17 +45,8 @@ void parse_cmd(User &user, Server &s) // envoyer users[i]
 {
     std::string buff(s.buffer);
 
-    typedef void (*Cmd)(Server & s, User & user, std::vector<std::string> arg);
-
-    std::map<std::string, Cmd> cmd_map;
-
-    cmd_map.insert(std::make_pair("NICK", &nick));
-	cmd_map.insert(std::make_pair("CAP", &nick));
-    cmd_map.insert(std::make_pair("USER", &setUser));
-    cmd_map.insert(std::make_pair("JOIN", &join));
-    cmd_map.insert(std::make_pair("PRIVMSG", &priv_msg));
-    cmd_map.insert(std::make_pair("EXIT", &quit_s));
-
+    out ("YO " << user.nickname);
+    std::map<std::string, Commands::Cmd> cmd_map = s.cmds.cmd_map;
     std::vector<std::string> res = split(buff);
     std::vector<std::string>::iterator it = res.begin(); // on garde les /n
 
@@ -72,7 +63,7 @@ void parse_cmd(User &user, Server &s) // envoyer users[i]
 		}
 		if (cmd_map.find(*it) != cmd_map.end())
         {
-            Cmd a = cmd_map.at(*it);
+            Commands::Cmd a = cmd_map.at(*it);
 			std::vector<std::string> new_res(res.begin() + std::distance(res.begin(), it), res.end());
             (*a)(s, user, new_res); // on envoie le deuxieme arg
         }                       // pour les messages slt  ; page accueil on peut que faire des cmd !!!

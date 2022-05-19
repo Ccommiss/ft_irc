@@ -22,7 +22,7 @@ Channel::Channel()
 }
 
 
-Channel::Channel(std::string name, User &creator): _name(name), _owner(creator) 
+Channel::Channel(std::string name, User &creator):  _name(name), _owner(creator)
 {
 	_owner = creator;
 	out ("Creator :" << _owner.nickname)
@@ -34,7 +34,7 @@ Channel::Channel(std::string name, User &creator): _name(name), _owner(creator)
 	std::cout << "a new chan " << *this << " has been created" << std::endl;
 }
 
-Channel::Channel( const Channel & src ): _owner(src._owner), _name(src._name)
+Channel::Channel( const Channel & src ): _name(src._name), _owner(src._owner)
 {
 	(void)src;
 	//if ( this != &src )
@@ -61,7 +61,7 @@ Channel::~Channel()
 
 Channel &				Channel::operator=( Channel const & rhs )
 {
-
+	(void)rhs;
 	return *this;
 }
 
