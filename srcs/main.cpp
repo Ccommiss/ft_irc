@@ -44,7 +44,6 @@ int    main()
 	{
 		bzero(s.buffer, 80);
 		memcpy(&s.working_set, &s.master_set, sizeof(s.master_set));
-		out ("Waiting select")
 		int rc = select(s.max_sd + 1, &s.working_set, NULL, NULL, &s.timeout);
 		out ("Waiting")
 		if (rc < 0)
@@ -63,16 +62,14 @@ int    main()
 		out ("RC" << s.desc_ready)
 		for (int i = 0; i <= s.max_sd && s.desc_ready > 0; ++i)
 		{
-			out ("ici");
 			if (FD_ISSET(i, &s.working_set))
 			{
-				out ("ici");
 				s.desc_ready -= 1;
 				// means it is a connection request 
 				if (i == s.listen_sd)
 				{
 					int new_sd = 0;
-									out ("before accept");
+					out ("before accept");
 
 					new_sd = accept(s.listen_sd, NULL, NULL);
 					// accetpted 
@@ -85,9 +82,7 @@ int    main()
 						}
 					}
 					// See Server
-					out ("new user")
 					User *new_user = new User(new_sd);
-					out ("befor push back")
 					users.insert(std::pair<int, User*>(new_sd,new_user));
 					s.welcome_user(new_sd, new_user);
 				}
