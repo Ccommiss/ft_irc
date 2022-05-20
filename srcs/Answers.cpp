@@ -32,7 +32,7 @@ std::string set_prefix(User *u, std::vector<std::string> cmd)
 */
 std::string choose_msg(Server &s, int code, User *u)
 {
-    return (*(s.cmds.server_replies.find(code)->second))(*u); // second = la function
+    return (*(s.cmds.server_replies.find(code)->second))(u); // second = la function
 }
 
 void server_reply(Server &s, User *u, std::string code)

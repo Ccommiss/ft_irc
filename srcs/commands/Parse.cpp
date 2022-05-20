@@ -51,11 +51,10 @@ std::vector<std::string> split(std::string x)
 **  @param s the server instance
 **  @returns none
 */
-void Commands::parse_cmd(User &user, Server &s) // envoyer users[i]
+void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
 {
+    start;
     std::string buff(s.buffer);
-
-    out ("YO " << user.nickname);
     std::vector<std::string> res = split(buff);
     std::vector<std::string>::iterator it = res.begin(); // on garde les /n
 

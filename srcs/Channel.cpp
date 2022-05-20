@@ -16,20 +16,21 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Channel::Channel()
+Channel::Channel() : _owner(0)
 {
 	
 }
 
 
-Channel::Channel(std::string name, User &creator):  _name(name), _owner(creator)
+Channel::Channel(std::string name, User *creator):  _name(name)
 {
 	_owner = creator;
-	out ("Creator :" << _owner.nickname)
-	out ("Creator :" << creator.nickname)
-	_users.insert(std::make_pair(&creator.nickname, &creator));
+	out ("Creator :" << _owner->nickname)
+	out ("Creator :" << creator->nickname)
+	_users.insert(std::pair<std::string *, User *>(&_owner->nickname, _owner));
+	out ("List of users :")
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out ("USERS : " << it->first);
+		out ("USERS : " << *it->first);
 	_operators.push_back(_owner);
 	std::cout << "a new chan " << *this << " has been created" << std::endl;
 }
@@ -78,14 +79,15 @@ std::ostream &			operator<<( std::ostream & o, Channel& i )
 */
 std::string& 				Channel::get_name() //const 
 {
-	return this->_name;
+	return _name;
 	
 }
 std::map<std::string *, User *>& 	Channel::get_users() //const 
 {
 	start;
-	out (*this->_users.begin()->first)
-	return this->_users;
+	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+		out ("USERS : " << *it->first);
+	return _users;
 }
 /*
 ** --------------------------------- OTHERS ----------------------------------
@@ -102,12 +104,11 @@ std::map<std::string *, User *>& 	Channel::get_users() //const
 // }
 
 //add a new_user, what happends if the name already exists ?
-void Channel::add_user(std::string name, User &new_user)
+void Channel::add_user(User *new_user)
 {
 	start;
-	std::cout << name << std::endl;
-	_users.insert(std::make_pair(&name, &new_user));
-	std::cout << "ok on est la !!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+	_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
+	std::cout << "Added users" << std::endl;
 }
 
 // void Channel::add_operator(User admin)

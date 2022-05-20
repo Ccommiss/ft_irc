@@ -15,17 +15,17 @@ class Commands
 		// Commands( Commands const & src );
 		~Commands();
 
-		void quit_s			(Server &s, User &u, std::vector<std::string> nick); // exit ou quit
-		void setUser		(Server &s, User &u, std::vector<std::string> arg);
-		void join			(Server &s, User &u, std::vector<std::string> arg);
-		void priv_msg		(Server &s, User &u, std::vector<std::string> arg);
-		void nick			(Server &s, User &u, std::vector<std::string> arg);
-		void parse_cmd		(User &user, Server &s);
+		void quit_s			(Server &s, User *u, std::vector<std::string> nick); // exit ou quit
+		void setUser		(Server &s, User *u, std::vector<std::string> arg);
+		void join			(Server &s, User *u, std::vector<std::string> arg);
+		void priv_msg		(Server &s, User *u, std::vector<std::string> arg);
+		void nick			(Server &s, User *u, std::vector<std::string> arg);
+		void parse_cmd		(User *user, Server &s);
 
-		typedef void (Commands::*Cmd)(Server &s, User &user, std::vector<std::string> arg);
+		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> arg);
 		std::map<std::string, Cmd> 		cmd_map;
 
-		typedef std::string (*Rep)(User &user);
+		typedef std::string (*Rep)(User *user);
 		std::map<int, Rep> 	server_replies;
 };
 

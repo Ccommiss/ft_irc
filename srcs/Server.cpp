@@ -81,31 +81,31 @@ Server::~Server()
 // 	return *this;
 // }
 
-void                    Server::welcome_user(int new_sd, User &u)
+void                    Server::welcome_user(int new_sd, User *u)
 {
     std::stringstream ss;
 	ss << new_sd;
 	std::string str = ss.str();
-    if (u.nickname == "Guest")
-	    u.nickname += str;
-	u.socket_descriptor = new_sd;
+    if (u->nickname == "Guest")
+	    u->nickname += str;
+	u->socket_descriptor = new_sd;
 	if (new_sd > max_sd)
 		max_sd = new_sd;
-    FD_SET(u.socket_descriptor, &master_set);  // add new SD to master set 
-	out(u.nickname << " joined the chat !");
-    server_users.insert(std::pair<std::string *, User *>(&(u.nickname), &u));
+    FD_SET(u->socket_descriptor, &master_set);  // add new SD to master set 
+	out(u->nickname << " joined the chat !");
+    server_users.insert(std::pair<std::string *, User *>(&u->nickname, u));
 
     out ("Adding " << server_users.begin()->first << " with nick " << server_users.begin()->second->nickname <<" to database");
 }
 
 
-void                    Server::quit_server(User &u)
+void                    Server::quit_server(User *u)
 {
     close_conn = 1;
-    out(u.nickname << " has left the chat");
-    close(u.socket_descriptor);
-    FD_CLR(u.socket_descriptor, &master_set);
-    if (u.socket_descriptor == max_sd)
+    out(u->nickname << " has left the chat");
+    close(u->socket_descriptor);
+    FD_CLR(u->socket_descriptor, &master_set);
+    if (u->socket_descriptor == max_sd)
     {
     	while (FD_ISSET(max_sd, &master_set) == 0)
     		max_sd -= 1;
