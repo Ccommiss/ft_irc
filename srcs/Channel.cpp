@@ -22,11 +22,12 @@ Channel::Channel() : _owner(0)
 }
 
 
-Channel::Channel(std::string name, User *creator):  _name(name)
+Channel::Channel(std::string name, User *creator):  _name(name), _topic("")
 {
 	_owner = creator;
 	out ("Creator :" << _owner->nickname)
 	out ("Creator :" << creator->nickname)
+
 	_users.insert(std::pair<std::string *, User *>(&_owner->nickname, _owner));
 	out ("List of users :")
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
@@ -68,7 +69,7 @@ Channel &				Channel::operator=( Channel const & rhs )
 
 std::ostream &			operator<<( std::ostream & o, Channel& i )
 {
-	o << i.get_name() << std::endl;
+	o << i.getName() << std::endl;
 	return o;
 }
 
@@ -77,18 +78,29 @@ std::ostream &			operator<<( std::ostream & o, Channel& i )
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
-std::string& 				Channel::get_name() //const 
+std::string& 				Channel::getName() //const 
 {
 	return _name;
 	
 }
-std::map<std::string *, User *>& 	Channel::get_users() //const 
+std::map<std::string *, User *>& 	Channel::getUsers() //const 
 {
 	start;
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
 		out ("USERS : " << *it->first);
 	return _users;
 }
+
+/*
+**	Prints the chan _users map (std::map<std::string *, User *>).  
+*/
+void	Channel::printUsers() //const 
+{
+	start;
+	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+		out ("USERS : " << *it->first); //show the nick name 
+}
+
 /*
 ** --------------------------------- OTHERS ----------------------------------
 */
@@ -103,12 +115,40 @@ std::map<std::string *, User *>& 	Channel::get_users() //const
 // 		std::cout << "this users doesn't exist" << std::endl;
 // }
 
+bool Channel::isTopicSet()
+{
+	if (_topic != "")
+		return true;
+	return false;
+}
+
+bool Channel::isInChan(User *u)
+{
+	if (_users.count(&u->nickname) == 1)
+		return true;
+	return false;
+}
+
+
+
 //add a new_user, what happends if the name already exists ?
 void Channel::add_user(User *new_user)
 {
 	start;
 	_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
 	std::cout << "Added users" << std::endl;
+}
+
+void Channel::remove_user(User *new_user)
+{
+	start;
+	if (isInChan(new_user))
+	{
+		_users.erase(&new_user->nickname);
+		std::cout << "Deleted users" << std::endl;
+	}
+	else
+		out("Unfound user : cannot remove from " << this->_name);
 }
 
 // void Channel::add_operator(User admin)
@@ -128,10 +168,10 @@ void Channel::add_user(User *new_user)
 // 	// 	std::cout << *it << std::endl;
 // }
 
-// void	Channel::set_topic(std::string topic)
-// {
-// 	this->_topic = topic;
-// }
+void	Channel::set_topic(std::string topic)
+{
+	this->_topic = topic;
+}
 // //Channel::invite 
 // //Channel::names ==> list connected users 
 

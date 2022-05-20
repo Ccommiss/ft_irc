@@ -23,12 +23,15 @@ class Commands
 		void priv_msg		(Server &s, User *u, std::vector<std::string> arg);
 		void nick			(Server &s, User *u, std::vector<std::string> arg);
 		void invite			(Server &s, User *u, std::vector<std::string> arg);
+		void part			(Server &s, User *u, std::vector<std::string> arg) ; // par d'un chan 
+		void topic			(Server &s, User *u, std::vector<std::string> arg);
+
 
 
 		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> arg);
 		std::map<std::string, Cmd> 		cmd_map;
 
-		typedef std::string (*Rep)(User *user);
+		typedef std::string (*Rep)(User *user, void *arg);
 		std::map<int, Rep> 	server_replies;
 };
 
@@ -41,7 +44,7 @@ std::string ltrim(const std::string &s);
 /*
 **  Answers
 */
-void 			server_reply(Server &s, User *u, std::string code);
+void 			server_reply(Server &s, User *u, std::string code, void *arg);
 std::string 	set_prefix(User *u, std::vector<std::string> cmd);
 
 #endif

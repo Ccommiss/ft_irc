@@ -53,6 +53,8 @@ Server::Server() : on(1), max_sd(0), desc_ready(0),  end_server(0)
     timeout.tv_usec = 0;
 }
 
+
+
 // Server::Server( const Server & src )
 // {
 // }
@@ -114,10 +116,25 @@ void                    Server::quit_server(User *u)
 
 //command 
 
-// void                      Server::list(std::string s)
-// {
+void                      Server::printChans()
+{
+    out ("Chan List :")
+    for (std::map<std::string, Channel *>::iterator it = chans.begin(); it != chans.end(); it++)
+    {
+        out ("- " << it->first);
+    }
 
-// }
+}
+
+void                      Server::printUsers()
+{
+    out ("User List :")
+    for (std::map<const std::string *, const User *>::iterator it = server_users.begin(); it !=  server_users.end(); it++)
+    {
+        out ("- " << it->first);
+    }
+
+}
 
 
 // std::ostream &			operator<<( std::ostream & o, Server const & i )

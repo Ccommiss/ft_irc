@@ -7,14 +7,20 @@
 #define MSG_002 "DOS Your host is irc.hackerzvoice.net, running version InspIRCd-2.0"
 #define MSG_003 "TRES This server was created 19:52:09 Aug 12 2013"
 #define MSG_004 "FINALMENTE irc.hackerzvoice.net InspIRCd-2.0 BHIRSWcghiorswx FLMNPRSYabcefhijklmnopqrstvz FLYabefhjkloqv"
-// #define MSG_005
+#define MSG_331  *(static_cast<std::string*>(arg)) + " :No topic is set"
+#define MSG_332 *(static_cast<std::string*>(arg)) + " : Topic is fruit" // // +  // TOPIC a deriver de arg qui est sera instance du channel
+#define MSG_341 *(static_cast<std::string*>(arg)) + " " + user->nickname
+
 // #define MSG_006
 
 
-std::string    RPL_001(User *user) { return (MSG_001); }
-std::string    RPL_002(User *user) { (void)user; return (MSG_002); }
-std::string    RPL_003(User *user) { (void)user; return (MSG_003); }
-std::string    RPL_004(User *user) { (void)user; return (MSG_004); }
+std::string    RPL_001(User *user, void *arg) { (void)arg; return (MSG_001); }
+std::string    RPL_002(User *user, void *arg) { (void)user; (void)arg; return (MSG_002); }
+std::string    RPL_003(User *user, void *arg) { (void)user; (void)arg; return (MSG_003); }
+std::string    RPL_004(User *user, void *arg) { (void)user; (void)arg; return (MSG_004); }
+std::string    RPL_331 (User *user, void *arg) { (void)user; (void)arg; return (MSG_331); }   //RPL INVITING 
+std::string    RPL_332 (User *user, void *arg) { (void)user; (void)arg; return (MSG_332); }   //RPL INVITING 
+std::string    RPL_341 (User *user, void *arg) { (void)user; (void)arg; return (MSG_341); }   //RPL INVITING 
 
 
 /*
@@ -31,6 +37,10 @@ Commands::Commands()
     cmd_map.insert(std::make_pair("PRIVMSG",  &Commands::priv_msg));
     cmd_map.insert(std::make_pair("EXIT",  &Commands::quit_s));
     cmd_map.insert(std::make_pair("INVITE",  &Commands::invite));
+    cmd_map.insert(std::make_pair("PART",  &Commands::part));
+    cmd_map.insert(std::make_pair("TOPIC",  &Commands::topic));
+    
+
 
 
     // Now storing replies ; idee, ptr sur func genre Answer::&RPL_001   avec RPL 001 qui prendra un user
@@ -38,6 +48,9 @@ Commands::Commands()
     server_replies.insert(std::make_pair(2, &RPL_002));
     server_replies.insert(std::make_pair(3, &RPL_003));
     server_replies.insert(std::make_pair(4, &RPL_004));
+    server_replies.insert(std::make_pair(331, &RPL_331)); // RPL TOPIC
+    server_replies.insert(std::make_pair(332, &RPL_332)); // RPL TOPIC
+    server_replies.insert(std::make_pair(341, &RPL_341));
 }
 
 

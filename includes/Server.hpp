@@ -32,6 +32,10 @@
 
 #define out(x) std::cout << x << std::endl;
 
+
+/// ev.data_fd == server_users->second->socket_descriptor; 
+
+
 class Channel;
 
 class Server {
@@ -47,9 +51,28 @@ class Server {
     struct        timeval       timeout;
     fd_set        master_set, working_set;
 
-    std::map<std::string,           Channel *>                          chans;
-    std::map<const std::string *, const User *>           server_users; // sd et ref
-    Commands                                cmds; 
+    std::map<std::string,           Channel *>              chans;
+    std::map<const std::string *, const User *>             server_users; 
+
+
+    //  quit_s (std::string *nick_name)
+    //  1 - find servers_users[nickname]
+    //  user *to_del = find servers_users[nickname];
+    //  servers_users.erase(nick_name);
+    //  delete to_del; 
+    //
+
+    // for (std::map<>::it = server_users.begin(); it .....)
+    // {
+    //
+    //
+    //  }
+    Commands                                                cmds; 
+
+
+    void                     printChans();
+    void                     printUsers();
+
 
     Server();
     Server &	operator=(Server const & rhs);

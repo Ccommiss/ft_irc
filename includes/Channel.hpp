@@ -31,11 +31,15 @@ class Channel
 
 		void								ban(User kicked);
 		void								add_user( User *new_user);
+		void								remove_user( User *new_user);
 		void								add_operator(User ope);
 		void 								set_topic(std::string topic);
 		void								me();
-		std::string  &						get_name() ;
-		std::map<std::string *, User *>  &		get_users()  ;
+		std::string  &						getName() ;
+		std::map<std::string *, User *>  &		getUsers()  ;
+		void 								printUsers();
+		bool 								isInChan(User *u);
+		bool 								isTopicSet();
 		
 		
 	private:
