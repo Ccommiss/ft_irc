@@ -6,13 +6,13 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 11:07:57 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/19 11:32:26 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/20 16:21:43 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "Server_tcp.hpp"
-void Server_tcp::get_addr( void )
+#include "Server.hpp"
+void Server::get_addr( void )
 {
 	//L'argument hints pointe sur une structure addrinfo qui spécifie les critères de sélection des structures d'adresses de sockets renvoyée dans la liste pointé par res. Si hints n'est pas NULL, il doit pointer sur une structure addrinfo dont les membres ai_family, ai_socktype, et ai_protocol indiquent les critères limitant l'ensemble d'adresses de sockets renvoyées par getaddrinfo(), de la façon suivante 
 	//ai_family

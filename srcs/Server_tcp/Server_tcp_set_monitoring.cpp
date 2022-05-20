@@ -6,13 +6,13 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 11:42:25 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/19 12:18:26 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/20 16:22:43 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "Server_tcp.hpp"
-void Server_tcp::set_monitoring( void )
+#include "Server.hpp"
+void Server::set_monitoring( void )
 {
 	//epoll_create creates a new epoll instance.
 	//we can put flags instead of 0. Does it worth it?

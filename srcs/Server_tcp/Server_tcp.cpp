@@ -6,12 +6,12 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:30:35 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/20 10:59:17 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/20 17:37:03 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-//Class_Name = Server_tcp
+//Class_Name = Server
 
-#include "Server_tcp.hpp"
+#include "Server.hpp"
 
 //debug{
 //priv_debug{
@@ -22,7 +22,7 @@
 //debug - END}
 
 //pub_constructor{
-Server_tcp::Server_tcp( const char * port, const char * pass ) : _port(strtol(port, NULL, 10)), _pass(pass), _addrs(NULL), _listener(-1), _nb_ev(0)
+Server::Server( const char * port, const char * pass ) : _port(strtol(port, NULL, 10)), _pass(pass), _addrs(NULL), _listener(-1), _nb_ev(0)
 {
 	if (_port < 1024 || _port > 65535)
 		throw std::runtime_error("port not correct");
@@ -47,16 +47,16 @@ Server_tcp::Server_tcp( const char * port, const char * pass ) : _port(strtol(po
 
 }
 
-Server_tcp::~Server_tcp( void ) {
+Server::~Server( void ) {
 }
 
-Server_tcp::Server_tcp( Server_tcp const & src ) {
+Server::Server( Server const & src ) {
 	*this = src;
 }
 //pub_constructor - END}
 
 //pub_operator{
-Server_tcp &	Server_tcp::operator=( Server_tcp const & rhs ) {
+Server &	Server::operator=( Server const & rhs ) {
 	if ( this != &rhs )
 	{
 		//this->VAR_TO_COPY = rhs.getVAR_TO_COPY();
@@ -78,6 +78,21 @@ Server_tcp &	Server_tcp::operator=( Server_tcp const & rhs ) {
 //pub_exception - END}
 
 //pub_fct{
+
+
+void                    Server::quit_server(User *u)
+{
+    //close_conn = 1;
+    out(u->nickname << " has left the chat");
+    close_fd(u->socket_descriptor, THROW);
+    //FD_CLR(u->socket_descriptor, &master_set);
+    //if (u->socket_descriptor == max_sd)
+    //{
+    //	while (FD_ISSET(max_sd, &master_set) == 0)
+    //		max_sd -= 1;
+    //}
+}
+
 //pub_fct - END}
 
 //pub_var{

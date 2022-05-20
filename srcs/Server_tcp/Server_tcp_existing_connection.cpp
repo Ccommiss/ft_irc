@@ -1,11 +1,11 @@
 
-#include "Server_tcp.hpp"
+#include "Server.hpp"
 
-void Server_tcp::existing_connection( struct epoll_event &ev )
+void Server::existing_connection( struct epoll_event &ev )
 {
 
-	memset (&_recv_message, '\0', sizeof (_recv_message));
-	ssize_t numbytes = recv (ev.data.fd, &_recv_message, sizeof (_recv_message), 0);
+	memset (&buffer, '\0', sizeof (buffer));
+	ssize_t numbytes = recv (ev.data.fd, &buffer, sizeof (buffer), 0);
 
 	if (numbytes == -1) //failed
 		throw std::runtime_error("Recv Failed");
@@ -25,12 +25,14 @@ void Server_tcp::existing_connection( struct epoll_event &ev )
 	{
 		debug("receved data to process : ",NOCR);
 		debug("BUFF_MAX_SIZE = ", NOCR);
-		debug(sizeof(_recv_message), NOCR);
+		debug(sizeof(buffer), NOCR);
 		debug(" - BYTES = ",NOCR);
 		debug(numbytes,NOCR);
 		debug(" - LEN = ",NOCR);
-		debug(strlen(_recv_message), NOCR);
+		debug(strlen(buffer), NOCR);
 		debug(" - MESSAGE = ", NOCR);
-		debug(_recv_message);
+		debug(buffer);
+		std::cout << users[ev.data.fd]->nickname << " says : " << buffer;
+		cmds.parse_cmd(users[ev.data.fd], *this);
 	}
 }

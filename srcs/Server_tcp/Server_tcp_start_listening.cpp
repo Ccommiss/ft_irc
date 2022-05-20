@@ -6,13 +6,13 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 11:21:55 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/19 17:50:20 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/20 16:22:51 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server_tcp.hpp"
+#include "Server.hpp"
 
-void Server_tcp::start_listening( void )
+void Server::start_listening( void )
 {
 	/* Scan through the list of address structures returned by
 	   getaddrinfo. Stop when the the socket and bind calls are successful. */

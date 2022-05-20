@@ -6,10 +6,9 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-User::User(int sd) : socket_descriptor(sd), registered(0)
+User::User(int sd) : socket_descriptor(sd), registered(0), name("Guest"), nickname("Guest")
 {
-    this->name = "Guest";
-    nickname = "Guest";
+	nickname.append(to_str(sd));
 }
 
 User::User( const User & src )

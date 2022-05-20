@@ -1,7 +1,7 @@
 
-#include "Server_tcp.hpp"
+#include "Server.hpp"
 
-bool	Server_tcp::pass_check( std::string to_check)
+bool	Server::pass_check( std::string to_check)
 {
 	if (!to_check.compare(_pass))
 		return (true);

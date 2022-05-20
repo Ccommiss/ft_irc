@@ -1,6 +1,6 @@
 
-#include "Server_tcp.hpp"
-void	Server_tcp::run( void )
+#include "Server.hpp"
+void	Server::run( void )
 {
 	while (1)
 	{

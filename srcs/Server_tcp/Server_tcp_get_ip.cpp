@@ -1,7 +1,7 @@
 
-#include "Server_tcp.hpp"
+#include "Server.hpp"
 
-char *	Server_tcp::get_ip( void )
+char *	Server::get_ip( void )
 {
 		return (inet_ntoa(((struct sockaddr_in *) &_client_saddr)->sin_addr));
 }
