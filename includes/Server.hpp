@@ -54,8 +54,8 @@ class Server {
     Server();
     Server &	operator=(Server const & rhs);
 
-    void welcome_user(int sd, User &u);
-    void quit_server(User &u);
+    void welcome_user(int sd, User *u);
+    void quit_server(User *u);
     ~Server();
 };
 

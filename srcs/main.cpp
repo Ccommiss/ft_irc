@@ -37,7 +37,7 @@ int    main()
 {
 
 	Server     	s;
-	User     	users[100];
+	std::map<int, User *>     	users;
 
 
 	while (s.end_server == 0)
@@ -60,16 +60,20 @@ int    main()
 		s.desc_ready = rc; // descriptor ready 
 		// we have to see step by step, 
 		// after return socme sockets are ready
-			out ("RC" << s.desc_ready)
+		out ("RC" << s.desc_ready)
 		for (int i = 0; i <= s.max_sd && s.desc_ready > 0; ++i)
 		{
+			out ("ici");
 			if (FD_ISSET(i, &s.working_set))
 			{
+				out ("ici");
 				s.desc_ready -= 1;
 				// means it is a connection request 
 				if (i == s.listen_sd)
 				{
 					int new_sd = 0;
+									out ("before accept");
+
 					new_sd = accept(s.listen_sd, NULL, NULL);
 					// accetpted 
 					if (new_sd < 0)
@@ -80,11 +84,16 @@ int    main()
 							s.end_server = TRUE;
 						}
 					}
-					// See Server 
-					s.welcome_user(new_sd, users[new_sd]);
+					// See Server
+					out ("new user")
+					User *new_user = new User(new_sd);
+					out ("befor push back")
+					users.insert(std::pair<int, User*>(new_sd,new_user));
+					s.welcome_user(new_sd, new_user);
 				}
 				else // we are receiving 
 				{
+					out ("receiving data");
 					s.close_conn = FALSE;
 					rc = recv(i, s.buffer, 80, 0);
 					if (rc < 0)
@@ -111,8 +120,9 @@ int    main()
 					}
 					else 
 					{
+						out ("there");
 					//std::string res = users[i].nickname << " says : " << s.buffer;
-					std::cout << users[i].nickname << " says : " << s.buffer;
+					std::cout << users[i]->nickname << " says : " << s.buffer;
 					//echo back 
 					s.cmds.parse_cmd(users[i], s);
 					bzero(s.buffer, 80);

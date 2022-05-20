@@ -1,13 +1,21 @@
 #include "Server.hpp"
 
 
+
+
+
+
+void    send_channel()
+
+
+
 /*
 **  Command: PRIVMSG
 **  @param arg : <msgtarget> <text to be sent>
 **  Triggered by /msg (login)
 ** or talking in a chan 
 */
-void            Commands::priv_msg(Server &s, User &u, std::vector<std::string> arg)
+void            Commands::priv_msg(Server &s, User *u, std::vector<std::string> arg)
 {
     start;
     std::string arg_1 = *(arg.begin() + 1);
@@ -16,7 +24,7 @@ void            Commands::priv_msg(Server &s, User &u, std::vector<std::string> 
     if (arg_1.compare(0, 1, "#", 0 , 1) == 0)
     {
         out ("Sending to channel" << arg_1)
-        out ("Does exist ? " << s.chans.count(arg_1))
+        out ("Does exist ? " << s.chans.count(arg_1) << " with " << s.chans[arg_1]->get_users().size() << " elems ")
         for (std::map<std::string *, User *>::iterator it = s.chans[arg_1]->get_users().begin(); it != s.chans[arg_1]->get_users().begin(); it++)
         {
             out ("USERS" << it->first);
@@ -32,7 +40,7 @@ void            Commands::priv_msg(Server &s, User &u, std::vector<std::string> 
             if (arg_1 == it->second->nickname)
             {
                 //out ("found user !" << s.server_users.at(arg_1).socket_descriptor);
-                std::string txt = set_prefix(&u, arg);
+                std::string txt = set_prefix(u, arg);
                 send (it->second->socket_descriptor, txt.c_str(), txt.length(), 0);
                 return ;
             }

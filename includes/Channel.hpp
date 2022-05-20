@@ -24,13 +24,13 @@ class Channel
 	public:
 
 		Channel();
-		Channel(std::string name, User & creator);
+		Channel(std::string name, User * creator);
 		Channel( Channel const & src );
 		~Channel();
 		Channel &		operator=( Channel const & src );
 
 		void								ban(User kicked);
-		void								add_user(std::string name, User &new_user);
+		void								add_user(User *new_user);
 		void								add_operator(User ope);
 		void 								set_topic(std::string topic);
 		void								me();
@@ -39,11 +39,11 @@ class Channel
 		
 		
 	private:
-		std::map<std::string *, User *> 		_users;
-		std::string							_name;
-		std::vector<User>					_operators;
-		std::vector<User> 					_banned;
-		User								_owner;
+		std::map<std::string *, User *> 	_users;
+		std::string							_name; // nom du chan 
+		std::vector<User *>					_operators;
+		std::vector<User *> 				_banned;
+		User*								_owner;
 		std::string							_topic;
 		//std::vector<User &>				_invite;
 		//std::vector<User &>				_voice;

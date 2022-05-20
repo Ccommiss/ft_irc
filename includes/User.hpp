@@ -13,7 +13,8 @@ class User {
         std::string nickname;
 
 
-    User();
+    //User();
+    User(int sd);
     User(User const & src);
     ~User();
     User &	operator=(User const & rhs);
