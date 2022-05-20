@@ -30,6 +30,7 @@ Commands::Commands()
     cmd_map.insert(std::make_pair("JOIN",  &Commands::join));
     cmd_map.insert(std::make_pair("PRIVMSG",  &Commands::priv_msg));
     cmd_map.insert(std::make_pair("EXIT",  &Commands::quit_s));
+    cmd_map.insert(std::make_pair("INVITE",  &Commands::invite));
 
 
     // Now storing replies ; idee, ptr sur func genre Answer::&RPL_001   avec RPL 001 qui prendra un user

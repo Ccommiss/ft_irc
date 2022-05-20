@@ -30,7 +30,7 @@ class Channel
 		Channel &		operator=( Channel const & src );
 
 		void								ban(User kicked);
-		void								add_user(User *new_user);
+		void								add_user( User *new_user);
 		void								add_operator(User ope);
 		void 								set_topic(std::string topic);
 		void								me();

@@ -22,6 +22,8 @@ class Commands
 		void join			(Server &s, User *u, std::vector<std::string> arg);
 		void priv_msg		(Server &s, User *u, std::vector<std::string> arg);
 		void nick			(Server &s, User *u, std::vector<std::string> arg);
+		void invite			(Server &s, User *u, std::vector<std::string> arg);
+
 
 		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> arg);
 		std::map<std::string, Cmd> 		cmd_map;
