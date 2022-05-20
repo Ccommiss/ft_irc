@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:50:03 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/19 16:50:14 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/20 11:01:37 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //Class_Name = Server_tcp
@@ -27,15 +27,6 @@
 # ifndef COL_NORMAL
 #  define COL_NORMAL		"\033[0m"
 # endif
-
-//Max client nbr
-# define MAX_EVENTS                10
-//timeout for epoll wait in ms
-//-1 for infinity
-# define TIMEOUT                -1
-
-//socket's queue size after what ECONNREFUSED ist return
-# define BACKLOG                   10
 
 #include <sys/epoll.h>
 
@@ -90,6 +81,8 @@ class	Server_tcp {
 		//pub_exception - END}
 
 		//pub_fct{
+		void	run( void );
+		bool	pass_check( std::string to_check);
 		//pub_fct - END}
 
 		//pub_var{
@@ -101,13 +94,14 @@ class	Server_tcp {
 
 		//priv_fct{
 		//out_loop
-		void get_addr( void );
-		void start_listening( void );
-		void set_monitoring( void );
+		void 	get_addr( void );
+		void 	start_listening( void );
+		void 	set_monitoring( void );
 
 		//in_loop
-		void new_connection( void );
-		void existing_connection( struct epoll_event &ev );
+		char *	get_ip( void );
+		void 	new_connection( void );
+		void 	existing_connection( struct epoll_event &ev );
 		//priv_fct - END}
 
 		//priv_constructor{
@@ -122,12 +116,11 @@ class	Server_tcp {
 		std::string					_pass;
 		struct addrinfo			*	_addrs;
 		int 						_listener;
-		char					*	_ip;
 		int							_efd;
-		struct 						epoll_event ep_event[MAX_EVENTS];
+		struct epoll_event 			_ep_event[MAX_EVENTS];
 		int							_nb_ev;
-		struct sockaddr_storage 	client_saddr;
-		char 						recv_message[RECV_BUFF_SIZE];
+		struct sockaddr_storage 	_client_saddr;
+		char 						_recv_message[RECV_BUFF_SIZE];
 		//priv_var - END}
 };
 

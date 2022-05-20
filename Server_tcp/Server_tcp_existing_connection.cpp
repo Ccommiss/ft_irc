@@ -4,8 +4,8 @@
 void Server_tcp::existing_connection( struct epoll_event &ev )
 {
 
-	memset (&recv_message, '\0', sizeof (recv_message));
-	ssize_t numbytes = recv (ev.data.fd, &recv_message, sizeof (recv_message), 0);
+	memset (&_recv_message, '\0', sizeof (_recv_message));
+	ssize_t numbytes = recv (ev.data.fd, &_recv_message, sizeof (_recv_message), 0);
 
 	if (numbytes == -1) //failed
 		throw std::runtime_error("Recv Failed");
@@ -25,12 +25,12 @@ void Server_tcp::existing_connection( struct epoll_event &ev )
 	{
 		debug("receved data to process : ",NOCR);
 		debug("BUFF_MAX_SIZE = ", NOCR);
-		debug(sizeof(recv_message), NOCR);
+		debug(sizeof(_recv_message), NOCR);
 		debug(" - BYTES = ",NOCR);
 		debug(numbytes,NOCR);
 		debug(" - LEN = ",NOCR);
-		debug(strlen(recv_message), NOCR);
+		debug(strlen(_recv_message), NOCR);
 		debug(" - MESSAGE = ", NOCR);
-		debug(recv_message);
+		debug(_recv_message);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:30:35 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/19 16:40:39 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/20 10:59:17 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //Class_Name = Server_tcp
@@ -22,7 +22,7 @@
 //debug - END}
 
 //pub_constructor{
-Server_tcp::Server_tcp( const char * port, const char * pass ) : _port(strtol(port, NULL, 10)), _pass(pass), _addrs(NULL), _listener(-1), _ip(NULL), _nb_ev(0)
+Server_tcp::Server_tcp( const char * port, const char * pass ) : _port(strtol(port, NULL, 10)), _pass(pass), _addrs(NULL), _listener(-1), _nb_ev(0)
 {
 	if (_port < 1024 || _port > 65535)
 		throw std::runtime_error("port not correct");
@@ -33,26 +33,6 @@ Server_tcp::Server_tcp( const char * port, const char * pass ) : _port(strtol(po
 		this->get_addr();
 		this->start_listening();
 		this->set_monitoring();
-		while (1)
-		{
-			_ip = NULL;
-			// monitor readfds for readiness for reading. if TIMEOUT = -1 == infinity
-			// fill ep_event ???
-			// return nb of evenements
-			if (0 > (_nb_ev = epoll_wait (_efd, ep_event, MAX_EVENTS,  TIMEOUT)))
-				throw std::runtime_error("epoll_wait failed");
-			for (int i = 0; i < _nb_ev; i++)
-			{
-				if 	((ep_event[i].events & EPOLLIN) == EPOLLIN) // mask EPOLLIN event
-				{
-					if (ep_event [i].data.fd == _listener)
-						this->new_connection();
-					else
-						this->existing_connection(ep_event[i]);
-				}
-			}
-
-		}
 	}
 	catch ( std::exception &e )
 	{
@@ -61,7 +41,7 @@ Server_tcp::Server_tcp( const char * port, const char * pass ) : _port(strtol(po
 		if (_listener >= 0 )
 			close_fd(_listener, NO_THROW);
 		for (int i = 0; i < _nb_ev; i++)
-			close_fd((ep_event[i].data.fd), NO_THROW);
+			close_fd((_ep_event[i].data.fd), NO_THROW);
 		throw e;
 	}
 
