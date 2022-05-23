@@ -16,6 +16,7 @@ void Commands::nick(Server &s, User *u, std::vector<std::string> arg)
         std::map<const std::string *, const User *>::iterator it = s.server_users.begin();
         while (it !=  s.server_users.end())
         {
+            out ("Sending answer to : " << it->second->socket_descriptor)
             if (send(it->second->socket_descriptor, txt.c_str(), txt.length(), 0) < 0)
                  perror ("Fail send");
             it++;
