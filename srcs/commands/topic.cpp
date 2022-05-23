@@ -24,12 +24,12 @@ void Commands::topic(Server &s, User *u, std::vector<std::string> arg)
     if ((arg.begin() + 2) != arg.end())  // si on demande suejt
     {
         std::string txt = set_prefix(u, arg);
-
         std::map<std::string *, User *> chan_users = s.chans.find(chan_name)->second->getUsers();
         for (std::map<std::string *, User *>::iterator ite = chan_users.begin(); ite != chan_users.end(); ite++)
             send(ite->second->socket_descriptor, txt.c_str(), txt.length(), 0);
         chan->setTopic( (*(arg.begin() + 2)).substr(1, (*(arg.begin() + 2)).length()));
     }
+
     if (chan->isTopicSet() == false) // si ni topic set renvoyer ca 
         server_reply(s, u, "331", chan);
     else

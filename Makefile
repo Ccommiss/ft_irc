@@ -4,17 +4,17 @@
 
 #Compiler and Linker
 CC					:= clang
-CXX					:= c++
+CXX					:= c++ -g 
 ifeq ($(shell uname -s),Darwin)
 	CC				:= gcc
-	CXX				:= g++
+	CXX				:= g++ 
 endif
 
 #The Target Binary Program
 TARGET				:= out
 TARGET_BONUS		:= out-bonus
 
-BUILD				:= release
+BUILD				:= release  
 
 include sources.mk
 
