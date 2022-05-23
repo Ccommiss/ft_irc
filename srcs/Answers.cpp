@@ -49,7 +49,7 @@ void server_reply(Server &s, User *u, std::string code, void *arg) // rajouter a
     txt.append(code);
     txt.append(" ");
     txt.append(u->nickname); // lui qui va servir commenickname
-    txt.append(" :");
+    txt.append(" ");
     txt.append(choose_msg(s, std::strtol(code.c_str(), &ptr, 10), u, arg));
     txt.append("\r\n");
     

@@ -117,8 +117,12 @@ void	Channel::printUsers() //const
 
 bool Channel::isTopicSet()
 {
-	if (_topic != "")
+	out (" TOPIC IS " << _topic << "-->" << _topic.length())
+	if (_topic.length() != 0)
+	{
+		out ("TOPIC IS SET")
 		return true;
+	}
 	return false;
 }
 
@@ -168,9 +172,17 @@ void Channel::remove_user(User *new_user)
 // 	// 	std::cout << *it << std::endl;
 // }
 
-void	Channel::set_topic(std::string topic)
+void	Channel::setTopic(std::string topic)
 {
-	this->_topic = topic;
+	if (topic.length() > 0){
+		_topic.clear();
+		_topic.append(topic);
+	}
+}
+
+std::string&	Channel::getTopic()
+{
+	return _topic;
 }
 // //Channel::invite 
 // //Channel::names ==> list connected users 

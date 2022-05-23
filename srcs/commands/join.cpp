@@ -20,9 +20,14 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
         s.chans[chan_name]->add_user(u);
     }
    
-    /* Server informing */
+    /* Server informing all chan users */
     std::map<std::string *, User *> chan_users = s.chans.find(chan_name)->second->getUsers();
     for (std::map<std::string *, User *>::iterator ite = chan_users.begin(); ite != chan_users.end(); ite++)
-        send(ite->second->socket_descriptor, txt.c_str(), txt.length(), 0);
+        send(ite->second->socket_descriptor, txt.c_str(), txt.length(), 0); // send to all 
     /* RPL 331 */
+    
+    server_reply(s, u, "353", s.chans[chan_name]);
+    server_reply(s, u, "366", s.chans[chan_name]);
+    if (s.chans[chan_name]->isTopicSet() == true)
+        server_reply(s, u, "332", &chan_name);
 }
