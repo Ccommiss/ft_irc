@@ -88,6 +88,9 @@ class	Server {
 		void	run( void );
 		bool	pass_check( std::string to_check);
 		void	quit_server(User *u);
+
+		void                     printChans();
+    	void                     printUsers();
 		//pub_fct - END}
 
 		//pub_var{
@@ -96,6 +99,7 @@ class	Server {
 		Commands                                	cmds; 
 		std::map<int, User *>     					users;
     	char          				buffer[RECV_BUFF_SIZE];
+
 		//pub_var - END}
 
 	private:
@@ -113,6 +117,8 @@ class	Server {
 		void 		new_connection( void );
 		void 		existing_connection( struct epoll_event &ev );
 		User 	*	create_user(int sd);
+
+
 		//priv_fct - END}
 
 		//priv_constructor{

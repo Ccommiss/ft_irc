@@ -25,6 +25,9 @@ SOURCES		+=             		\
 		srcs/commands/nick.cpp       	\
 		srcs/commands/priv_msg.cpp       	\
 		srcs/commands/user.cpp       	\
+		srcs/commands/invite.cpp       	\
+		srcs/commands/part.cpp       	\
+		srcs/commands/topic.cpp       	\
 
 
 

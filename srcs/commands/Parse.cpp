@@ -58,6 +58,8 @@ void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
     std::vector<std::string> res = split(buff);
     std::vector<std::string>::iterator it = res.begin(); // on garde les /n
 
+    out ("Buffer : " << s.buffer);
+
     while (it != res.end())
     {
         while (*it == "\n")
