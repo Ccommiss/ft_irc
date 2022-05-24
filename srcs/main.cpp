@@ -9,15 +9,26 @@ int main (int ac, char**av)
 		return(-1);
 	}
 
-	Server *sv;
-	try 
-	{
-		sv = new Server(av[1], av[2]);
-		sv->run();
-	}
+	Server *sv = NULL;
+	try { sv = new Server(av[1], av[2]); }
 	catch (std::exception &	e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr <<"[MAIN] - Exception catched during sv INIT: " << e.what() << std::endl;
+		exit(-1);
 	}
+
+	try { sv->run(); }
+	catch (std::exception &	e)
+	{
+		std::cerr <<"[MAIN] - Exception catched during sv RUN: " << e.what() << std::endl;
+		sv->shutdown(NO_THROW);
+		delete sv;
+		exit(-1);
+	}
+
+
+	sv->shutdown(THROW);
+	delete sv;
+	exit(0);
 
 }

@@ -6,7 +6,7 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-User::User(int sd) : socket_descriptor(sd), registered(0), name("Guest"), nickname("Guest")
+User::User(int sd) : socket_descriptor(sd), registered(0), name("Guest"), nickname("Guest"), event(NULL)
 {
 	nickname.append(to_str(sd));
 }

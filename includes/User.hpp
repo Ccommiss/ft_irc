@@ -7,10 +7,11 @@
 
 class User {
     public:
-        int         socket_descriptor;
-        int registered;
-        std::string name;
-        std::string nickname;
+        int         			socket_descriptor;
+        int 					registered;
+        std::string 			name;
+        std::string 			nickname;
+		struct epoll_event	*	event;
 
 
     //User();

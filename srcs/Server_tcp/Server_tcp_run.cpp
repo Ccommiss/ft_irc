@@ -16,9 +16,11 @@ void	Server::run( void )
 				if (_ep_event [i].data.fd == _listener)
 					this->new_connection();
 				else
-					this->existing_connection(_ep_event[i]);
+					this->existing_connection(_ep_event[i].data.fd);
 			}
 		}
+		if (!_nb_ev)
+			std::cout << "TIMEOUT" << std::endl;
 
 	}
 }

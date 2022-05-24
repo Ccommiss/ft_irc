@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 16:31:45 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/19 17:55:48 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/24 18:47:54 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 //Flag used to print debug message
 #ifndef DEBUG
 # define DEBUG 0
+#endif
+
+#ifndef DEBUG_SV
+# define DEBUG_SV 0
 #endif
 
 //Flag used to disable printing carriage return
@@ -33,10 +37,11 @@
 
 //timeout for epoll wait in ms
 //-1 for infinity
-# define TIMEOUT                -1
+# define TIMEOUT                10000
 
 //socket's queue size after what ECONNREFUSED ist return
 # define BACKLOG                   10
 
 
+#define SV  1
 #endif

@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:50:03 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/20 18:10:54 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/24 18:33:21 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //Class_Name = Server
@@ -85,9 +85,10 @@ class	Server {
 		//pub_exception - END}
 
 		//pub_fct{
+		void	end_connection( int sd );
+		void	shutdown(bool does_throw);
 		void	run( void );
 		bool	pass_check( std::string to_check);
-		void	quit_server(User *u);
 
 		void                     printChans();
     	void                     printUsers();
@@ -99,6 +100,7 @@ class	Server {
 		Commands                                	cmds; 
 		std::map<int, User *>     					users;
     	char          				buffer[RECV_BUFF_SIZE];
+		void						delete_user(User * to_del);
 
 		//pub_var - END}
 
@@ -115,7 +117,7 @@ class	Server {
 		//in_loop
 		char	*	get_ip( void );
 		void 		new_connection( void );
-		void 		existing_connection( struct epoll_event &ev );
+		void 		existing_connection( int sd );
 		User 	*	create_user(int sd);
 
 
