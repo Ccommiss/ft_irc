@@ -3,7 +3,8 @@
 
 #include <iostream> 
 #include <vector>
- 
+
+class Channel;
 
 class User {
     public:
@@ -24,6 +25,9 @@ class User {
     void                            setName(std::string newName);
     std::string const               &getName();
     static std::string              getNickName(); //{ return nickname; }
+
+    void                            join_chan(Channel *chan);
+    std::vector<Channel *>          joined_chans;
 
     
 };

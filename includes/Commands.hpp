@@ -1,15 +1,11 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-
-
+#include <map>
 #include "User.hpp"
 #include "Debug.hpp"
 
 
 class Server; 
-#include <map>
-
-
 
 class Commands
 {

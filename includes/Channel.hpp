@@ -58,4 +58,6 @@ class Channel
 
 std::ostream &			operator<<( std::ostream & o, Channel & i );
 
+std::string        printNames(Channel *chan); // formatte, pour command names etc;
+
 #endif /* ********************************************************* CHANNEL_H */

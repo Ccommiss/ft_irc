@@ -26,14 +26,9 @@ Channel::Channel(std::string name, User *creator):  _name(name), _topic("")
 {
 	_owner = creator;
 	out ("Creator :" << _owner->nickname)
-	out ("Creator :" << creator->nickname)
-
-	_users.insert(std::pair<std::string *, User *>(&_owner->nickname, _owner));
-	out ("List of users :")
-	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out ("USERS : " << *it->first);
+	add_user(creator);
 	_operators.push_back(_owner);
-	std::cout << "a new chan " << *this << " has been created" << std::endl;
+	out("A new chan " << *this << " has been created");
 }
 
 Channel::Channel( const Channel & src ): _name(src._name), _owner(src._owner)
@@ -139,6 +134,7 @@ bool Channel::isInChan(User *u)
 void Channel::add_user(User *new_user)
 {
 	start;
+	new_user->join_chan(this);
 	_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
 	std::cout << "Added users" << std::endl;
 }
@@ -186,3 +182,17 @@ std::string&	Channel::getTopic()
 // //Channel::names ==> list connected users 
 
 // /* ************************************************************************** */
+
+
+std::string        printNames(Channel *chan)
+{
+	 std::string names;
+	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin() ; it != chan->getUsers().end(); it++)
+	{
+		//if is op... @, sinon +
+		names.append("@");
+		names.append(*it->first);
+		names.append(" ");
+	}
+	return names;
+}

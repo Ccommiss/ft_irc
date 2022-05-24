@@ -21,3 +21,4 @@ std::string rtrim(const std::string &s)
 std::string trim(const std::string &s) {
     return rtrim(ltrim(s));
 }
+
