@@ -9,9 +9,7 @@ void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string>
     {
         if (dest_nick == it->second->nickname)
         {
-            // out ("found user !" << s.server_users.at(arg_1).socket_descriptor);
-            std::string txt = set_prefix(u, arg);
-            send(it->second->socket_descriptor, txt.c_str(), txt.length(), 0);
+            server_relay(u, arg, u);
             return;
         }
         it++;
@@ -24,13 +22,10 @@ void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std:
     // regarder se passe quioi si channel non existant
     {
         out("Sending to channel >>> " << dest_channel)
-            std::string txt = set_prefix(u, arg);
         s.chans[dest_channel]->printUsers();
-        for (std::map<std::string *, User *>::iterator it = s.chans[dest_channel]->getUsers().begin(); it != s.chans[dest_channel]->getUsers().end(); it++)
-        {
-            if (it->second != u) // snd to other and not current user
-                send(it->second->socket_descriptor, txt.c_str(), txt.length(), 0);
-        }
+        std::map<std::string *, User *> chan_users(s.chans[dest_channel]->getUsers());
+        chan_users.erase(&u->nickname);
+        server_relay(u, arg, chan_users);
     }
 }
 

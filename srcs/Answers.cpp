@@ -8,22 +8,7 @@
 
 
 
-std::string set_prefix(User *u, std::vector<std::string> cmd)
-{
-    std::string txt;
-    txt.append(":");
-    txt.append(u->nickname);
-    txt.append("!");
-    txt.append(u->name); //username
-    txt.append("@localhost ");
-    for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
-        txt.append(*it + " "); // on met touts les commandes dans le prefixe 
-    txt = trim(txt);
-     txt.append("\r\n");
-    out(FG2("Server Reply to be sent:"));
-    out (txt)
-    return ((txt));
-}
+
 
 
 /*
@@ -40,7 +25,7 @@ std::string choose_msg(Server &s, int code, User *u, void *arg)
     return (*(s.cmds.server_replies.find(code)->second))(u, arg); // second = la function
 }
 
-void server_reply(Server &s, User *u, std::string code, void *arg) // rajouter autre chose pour le channel par ex ?
+void numeric_reply(Server &s, User *u, std::string code, void *arg) // rajouter autre chose pour le channel par ex ? //numeric reply 
 {
     std::string txt;
     char *ptr;

@@ -3,35 +3,31 @@
 
 
 
-bool chanExists(Server &s, std::string chan_name)
+bool chanExists(Server &s, std::string chan_name) // a mettre ailleurs 
 {
-    if (s.chans.count(chan_name) == 1)
-        return (true);
-    return (false);
+	if (s.chans.count(chan_name) == 1)
+		return (true);
+	return (false);
 }
 
 
-//faire protection si chan existe pas ; faire function channel exist pour server 
-
 void Commands::topic(Server &s, User *u, std::vector<std::string> arg)
 {
-    (void)arg;
-    start;
-    std::string chan_name = *(arg.begin() + 1);
-    if (!chanExists(s, chan_name))
-        return ;
-    Channel     *chan = (s.chans.find(chan_name)->second); //on recp l'instance 
-    if ((arg.begin() + 2) != arg.end())  // si on demande suejt
-    {
-        std::string txt = set_prefix(u, arg);
-        std::map<std::string *, User *> chan_users = s.chans.find(chan_name)->second->getUsers();
-        for (std::map<std::string *, User *>::iterator ite = chan_users.begin(); ite != chan_users.end(); ite++)
-            send(ite->second->socket_descriptor, txt.c_str(), txt.length(), 0);
-        chan->setTopic( (*(arg.begin() + 2)).substr(1, (*(arg.begin() + 2)).length()));
-    }
+	(void)arg;
+	start;
+	std::string chan_name = *(arg.begin() + 1);
+	if (!chanExists(s, chan_name))
+		return ;
+	Channel     *chan = (s.chans.find(chan_name)->second); //on recp l'instance 
+	if ((arg.begin() + 2) != arg.end())  // si on demande suejt
+	{
+	   std::map<std::string *, User *> chan_users = s.chans.find(chan_name)->second->getUsers();
+	   server_relay(u, arg, chan_users);
+		chan->setTopic( (*(arg.begin() + 2)).substr(1, (*(arg.begin() + 2)).length()));
+	}
 
-    if (chan->isTopicSet() == false) // si ni topic set renvoyer ca 
-        server_reply(s, u, "331", chan);
-    else
-        server_reply(s, u, "332", chan);
+	if (chan->isTopicSet() == false) // si ni topic set renvoyer ca 
+		numeric_reply(s, u, "331", chan);
+	else
+		numeric_reply(s, u, "332", chan);
 }

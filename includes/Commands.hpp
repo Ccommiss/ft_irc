@@ -1,6 +1,8 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 #include "User.hpp"
+#include "Debug.hpp"
+
 #include <map>
 
 class Server;
@@ -34,6 +36,7 @@ class Commands
 		typedef std::string (*Rep)(User *user, void *arg);
 		std::map<int, Rep> 	server_replies;
 };
+#include "Server.hpp"
 
 /*
 **  Utils
@@ -44,7 +47,54 @@ std::string ltrim(const std::string &s);
 /*
 **  Answers
 */
-void 			server_reply(Server &s, User *u, std::string code, void *arg);
-std::string 	set_prefix(User *u, std::vector<std::string> cmd);
+void 			numeric_reply(Server &s, User *u, std::string code, void *arg);
+
+// template <typename T>
+// std::string 	server_relay(const User *u, std::vector<std::string> cmd, T users_list);
+// template <>
+// std::string 	server_relay(const User *u, std::vector<std::string> cmd, User *receiver);
+
+
+
+template <typename T> // un container 
+inline std::string server_relay(const User *u, std::vector<std::string> cmd, T user_list) 
+{
+    std::string txt;
+    txt.append(":");
+    txt.append(u->nickname);
+    txt.append("!");
+    txt.append(u->name); //username
+    txt.append("@localhost ");
+    for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
+        txt.append(*it + " "); // on met touts les commandes dans le prefixe 
+    txt = trim(txt);
+     txt.append("\r\n");
+    out(FG2("Server Reply to be sent: (server relay)"));
+    out (txt)
+    for (typename T::iterator ite = user_list.begin(); ite != user_list.end(); ite++)
+       send(ite->second->socket_descriptor, txt.c_str(), txt.length(), 0); // send to all 
+
+    return ((txt));
+}
+
+template <> // specialisation si un seul envoi a effectuer
+inline std::string server_relay(const User *u, std::vector<std::string> cmd, User *receiver) 
+{
+    std::string txt;
+    txt.append(":");
+    txt.append(u->nickname);
+    txt.append("!");
+    txt.append(u->name); //username
+    txt.append("@localhost ");
+    for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
+        txt.append(*it + " "); // on met touts les commandes dans le prefixe 
+    txt = trim(txt);
+     txt.append("\r\n");
+    out(FG2("Server Reply to be sent: (server relay)"));
+    out (txt)
+    send(receiver->socket_descriptor, txt.c_str(), txt.length(), 0);
+    return ((txt));
+}
+
 
 #endif

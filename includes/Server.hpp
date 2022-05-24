@@ -96,6 +96,7 @@ class	Server {
 		//pub_var{
 		std::map<std::string, Channel *>			chans;
 		std::map<const std::string *, const User *>	server_users; // sd et ref
+	
 		Commands                                	cmds; 
 		std::map<int, User *>     					users;
     	char          				buffer[RECV_BUFF_SIZE];
