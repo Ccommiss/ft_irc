@@ -91,6 +91,11 @@ class	Server {
 
 		void                     printChans();
     	void                     printUsers();
+
+		template <typename T>
+		std::string 	choose_msg(int code, User *u, T *arg);
+		template <typename T>
+		void 			numeric_reply( User *u, std::string code, T *arg);
 		//pub_fct - END}
 
 		//pub_var{

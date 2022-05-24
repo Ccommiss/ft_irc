@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "Answers.hpp"
 
 void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string> arg)
 {

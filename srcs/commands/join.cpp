@@ -1,5 +1,5 @@
 #include "Server.hpp"
-
+#include "Answers.hpp"
 
 
 void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou quit
@@ -26,8 +26,8 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 	server_relay(u, arg, chan_users);
 	/* RPL 331 */
 	
-	numeric_reply(s, u, "353", s.chans[chan_name]);
-	numeric_reply(s, u, "366", s.chans[chan_name]);
+	s.numeric_reply(u, "353", s.chans[chan_name]);
+	s.numeric_reply(u, "366", s.chans[chan_name]);
 	if (s.chans[chan_name]->isTopicSet() == true)
-		numeric_reply(s, u, "332",  s.chans[chan_name]);
+		s.numeric_reply(u, "332",  s.chans[chan_name]);
 }

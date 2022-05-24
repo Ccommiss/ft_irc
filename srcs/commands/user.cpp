@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "Answers.hpp"
 
 void Commands::setUser(Server &s, User *u, std::vector<std::string> arg)
 {
@@ -7,10 +8,10 @@ void Commands::setUser(Server &s, User *u, std::vector<std::string> arg)
 	u->setName(*(arg.begin() + 1));
 	if (u->registered == 0)
 	{
-		numeric_reply(s, u, "001", NULL);
-		numeric_reply(s, u, "002", NULL);
-		numeric_reply(s, u, "003", NULL);
-		numeric_reply(s, u, "004", NULL);
+		s.numeric_reply(u, "001", u);
+		s.numeric_reply(u, "002", u);
+		s.numeric_reply(u, "003", u);
+		s.numeric_reply(u, "004", u);
 		u->registered = 1;
 		out("Answer sent to " << u->socket_descriptor);
 	}

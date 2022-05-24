@@ -1,5 +1,5 @@
 #include "Server.hpp"
-
+#include "Answers.hpp"
 
 void Commands::nick(Server &s, User *u, std::vector<std::string> arg)
 {

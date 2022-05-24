@@ -1,7 +1,5 @@
 #include "Server.hpp"
-
-
-
+#include "Answers.hpp"
 
 bool chanExists(Server &s, std::string chan_name) // a mettre ailleurs 
 {
@@ -10,7 +8,6 @@ bool chanExists(Server &s, std::string chan_name) // a mettre ailleurs
 	return (false);
 }
 
-
 void Commands::topic(Server &s, User *u, std::vector<std::string> arg)
 {
 	(void)arg;
@@ -18,7 +15,8 @@ void Commands::topic(Server &s, User *u, std::vector<std::string> arg)
 	std::string chan_name = *(arg.begin() + 1);
 	if (!chanExists(s, chan_name))
 		return ;
-	Channel     *chan = (s.chans.find(chan_name)->second); //on recp l'instance 
+	Channel     *chan = (s.chans.find(chan_name)->second); //on recp l'instance
+
 	if ((arg.begin() + 2) != arg.end())  // si on demande suejt
 	{
 	   std::map<std::string *, User *> chan_users = s.chans.find(chan_name)->second->getUsers();
@@ -27,7 +25,7 @@ void Commands::topic(Server &s, User *u, std::vector<std::string> arg)
 	}
 
 	if (chan->isTopicSet() == false) // si ni topic set renvoyer ca 
-		numeric_reply(s, u, "331", chan);
+		s.numeric_reply(u, "331", chan);
 	else
-		numeric_reply(s, u, "332", chan);
+		s.numeric_reply(u, "332", chan);
 }

@@ -2,7 +2,7 @@
 #include "Commands.hpp"
 #include "Debug.hpp"
 #include "Channel.hpp"
-
+#include "Answers.hpp"
 
 std::string        printNames(Channel *chan)
 {
