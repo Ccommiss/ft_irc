@@ -22,6 +22,7 @@ Commands::Commands()
 	cmd_map.insert(std::make_pair("INVITE",  &Commands::invite));
 	cmd_map.insert(std::make_pair("PART",  &Commands::part));
 	cmd_map.insert(std::make_pair("TOPIC",  &Commands::topic));
+	cmd_map.insert(std::make_pair("MODE",  &Commands::mode));
 	
 
 

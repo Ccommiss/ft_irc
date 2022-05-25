@@ -27,7 +27,10 @@ class User {
     std::string const               &getName();
     static std::string              getNickName(); //{ return nickname; }
 
-    void                            join_chan(Channel *chan);
+    void                            joinChan(Channel *chan);
+    void                            leaveChan(Channel *chan);
+    std::vector<Channel *> const & getJoinedChannels();
+    
     std::vector<Channel *>          joined_chans;
 
     

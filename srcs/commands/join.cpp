@@ -28,15 +28,31 @@
 **    a PART command (See Section 3.2.2) for each channel he is a member
 **    of.
 **
+** 	JOIN #foo,#bar fubar,foobar ==> ex with key 
 **    Numeric Replies:
 **
 **            ERR_NEEDMOREPARAMS OK            ERR_BANNEDFROMCHAN
 **            ERR_INVITEONLYCHAN              ERR_BADCHANNELKEY
 **            ERR_CHANNELISFULL               ERR_BADCHANMASK
-**            ERR_NOSUCHCHANNEL OK               ERR_TOOMANYCHANNELS
+**            ERR_NOSUCHCHANNEL OK              ERR_TOOMANYCHANNELS
 **            ERR_TOOMANYTARGETS              ERR_UNAVAILRESOURCE
 **            RPL_TOPIC OK
 */
+
+// a penser : remove User ... + irc root me does not work with this
+
+void Commands::leaveAllChans(User *u) // comment faire ca sur irssi ??????? 
+{
+	for (std::vector< Channel *>::const_iterator chans = u->getJoinedChannels().begin(); chans != u->getJoinedChannels().end(); chans++)
+	{
+		u->leaveChan(*chans); // il leave le chan, il eprforme le delete user aussi via channel
+		std::vector<std::string> part_msg;
+		part_msg.push_back("PART");
+		part_msg.push_back((*chans)->_name);
+		server_relay(u, part_msg, u);
+	}
+}
+
 
 void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou quit
 {
@@ -53,7 +69,10 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 		chan_name = *nb_chans_it;
 		if (chan_name[0] != '#')
 			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name));
-
+		if (*nb_chans_it == "0") // leave all chans que faire si JOIN 0 jakfjskfj derreire ? 
+		{
+			leaveAllChans(s, u);
+		}
 		std::map<std::string, Channel *>::const_iterator it = s.chans.find(chan_name);
 		if (it == s.chans.end())
 		{

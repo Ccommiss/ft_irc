@@ -144,7 +144,7 @@ bool Channel::isBanned(User *u)
 void Channel::add_user(User *new_user)
 {
 	start;
-	new_user->join_chan(this);
+	new_user->joinChan(this);
 	_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
 	std::cout << "Added users" << std::endl;
 }

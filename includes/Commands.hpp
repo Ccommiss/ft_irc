@@ -17,6 +17,11 @@ class Commands
 		~Commands();
 
 		void parse_cmd		(User *user, Server &s);
+		void leaveAllChans(Server &s, User *u);
+
+/*
+** in map 
+*/
 
 		void quit_s			(Server &s, User *u, std::vector<std::string> nick); // exit ou quit
 		void setUser		(Server &s, User *u, std::vector<std::string> arg);
@@ -26,7 +31,7 @@ class Commands
 		void invite			(Server &s, User *u, std::vector<std::string> arg);
 		void part			(Server &s, User *u, std::vector<std::string> arg) ; // par d'un chan 
 		void topic			(Server &s, User *u, std::vector<std::string> arg);
-
+		void mode			(Server &s, User *u, std::vector<std::string> arg);
 
 
 		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> arg);

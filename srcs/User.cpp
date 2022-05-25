@@ -70,15 +70,31 @@ void        User::setSocket(int sd)
     this->socket_descriptor = sd;
 }
 
-void        User::join_chan(Channel *chan)
+void        User::joinChan(Channel *chan)
 {
     this->joined_chans.push_back(chan);
 }
 
+void        User::leaveChan(Channel *chan)
+{
+    for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
+    {
+        if (*it == chan)
+        {
+            this->joined_chans.erase(it);
+            chan->remove_user(this);
+        }
+    }
+}
 
 std::string const & User::getName()
 {
     return (this->name);
+}
+
+std::vector<Channel *> const & User::getJoinedChannels()
+{
+    return (this->joined_chans);
 }
 
 /* ************************************************************************** */

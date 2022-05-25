@@ -30,7 +30,6 @@ void Commands::part(Server &s, User *u, std::vector<std::string> arg)
 	{
 		std::map<std::string *, User *> chan_users = it->second->getUsers(); // on recup les users du chan
 		std::cout << "removing user " << u->getName() << std::endl;
-
 		s.chans[chan_name]->remove_user(u); 
 		server_relay(u, arg, chan_users);             
 	}
