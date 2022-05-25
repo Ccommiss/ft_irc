@@ -128,6 +128,16 @@ bool Channel::isInChan(User *u)
 	return false;
 }
 
+bool Channel::isBanned(User *u)
+{
+	for (std::vector<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
+	{
+		if ((*it) == u)
+			return true;
+	}
+	return false;
+}
+
 
 
 //add a new_user, what happends if the name already exists ?

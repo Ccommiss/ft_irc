@@ -10,7 +10,6 @@ bool chanExists(Server &s, std::string chan_name) // a mettre ailleurs
 
 void Commands::topic(Server &s, User *u, std::vector<std::string> arg)
 {
-	(void)arg;
 	start;
 	std::string chan_name = *(arg.begin() + 1);
 	if (!chanExists(s, chan_name))

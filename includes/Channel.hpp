@@ -41,6 +41,7 @@ class Channel
 		void 								printUsers();
 		bool 								isInChan(User *u);
 		bool 								isTopicSet();
+		bool 								isBanned(User *u);
 		std::string							_name; // nom du chan 
 		std::string							_topic;
 		
