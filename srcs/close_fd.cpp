@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 16:04:15 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/24 10:26:23 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/25 15:04:18 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	close_fd(int &fd, bool exception)
 		}
 		std::stringstream ss;
 		ss << "Succesfully closed fd nb[" << fd << "]";
-		debug(SV, ss.str());
+		//debug(SV, ss.str());
 		fd = -1;
 	}
 	else

@@ -14,7 +14,7 @@ void	Server::run( void )
 			if 	((_ep_event[i].events & EPOLLIN) == EPOLLIN) // mask EPOLLIN event
 			{
 				if (_ep_event [i].data.fd == _listener)
-					this->new_connection();
+					create_user();
 				else
 					this->existing_connection(_ep_event[i].data.fd);
 			}

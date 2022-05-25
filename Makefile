@@ -15,7 +15,7 @@ TARGET				:= out
 TARGET_BONUS		:= out-bonus
 
 
-BUILD				:= release  
+BUILD				:= valgrind
 
 
 include sources.mk
@@ -24,7 +24,7 @@ include sources.mk
 SRCDIR				:= srcs
 INCDIR				:= includes
 BUILDDIR			:= obj
-TARGETDIR			:= .
+TARGETDIR			:= ./
 SRCEXT				:= cpp
 DEPEXT				:= d
 OBJEXT				:= o
@@ -86,7 +86,7 @@ clean:
 
 # Full Clean, Objects and Binaries
 fclean: clean
-	@$(RM) -rf $(TARGETDIR)
+	@$(RM) -rf $(TARGETDIR)/$(TARGET)
 
 
 # Pull in dependency info for *existing* .o files
