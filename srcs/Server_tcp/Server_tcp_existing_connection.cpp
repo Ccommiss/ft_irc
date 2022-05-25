@@ -10,7 +10,7 @@ void Server::existing_connection( int sd )
 	if (numbytes == -1) //failed
 		throw std::runtime_error("Recv Failed");
 	else if (numbytes == 0) // connection closed by client
-		end_connection(sd);
+		delete_user(users[sd]);
 	else //do_action
 	{
 		debug(SV, users[sd]->nickname,NOCR);

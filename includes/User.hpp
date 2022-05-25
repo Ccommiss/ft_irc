@@ -7,31 +7,35 @@
 class Channel;
 
 class User {
+	private:
+	User( void );
     public:
         int         			socket_descriptor;
         int 					registered;
         std::string 			name;
         std::string 			nickname;
-		struct epoll_event	*	event;
+        std::string 			ip;
+    	std::vector<Channel *>	joined_chans;
 
 
-    //User();
-    User(int sd);
+    User( int sd, std::string ip );
     User(User const & src);
-    ~User();
+    ~User( void );
     User &	operator=(User const & rhs);
 
     void                            setSocket(int sd);
     void                            setNickName(std::string newNickName);
     void                            setName(std::string newName);
-    std::string const               &getName();
-    static std::string              getNickName(); //{ return nickname; }
+
+
+	std::string						presentation( void );
+    std::string const               &getName( void );
+    static std::string              getNickName( void ); //{ return nickname; }
 
     void                            joinChan(Channel *chan);
     void                            leaveChan(Channel *chan);
     std::vector<Channel *> const & getJoinedChannels();
     
-    std::vector<Channel *>          joined_chans;
 
     
 };

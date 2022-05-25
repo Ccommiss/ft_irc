@@ -14,13 +14,16 @@ void	Server::run( void )
 			if 	((_ep_event[i].events & EPOLLIN) == EPOLLIN) // mask EPOLLIN event
 			{
 				if (_ep_event [i].data.fd == _listener)
-					this->new_connection();
+					create_user();
 				else
 					this->existing_connection(_ep_event[i].data.fd);
 			}
 		}
 		if (!_nb_ev)
-			std::cout << "TIMEOUT" << std::endl;
+		{
+			debug(SV, "Timeout - exit now");
+			break;
+		}
 
 	}
 }

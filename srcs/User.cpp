@@ -6,9 +6,11 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-User::User(int sd) : socket_descriptor(sd), registered(0), name("Guest"), nickname("Guest"), event(NULL)
+User::User(int sd, std::string ip) : socket_descriptor(sd), registered(0), name("Guest"), nickname("Guest"), ip(ip)
 {
 	nickname.append(to_str(sd));
+	debug(US, presentation(), NOCR);
+	debug(US, "CONNECTED");
 }
 
 User::User( const User & src )
@@ -23,6 +25,10 @@ User::User( const User & src )
 
 User::~User()
 {
+	debug(US, presentation(), NOCR);
+	debug(US, "CLOSED");
+	std::cout << "NEED TO LEAVE ALL CHANS" << std::endl;
+	joined_chans.clear();
 }
 
 
@@ -49,6 +55,12 @@ std::ostream &			operator<<( std::ostream & o, User const & i )
 ** --------------------------------- METHODS ----------------------------------
 */
 
+std::string	User::presentation( void )
+{
+	std::string to_ret(nickname);
+	to_ret = to_ret + "[" + ip + ":" + to_str(socket_descriptor) + "] - ";
+	return (to_ret);
+}
 
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
