@@ -20,7 +20,10 @@ void	Server::run( void )
 			}
 		}
 		if (!_nb_ev)
-			std::cout << "TIMEOUT" << std::endl;
+		{
+			debug(SV, "Timeout - exit now");
+			break;
+		}
 
 	}
 }

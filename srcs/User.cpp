@@ -10,7 +10,7 @@ User::User(int sd, std::string ip) : socket_descriptor(sd), registered(0), name(
 {
 	nickname.append(to_str(sd));
 	debug(US, presentation(), NOCR);
-	debug(US, " - CONNECTED");
+	debug(US, "CONNECTED");
 }
 
 User::User( const User & src )
@@ -26,8 +26,9 @@ User::User( const User & src )
 User::~User()
 {
 	debug(US, presentation(), NOCR);
+	debug(US, "CLOSED");
+	std::cout << "NEED TO LEAVE ALL CHANS" << std::endl;
 	joined_chans.clear();
-	debug(US, " - CLOSED");
 }
 
 
