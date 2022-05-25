@@ -67,8 +67,8 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 	}
 	else
 	{
-		if (s.chans[chan_name]->_banned.count(u) == 1)
-			return (s.numeric_reply (u, ERR_BANNEDFROMCHAN, s.chans[chan_name]));
+		//if (s.chans[chan_name]->_banned.at(u) < s.chans[chan_name]->_banned.size())
+		//	return (s.numeric_reply (u, ERR_BANNEDFROMCHAN, s.chans[chan_name]));
 		std::cout << "adding_user " << u->getName() << std::endl;
 		s.chans[chan_name]->add_user(u);
 	}
