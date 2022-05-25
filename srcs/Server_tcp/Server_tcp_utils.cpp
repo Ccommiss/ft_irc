@@ -3,7 +3,7 @@
 
 char *	Server::get_ip( void )
 {
-		return (inet_ntoa(((struct sockaddr_in *) &_client_saddr)->sin_addr));
+	return (inet_ntoa(((struct sockaddr_in *) &_client_saddr)->sin_addr));
 }
 
 User*	Server::create_user( void )
@@ -30,28 +30,38 @@ User*	Server::create_user( void )
 
 void	Server::delete_user( User *to_del )
 {
-	//remove from server_users
-	debug(SV,to_del->presentation(), NOCR);
-	if (server_users.erase(&to_del->nickname))
-		debug(SV,"removed from server_users");
-	else
-		debug(SV,"NOT removed from server_users");
+	std::vector<std::string> arg;;
+	arg.push_back("PART");
+	arg.push_back("chan");
+	arg.push_back("MESSAGE");
 
-	//remove from users
-	debug(SV,to_del->presentation(), NOCR);
-	if (users.erase(to_del->socket_descriptor))
-		debug(SV,"removed from users");
-	else
-		debug(SV,"NOT removed from users");
-	
-	//unset from monitoring
-	if (epoll_ctl (_efd, EPOLL_CTL_DEL, to_del->socket_descriptor, NULL) == -1)
-		throw std::runtime_error("epoll_ctl socket del failed");
+		 for (std::vector <Channel *>::iterator it = to_del->joined_chans.begin(); it != to_del->joined_chans.end(); it++)
+		 {
+			 arg[1] = (*it)->_name;
+			 cmds.part(*this, to_del, arg);
+		 }
+	 //remove from server_users
+	 debug(SV,to_del->presentation(), NOCR);
+	 if (server_users.erase(&to_del->nickname))
+		 debug(SV,"removed from server_users");
+	 else
+		 debug(SV,"NOT removed from server_users");
 
-	//close socket
-	close_fd(to_del->socket_descriptor, THROW);
+	 //remove from users
+	 debug(SV,to_del->presentation(), NOCR);
+	 if (users.erase(to_del->socket_descriptor))
+		 debug(SV,"removed from users");
+	 else
+		 debug(SV,"NOT removed from users");
 
-	delete to_del;
+	 //unset from monitoring
+	 if (epoll_ctl (_efd, EPOLL_CTL_DEL, to_del->socket_descriptor, NULL) == -1)
+		 throw std::runtime_error("epoll_ctl socket del failed");
+
+	 //close socket
+	 close_fd(to_del->socket_descriptor, THROW);
+
+	 delete to_del;
 }
 
 bool	Server::pass_check( std::string to_check)

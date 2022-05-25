@@ -23,6 +23,7 @@ void	Server::run( void )
 		{
 			debug(SV, "Timeout - exit now");
 			break;
+			//delete_user(users[5]);
 		}
 
 	}

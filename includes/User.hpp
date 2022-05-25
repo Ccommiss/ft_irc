@@ -36,8 +36,6 @@ class User {
     void                            leaveChan(Channel *chan);
     std::vector<Channel *> const & getJoinedChannels();
     
-
-    
 };
 
 
