@@ -3,7 +3,8 @@
 
 #include <iostream> 
 #include <vector>
- 
+
+class Channel;
 
 class User {
     public:
@@ -19,12 +20,14 @@ class User {
     ~User();
     User &	operator=(User const & rhs);
 
-    void        setSocket(int sd);
-    // COMMANDES 
-    void        setNickName(std::string newNickName);
-    void        setName(std::string newName);
-    std::string const &getName();
-    static std::string getNickName(); //{ return nickname; }
+    void                            setSocket(int sd);
+    void                            setNickName(std::string newNickName);
+    void                            setName(std::string newName);
+    std::string const               &getName();
+    static std::string              getNickName(); //{ return nickname; }
+
+    void                            join_chan(Channel *chan);
+    std::vector<Channel *>          joined_chans;
 
     
 };

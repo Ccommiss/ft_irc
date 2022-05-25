@@ -91,11 +91,17 @@ class	Server {
 
 		void                     printChans();
     	void                     printUsers();
+
+		template <typename T>
+		std::string 	choose_msg(int code, User *u, T *arg);
+		template <typename T>
+		void 			numeric_reply( User *u, std::string code, T *arg);
 		//pub_fct - END}
 
 		//pub_var{
 		std::map<std::string, Channel *>			chans;
 		std::map<const std::string *, const User *>	server_users; // sd et ref
+	
 		Commands                                	cmds; 
 		std::map<int, User *>     					users;
     	char          				buffer[RECV_BUFF_SIZE];

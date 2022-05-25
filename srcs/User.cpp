@@ -70,6 +70,12 @@ void        User::setSocket(int sd)
     this->socket_descriptor = sd;
 }
 
+void        User::join_chan(Channel *chan)
+{
+    this->joined_chans.push_back(chan);
+}
+
+
 std::string const & User::getName()
 {
     return (this->name);

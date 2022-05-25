@@ -4,7 +4,6 @@
 
 SOURCES		+=             		\
 		srcs/Channel.cpp      	\
-		srcs/Answers.cpp      	\
 		srcs/utils.cpp        	\
 		srcs/close_fd.cpp\
 		srcs/main.cpp         	\

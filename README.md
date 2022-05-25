@@ -477,12 +477,8 @@ A few highlights :
   style="width:100%; height:400px;"
 ></iframe>
 
-<<<<<<< HEAD
-**Other resources :** 
-=======
 **Other resources **  
 list of commands : https://linux.developpez.com/formation_debian/irc.html
->>>>>>> origin/main
 
 list of commands :  https://linux.developpez.com/formation_debian/irc.html  
                     https://fr.wikipedia.org/wiki/Aide:IRC/commandes
@@ -494,3 +490,11 @@ operators' level :  https://wiki.mibbit.com/index.php/Channel_operator
 [^3]: See "3.1 Connection Registration", _RFC 2812_ , <https://www.rfcreader.com/#rfc2812_line411>
 [^4]: Little glossary . Note: / stands for alternative, <   and > are for rul naming, *rule for repetiton, [rule] is optional.
 
+
+
+
+
+
+
+Coding commeting guidelinesexamples 
+https://iisb-foxbms.iisb.fraunhofer.de/foxbms/docs/latest/developer-manual/style-guide/guidelines_c.html

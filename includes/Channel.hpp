@@ -37,7 +37,7 @@ class Channel
 		std::string  &						getTopic() ;
 		void								me();
 		std::string  &						getName() ;
-		std::map<std::string *, User *>  &		getUsers()  ;
+		std::map<std::string *, User *>  &	getUsers()  ;
 		void 								printUsers();
 		bool 								isInChan(User *u);
 		bool 								isTopicSet();
@@ -47,7 +47,6 @@ class Channel
 		
 	private:
 		std::map<std::string *, User *> 	_users;
-		
 		std::vector<User *>					_operators;
 		std::vector<User *> 				_banned;
 		User*								_owner;
@@ -58,5 +57,7 @@ class Channel
 };
 
 std::ostream &			operator<<( std::ostream & o, Channel & i );
+
+std::string        printNames(Channel *chan); // formatte, pour command names etc;
 
 #endif /* ********************************************************* CHANNEL_H */

@@ -1,10 +1,11 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-#include "User.hpp"
 #include <map>
+#include "User.hpp"
+#include "Debug.hpp"
 
-class Server;
 
+class Server; 
 
 class Commands
 {
@@ -35,16 +36,14 @@ class Commands
 		std::map<int, Rep> 	server_replies;
 };
 
+
 /*
 **  Utils
 */
 std::string trim(const std::string &s);
 std::string ltrim(const std::string &s);
 
-/*
-**  Answers
-*/
-void 			server_reply(Server &s, User *u, std::string code, void *arg);
-std::string 	set_prefix(User *u, std::vector<std::string> cmd);
+
+
 
 #endif
