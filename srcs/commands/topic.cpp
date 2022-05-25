@@ -1,18 +1,13 @@
 #include "Server.hpp"
 #include "Answers.hpp"
 
-bool chanExists(Server &s, std::string chan_name) // a mettre ailleurs 
-{
-	if (s.chans.count(chan_name) == 1)
-		return (true);
-	return (false);
-}
+
 
 void Commands::topic(Server &s, User *u, std::vector<std::string> arg)
 {
 	start;
 	std::string chan_name = *(arg.begin() + 1);
-	if (!chanExists(s, chan_name))
+	if (!s.chanExists(chan_name)) // une erreur 
 		return ;
 	Channel     *chan = (s.chans.find(chan_name)->second); //on recp l'instance
 

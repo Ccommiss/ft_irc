@@ -71,15 +71,17 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name));
 		if (*nb_chans_it == "0") // leave all chans que faire si JOIN 0 jakfjskfj derreire ? 
 		{
-			leaveAllChans(u);
+			leaveAllChans(u); // return ou non  ? 
 		}
+
+
 		std::map<std::string, Channel *>::const_iterator it = s.chans.find(chan_name);
-		if (it == s.chans.end())
+		if (it == s.chans.end()) // le chan existe pas 
 		{
 			Channel *chan = new Channel(chan_name, u);
 			s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
 		}
-		else
+		else // le chan existe 
 		{
 			if (s.chans[chan_name]->isBanned(u))
 				return (s.numeric_reply(u, ERR_BANNEDFROMCHAN, s.chans[chan_name]));
@@ -91,7 +93,8 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 		std::vector<std::string> join_chan_msg;
 		join_chan_msg.push_back(*(arg.begin()));
 		join_chan_msg.push_back(*nb_chans_it);
-		server_relay(u, join_chan_msg, chan_users); // pb la
+
+		server_relay(u, join_chan_msg, chan_users);
 		s.numeric_reply(u, RPL_NAMREPLY, s.chans[chan_name]);
 		s.numeric_reply(u, RPL_ENDOFNAMES, s.chans[chan_name]);
 		if (s.chans[chan_name]->isTopicSet() == true)

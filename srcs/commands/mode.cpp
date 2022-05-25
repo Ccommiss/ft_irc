@@ -1,4 +1,8 @@
 
+#include "Server.hpp"
+#include "Answers.hpp"
+
+
 
 
 /*
@@ -23,14 +27,68 @@
 **            RPL_UNIQOPIS
 */
 // MODE #TRUC -/+[options] [mode params]
-void    Commands::mode (Server &s, User *u, std::vector<std::string> arg)
+
+
+
+
+/*
+**    The various modes available for channels are as follows:
+** 
+**         O - give "channel creator" status;
+**         o - give/take channel operator privilege;
+**         v - give/take the voice privilege;
+** 
+**         a - toggle the anonymous channel flag;
+**         i - toggle the invite-only channel flag;
+**         m - toggle the moderated channel;
+**         n - toggle the no messages to channel from clients on the
+**             outside;
+**         q - toggle the quiet channel flag;
+**         p - toggle the private channel flag;
+**         s - toggle the secret channel flag;
+**         r - toggle the server reop channel flag;
+**         t - toggle the topic settable by channel operator only flag;
+** 
+**         k - set/remove the channel key (password);
+**         l - set/remove the user limit to channel;
+** 
+**         b - set/remove ban mask to keep users out;
+**         e - set/remove an exception mask to override a ban mask;
+**         I - set/remove an invitation mask to automatically override
+**             the invite-only flag;
+*/
+
+void    Commands::mode(Server &s, User *u, std::vector<std::string> arg)
 {
+    (void)u;
     if ((*(arg.begin() + 1))[0] == '#') // ou & ....
     {
         std::string chan_name = arg.size() > 1 ? *(arg.begin() + 1) : ""; // #truc
         std::string modes = arg.size() > 2 ? *(arg.begin() + 2) : ""; // +=....
-        std::string mode_params = arg.size() > 3 ? *(arg.begin() + 3) : "";//
+      //  std::vector<std::string> mode_params = arg.size() > 3 ? mode_params.insert(arg.begin() + 3, arg.end()): mode_params.push_back("");// tout le reste n fait 
         // si modes c un +, faut un troisieme arg ssi K par ex
+        if (!s.chanExists(chan_name))
+        {
+            out ("Chan does not exist") // une erreur surement 
+            return ; 
+        }
+        else
+        {
+            Channel *chan = s.chans[chan_name]; // on recup instance
+            //if (modes[0]) ni un - ou +, trouver quoi retrouner 
+            bool value = modes[0] == '+' ? true : false;
+            for (size_t i = 1; i < modes.length(); i++)
+            {
+               if (!chan->setMode(modes[i], value))//, mode_params))
+                    s.numeric_reply(u, ERR_UNKNOWNMODE, &chan); // a definir 
+            }
+            chan->displayModes();
+        }
+
+
+    }
+    else
+    {
 
     }
 }

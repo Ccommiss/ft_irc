@@ -24,6 +24,24 @@ Channel::Channel() : _owner(0)
 
 Channel::Channel(std::string name, User *creator):  _name(name), _topic("")
 {
+	_modes.insert(std::make_pair('O', false));
+	_modes.insert(std::make_pair('o', false));
+	_modes.insert(std::make_pair('v', false));
+	_modes.insert(std::make_pair('a', false));
+	_modes.insert(std::make_pair('i', false));
+	_modes.insert(std::make_pair('m', false));
+	_modes.insert(std::make_pair('n', false));
+	_modes.insert(std::make_pair('q', false));
+	_modes.insert(std::make_pair('p', false));
+	_modes.insert(std::make_pair('s', false));
+	_modes.insert(std::make_pair('r', false));
+	_modes.insert(std::make_pair('t', false));
+	_modes.insert(std::make_pair('k', false));
+	_modes.insert(std::make_pair('l', false));
+	_modes.insert(std::make_pair('b', false));
+	_modes.insert(std::make_pair('e', false));
+	_modes.insert(std::make_pair('I', false)); 
+
 	_owner = creator;
 	out ("Creator :" << _owner->nickname)
 	add_user(creator);
@@ -128,6 +146,12 @@ bool Channel::isInChan(User *u)
 	return false;
 }
 
+bool								Channel::hasKey()
+{
+	return (_modes['k']);
+} //si le flag K est actif pour rentrer 
+
+
 bool Channel::isBanned(User *u)
 {
 	for (std::vector<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
@@ -178,6 +202,17 @@ void Channel::remove_user(User *new_user)
 // 	// 	std::cout << *it << std::endl;
 // }
 
+bool	Channel::setMode(char mode, bool value)
+{	
+	if (_modes.count(mode) == 1) // c un bon caractere
+	{	
+		_modes[mode] = value;
+		return true;
+	}
+	return false;
+}
+
+
 void	Channel::setTopic(std::string topic)
 {
 	//_topic.clear();
@@ -192,6 +227,23 @@ std::string&	Channel::getTopic()
 // //Channel::names ==> list connected users 
 
 // /* ************************************************************************** */
+
+
+void			Channel::displayModes()
+{
+	out ("Channel " << _name << " has modes : ")
+	for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
+	{
+		if (it->second == true)
+			out (it->first << " is active");
+	}
+}
+
+
+std::map<char, bool>&			Channel::getModes()
+{
+		return _modes;
+}
 
 
 std::string        printNames(Channel *chan)

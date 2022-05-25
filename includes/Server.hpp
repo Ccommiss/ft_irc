@@ -108,6 +108,9 @@ class	Server {
     	char          				buffer[RECV_BUFF_SIZE];
 		void						delete_user(User * to_del);
 
+
+		bool 				chanExists(std::string chan_name);
+
 		//pub_var - END}
 
 	private:

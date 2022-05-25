@@ -36,14 +36,19 @@ class Channel
 		void 								setTopic(std::string topic);
 		std::string  &						getTopic() ;
 		void								me();
-		std::string  &						getName() ;
-		std::map<std::string *, User *>  &	getUsers()  ;
+		std::string  &						getName();
+		std::map<std::string *, User *>  &	getUsers();
+		bool								setMode(char mode, bool value);
+		void								displayModes();
+		std::map<char, bool>&				getModes();
 		void 								printUsers();
 		bool 								isInChan(User *u);
 		bool 								isTopicSet();
+		bool								hasKey(); //si le flag K est actif pour rentrer 
 		bool 								isBanned(User *u);
 		std::string							_name; // nom du chan 
 		std::string							_topic;
+
 		
 		
 	private:
@@ -51,7 +56,7 @@ class Channel
 		std::vector<User *>					_operators;
 		std::vector<User *> 				_banned;
 		User*								_owner;
-		char								_mode;
+		std::map<char, bool>				_modes;
 		
 		//std::vector<User &>				_invite;
 		//std::vector<User &>				_voice;

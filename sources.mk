@@ -8,6 +8,7 @@ SOURCES		+=             		\
 		srcs/close_fd.cpp\
 		srcs/main.cpp         	\
 		srcs/User.cpp         	\
+		srcs/server_infos.cpp         	\
 		srcs/Server_tcp/Server_tcp.cpp \
 		srcs/Server_tcp/Server_tcp_get_addr.cpp \
 		srcs/Server_tcp/Server_tcp_utils.cpp \
@@ -28,6 +29,7 @@ SOURCES		+=             		\
 		srcs/commands/invite.cpp       	\
 		srcs/commands/part.cpp       	\
 		srcs/commands/topic.cpp       	\
+		srcs/commands/mode.cpp       	\
 
 
 
