@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:30:35 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/20 17:37:03 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/24 16:47:25 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //Class_Name = Server
@@ -34,14 +34,10 @@ Server::Server( const char * port, const char * pass ) : _port(strtol(port, NULL
 		this->start_listening();
 		this->set_monitoring();
 	}
-	catch ( std::exception &e )
+	catch (std::exception &e)
 	{
-		if (this->_addrs)
-			freeaddrinfo (_addrs);
-		if (_listener >= 0 )
-			close_fd(_listener, NO_THROW);
-		for (int i = 0; i < _nb_ev; i++)
-			close_fd((_ep_event[i].data.fd), NO_THROW);
+		std::cerr << "[SERVER] - Exception catched : " << e.what() << std::endl;
+		shutdown(NO_THROW);
 		throw e;
 	}
 
@@ -79,19 +75,6 @@ Server &	Server::operator=( Server const & rhs ) {
 
 //pub_fct{
 
-
-void                    Server::quit_server(User *u)
-{
-    //close_conn = 1;
-    out(u->nickname << " has left the chat");
-    close_fd(u->socket_descriptor, THROW);
-    //FD_CLR(u->socket_descriptor, &master_set);
-    //if (u->socket_descriptor == max_sd)
-    //{
-    //	while (FD_ISSET(max_sd, &master_set) == 0)
-    //		max_sd -= 1;
-    //}
-}
 
 //pub_fct - END}
 

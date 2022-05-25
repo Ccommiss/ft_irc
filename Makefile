@@ -14,7 +14,9 @@ endif
 TARGET				:= out
 TARGET_BONUS		:= out-bonus
 
+
 BUILD				:= release  
+
 
 include sources.mk
 
@@ -32,7 +34,7 @@ OBJECTS_BONUS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES_BONUS:.$(SRCEXT
 
 #Flags, Libraries and Includes
 cflags.release		:= -Wall -Werror -Wextra -I./includes/
-cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -ggdb
+cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV -ggdb
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))
 CPPFLAGS			:= $(cflags.$(BUILD)) -std=c++98
