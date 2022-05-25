@@ -33,39 +33,44 @@
 ** 
 **    Numeric Replies:
 ** 
-**            ERR_NEEDMOREPARAMS              ERR_BANNEDFROMCHAN
+**            ERR_NEEDMOREPARAMS OK            ERR_BANNEDFROMCHAN
 **            ERR_INVITEONLYCHAN              ERR_BADCHANNELKEY
 **            ERR_CHANNELISFULL               ERR_BADCHANMASK
 **            ERR_NOSUCHCHANNEL OK               ERR_TOOMANYCHANNELS
 **            ERR_TOOMANYTARGETS              ERR_UNAVAILRESOURCE
-**            RPL_TOPIC
+**            RPL_TOPIC OK
 */
 
 void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou quit
 {
 	start;
+	if (arg.size() == 1) // un seul mot dans le vec donc juste la cmd sans arg
+		return (s.numeric_reply (u, ERR_NEEDMOREPARAMS, &(*arg.begin())));
 	std::string chan_name = *(arg.begin() + 1);
+	if (chan_name[0] != '#')
+		return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name));
+	
+
+	
 	std::map<std::string, Channel *>::const_iterator it = s.chans.find(chan_name);
 
+
 	// gestion err
-	if (chan_name[0] != '#')
-	{
-		s.numeric_reply(u, "403", &chan_name);
-		return ; 
-	} 
+
 
 	if (it == s.chans.end())
 	{
 		out("Creating new channel");
 		Channel *chan = new Channel(chan_name, u);
-		s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan));
+		s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur 
 		server_relay(u, arg, u);
 	}
 	else
 	{
+		if (s.chans[chan_name]->_banned.count(u) == 1)
+			return (s.numeric_reply (u, ERR_BANNEDFROMCHAN, s.chans[chan_name]));
 		std::cout << "adding_user " << u->getName() << std::endl;
 		s.chans[chan_name]->add_user(u);
-		// u.joined_chans.push_back(s.chans[chan_name]); a faire dans adduser, creer vecteur pour specifier chans joints par le user
 	}
    
 	/* Server informing all chan users */
@@ -73,8 +78,8 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 	server_relay(u, arg, chan_users);
 	/* RPL 331 */
 	
-	s.numeric_reply(u, "353", s.chans[chan_name]);
-	s.numeric_reply(u, "366", s.chans[chan_name]);
+	s.numeric_reply(u, RPL_NAMREPLY, s.chans[chan_name]);
+	s.numeric_reply(u, RPL_ENDOFNAMES, s.chans[chan_name]);
 	if (s.chans[chan_name]->isTopicSet() == true)
-		s.numeric_reply(u, "332",  s.chans[chan_name]);
+		s.numeric_reply(u, RPL_TOPIC,  s.chans[chan_name]);
 }

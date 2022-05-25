@@ -14,6 +14,9 @@
 
 
 
+#include "numeric_rpl.hpp"
+
+
 /*
 **  Define messages 
 */
