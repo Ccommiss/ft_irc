@@ -71,7 +71,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name));
 		if (*nb_chans_it == "0") // leave all chans que faire si JOIN 0 jakfjskfj derreire ? 
 		{
-			leaveAllChans(s, u);
+			leaveAllChans(u);
 		}
 		std::map<std::string, Channel *>::const_iterator it = s.chans.find(chan_name);
 		if (it == s.chans.end())

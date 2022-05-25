@@ -48,8 +48,8 @@ class Channel
 		
 	private:
 		std::map<std::string *, User *> 	_users;
-		// std::vector<User *>					_operators;
-		// std::vector<User *> 				_banned;
+		std::vector<User *>					_operators;
+		std::vector<User *> 				_banned;
 		User*								_owner;
 		char								_mode;
 		

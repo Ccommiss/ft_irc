@@ -17,7 +17,7 @@ class Commands
 		~Commands();
 
 		void parse_cmd		(User *user, Server &s);
-		void leaveAllChans(Server &s, User *u);
+		void leaveAllChans(User *u);
 
 /*
 ** in map 
