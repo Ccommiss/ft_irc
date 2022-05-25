@@ -3,6 +3,8 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+# include <sstream>
+#include <iterator>
 
 const std::string WHITESPACE = " \n\r\t\f\v";
  
@@ -22,6 +24,14 @@ std::string trim(const std::string &s) {
     return rtrim(ltrim(s));
 }
 
+
+std::string vecToString(std::vector<std::string> input)
+{
+    std::ostringstream imploded;
+    std::copy(input.begin(), input.end(),  std::ostream_iterator<std::string>(imploded, " "));
+    std::ostream_iterator<std::string>(imploded, " ");
+    return imploded.str();
+}
 void tokenize(std::string const &str, const char delim, std::vector<std::string> &out)
 {
     size_t start;

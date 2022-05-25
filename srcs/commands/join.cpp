@@ -60,21 +60,27 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 	if (arg.size() == 1) // un seul mot dans le vec donc juste la cmd sans arg
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, &(*arg.begin())));
 
-	std::string chan_name = *(arg.begin() + 1);
+	std::vector<std::string> rest(arg.begin() +1, arg.end());
+	std::string new_args = vecToString(rest); // faut recupere tout le reste de la string
+	for (std::vector<std::string>::iterator d = arg.begin(); d != arg.end(); d++)
+			out ("ARGS DE BASE " << *d);
 	std::vector<std::string> out; // si plusieurs chans JOIN #lol,#test,#mdr,#flute
-	tokenize(chan_name, ',', out);
+	tokenize(new_args, ',', out);
 
 	for (std::vector<std::string>::iterator nb_chans_it = out.begin(); nb_chans_it != out.end(); nb_chans_it++)
 	{
-		chan_name = *nb_chans_it;
+		std::vector<std::string> args; 
+		tokenize(*nb_chans_it, ' ', args); // onredevise si jamais y a des mdp genre #lol motdepass 
+
+		for (std::vector<std::string>::iterator d = args.begin(); d != args.end(); d++)
+			out ("ARGS " << *d);
+		std::string chan_name = args[0];
 		if (chan_name[0] != '#')
 			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name));
 		if (*nb_chans_it == "0") // leave all chans que faire si JOIN 0 jakfjskfj derreire ? 
 		{
 			leaveAllChans(u); // return ou non  ? 
 		}
-
-
 		std::map<std::string, Channel *>::const_iterator it = s.chans.find(chan_name);
 		if (it == s.chans.end()) // le chan existe pas 
 		{
@@ -82,7 +88,9 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 			s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
 		}
 		else // le chan existe 
-		{
+		{	
+			if (s.chans[chan_name]->hasKey() && ( (args.size() < 2) || !s.chans[chan_name]->isCorrectPass(args[1])))
+				return (s.numeric_reply(u, ERR_BADCHANNELKEY, s.chans[chan_name]));
 			if (s.chans[chan_name]->isBanned(u))
 				return (s.numeric_reply(u, ERR_BANNEDFROMCHAN, s.chans[chan_name]));
 			s.chans[chan_name]->add_user(u);
@@ -91,8 +99,8 @@ void Commands::join(Server &s, User *u, std::vector<std::string> arg) // exit ou
 		/* Server informing all chan users */
 		std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
 		std::vector<std::string> join_chan_msg;
-		join_chan_msg.push_back(*(arg.begin()));
-		join_chan_msg.push_back(*nb_chans_it);
+		join_chan_msg.push_back(*(arg.begin())); // "JOIN "
+		join_chan_msg.push_back(chan_name);
 
 		server_relay(u, join_chan_msg, chan_users);
 		s.numeric_reply(u, RPL_NAMREPLY, s.chans[chan_name]);

@@ -63,9 +63,11 @@ void    Commands::mode(Server &s, User *u, std::vector<std::string> arg)
     (void)u;
     if ((*(arg.begin() + 1))[0] == '#') // ou & ....
     {
+        std::string empty = " lol";
         std::string chan_name = arg.size() > 1 ? *(arg.begin() + 1) : ""; // #truc
         std::string modes = arg.size() > 2 ? *(arg.begin() + 2) : ""; // +=....
-      //  std::vector<std::string> mode_params = arg.size() > 3 ? mode_params.insert(arg.begin() + 3, arg.end()): mode_params.push_back("");// tout le reste n fait 
+        std::vector<std::string> mode_params;
+        (arg.size() > 3) ? (mode_params.insert(mode_params.begin(), arg.begin() + 3, arg.end())) : (mode_params.push_back(""));// tout le reste n fait 
         // si modes c un +, faut un troisieme arg ssi K par ex
         if (!s.chanExists(chan_name))
         {
@@ -79,8 +81,14 @@ void    Commands::mode(Server &s, User *u, std::vector<std::string> arg)
             bool value = modes[0] == '+' ? true : false;
             for (size_t i = 1; i < modes.length(); i++)
             {
-               if (!chan->setMode(modes[i], value))//, mode_params))
-                    s.numeric_reply(u, ERR_UNKNOWNMODE, &chan); // a definir 
+                std::string res = chan->setMode(modes[i], value, mode_params);
+                if (res.length() != 0)
+                    s.numeric_reply(u, res, chan);
+                else 
+                {  
+                    s.numeric_reply(u, RPL_CHANNELMODEIS, chan); // 
+                    server_relay(u, arg ,u);
+                }
             }
             chan->displayModes();
         }

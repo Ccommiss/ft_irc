@@ -38,8 +38,9 @@ class Channel
 		void								me();
 		std::string  &						getName();
 		std::map<std::string *, User *>  &	getUsers();
-		bool								setMode(char mode, bool value);
+		std::string							setMode(char mode, bool value, std::vector<std::string > params);
 		void								displayModes();
+		bool								isCorrectPass(std::string candidate);
 		std::map<char, bool>&				getModes();
 		void 								printUsers();
 		bool 								isInChan(User *u);
@@ -57,6 +58,7 @@ class Channel
 		std::vector<User *> 				_banned;
 		User*								_owner;
 		std::map<char, bool>				_modes;
+		std::string 						_password;
 		
 		//std::vector<User &>				_invite;
 		//std::vector<User &>				_voice;

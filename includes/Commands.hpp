@@ -48,6 +48,7 @@ class Commands
 std::string trim(const std::string &s);
 std::string ltrim(const std::string &s);
 void tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
+std::string vecToString(std::vector<std::string> input);
 
 
 

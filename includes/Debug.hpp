@@ -42,6 +42,6 @@
 
 #define wait getwchar();
 
-#define start head("Test : " << __func__ << " ");
+#define start std::cout << FG1("---> function : " << __func__ << " ") << std::endl;
 #define finish head("End of test : " << __func__ << " ");
 #endif

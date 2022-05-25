@@ -32,6 +32,7 @@ Commands::Commands()
 	server_replies.insert(std::make_pair(2, &RPL_002));
 	server_replies.insert(std::make_pair(3, &RPL_003));
 	server_replies.insert(std::make_pair(4, &RPL_004));
+	server_replies.insert(std::make_pair(324, &RPL_324));
 	server_replies.insert(std::make_pair(331, &RPL_331)); // RPL TOPIC
 	server_replies.insert(std::make_pair(332, &RPL_332)); // RPL NOTOPIC
 	server_replies.insert(std::make_pair(341, &RPL_341));

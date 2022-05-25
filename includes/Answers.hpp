@@ -25,6 +25,8 @@
 #define MSG_002		":Your host is localhost, version 1.0   8-)"
 #define MSG_003		":This server was created not so long time ago."
 #define MSG_004		":You are very welcome. Enjoy !"
+#define MSG_324 	":" + (static_cast<Channel *>(arg))->_name + "<mode> <mode_params>" 	/* RPL_CHANNELMODEIS */
+// VA FALLOIR CHANGER LA STRUCTURE.........
 #define MSG_331		 *(static_cast<std::string*>(arg)) + " :No topic is set."
 #define MSG_332		 (static_cast<Channel *>(arg))->_name + " :" + (static_cast<Channel *>(arg))->_topic  	/* RPL_TOPIC */
 #define MSG_341		 ":" + *(static_cast<std::string*>(arg)) + " " + user->nickname
@@ -56,6 +58,7 @@ inline std::string		RPL_001 (User *user, void *arg) { (void)arg; return (MSG_001
 inline std::string		RPL_002 (User *user, void *arg) { (void)user; (void)arg; return (MSG_002); }
 inline std::string		RPL_003 (User *user, void *arg) { (void)user; (void)arg; return (MSG_003); }
 inline std::string		RPL_004 (User *user, void *arg) { (void)user; (void)arg; return (MSG_004); }
+inline std::string		RPL_324 (User *user, void *arg) { (void)user; (void)arg; return (MSG_324); }   //RPL INVITING 
 inline std::string		RPL_331 (User *user, void *arg) { (void)user; (void)arg; return (MSG_331); }   //RPL INVITING 
 inline std::string		RPL_332 (User *user, void *arg) { (void)user; (void)arg; return (MSG_332); }   //RPL INVITING 
 inline std::string		RPL_341 (User *user, void *arg) { (void)user; (void)arg; return (MSG_341); }   //RPL INVITING 
@@ -141,6 +144,8 @@ inline std::string server_relay(const User *u, std::vector<std::string> cmd, Use
 template <typename T>
 std::string     Server::choose_msg(int code, User *u, T *arg)
 {
+	start;
+	out ("anwer code " << code)
 	if (cmds.server_replies.count(code) != 1)
 	{
 		out ("==> Unfound server_replies");
@@ -152,6 +157,7 @@ std::string     Server::choose_msg(int code, User *u, T *arg)
 template <typename T>
 void            Server::numeric_reply(User *u, std::string code, T *arg) // rajouter autre chose pour le channel par ex ? //numeric reply 
 {
+	start;
 	std::string txt;
 	char *ptr;
 	txt.append(":");

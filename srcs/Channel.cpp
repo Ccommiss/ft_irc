@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Answers.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
@@ -22,7 +23,7 @@ Channel::Channel() : _owner(0)
 }
 
 
-Channel::Channel(std::string name, User *creator):  _name(name), _topic("")
+Channel::Channel(std::string name, User *creator):  _name(name), _topic(""), _password("")
 {
 	_modes.insert(std::make_pair('O', false));
 	_modes.insert(std::make_pair('o', false));
@@ -202,14 +203,26 @@ void Channel::remove_user(User *new_user)
 // 	// 	std::cout << *it << std::endl;
 // }
 
-bool	Channel::setMode(char mode, bool value)
+std::string 	Channel::setMode(char mode, bool value, std::vector<std::string > params) // on va renvoyer le code erreur ou bien  0 
 {	
-	if (_modes.count(mode) == 1) // c un bon caractere
-	{	
-		_modes[mode] = value;
-		return true;
-	}
-	return false;
+	if (!_modes.count(mode)) // c un bon caractere
+		return ERR_UNKNOWNMODE;
+	
+	switch ( mode )
+	{
+		case 'k':
+			if (trim(params[0]).length() == 0)
+				return ERR_NEEDMOREPARAMS; // faudra renvoyer erreur 
+			if (value == true && _modes['k'] == true) // on veut changer alors que deja existant 
+				return ERR_KEYSET;
+			else if (value == true)
+				_password = trim(params[0]);
+			else if (value == false && trim(params[0]) != _password) // on essaie d'enever le pass mais mavais
+				return ERR_KEYSET; // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
+
+	} 
+	_modes[mode] = value;
+	return "";
 }
 
 
@@ -237,6 +250,7 @@ void			Channel::displayModes()
 		if (it->second == true)
 			out (it->first << " is active");
 	}
+	out ("Password is : " << _password);
 }
 
 
@@ -244,7 +258,13 @@ std::map<char, bool>&			Channel::getModes()
 {
 		return _modes;
 }
-
+bool 						Channel::isCorrectPass(std::string candidate)
+{
+	out ("candidate pass : " << candidate)
+	if (candidate == _password)
+		return true; 
+	return false;
+}
 
 std::string        printNames(Channel *chan)
 {
