@@ -6,8 +6,10 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-User::User(int sd) : socket_descriptor(sd), registered(0), name("Guest"), nickname("Guest"), event(NULL)
+User::User(int sd) : socket_descriptor(sd), name("Guest"), nickname("Guest"), event(NULL)
 {
+    for (int i = 0; i < 4; i++)
+         registered[i] = false;
 	nickname.append(to_str(sd));
 }
 
@@ -87,14 +89,26 @@ void        User::leaveChan(Channel *chan)
     }
 }
 
-std::string const & User::getName()
+std::string const &       User::getName() const
 {
     return (this->name);
+}
+
+std::string const &       User::getNickName() const
+{
+    return (this->nickname);
 }
 
 std::vector<Channel *> const & User::getJoinedChannels()
 {
     return (this->joined_chans);
+}
+
+bool    User::HasCompletedRegistration()
+{
+    if (!registered[USER] || !registered[NICK])
+        return false;
+    return true;
 }
 
 /* ************************************************************************** */

@@ -21,19 +21,16 @@
 **         ERR_NOTONCHANNEL
 */
 
-// un seul channel
 
 void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 {
 	start;
 
-	if (cmd.size() == 1) // un seul mot dans le vec donc juste la cmd sans cmd
+	if (cmd.size() == 1) // un seul mot dans le vec donc juste la cmd sans cmd 
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, &(*cmd.begin())));
 
-	std::vector<std::string> args(cmd.begin() + 1, cmd.end());
-	std::string new_args = vecToString(args); // only args
-	std::vector<std::string> out = tokenize(new_args, ',');
-
+	std::vector<std::string> 	out = tokenize(*(cmd.begin() + 1), ','); // tous les channels
+	std::string 				bye_msg = implodeMessage(cmd.begin() + 2, cmd.end()); // on va tester sans verif 
 
 	for (std::vector<std::string>::iterator nb_chans_it = out.begin(); nb_chans_it != out.end(); nb_chans_it++)
 	{
@@ -47,13 +44,10 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 		if (it != s.chans.end())
 		{
 			std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
-			std::cout << "removing user " << u->getName() << std::endl;
 			s.chans[chan_name]->remove_user(u);
 
-			
-			std::vector<std::string> part_chan_msg;
-			part_chan_msg.push_back(*(cmd.begin())); // "PART "
-			part_chan_msg.push_back(chan_name);
+			std::string msg[] = { *(cmd.begin()), chan_name, bye_msg };
+			std::vector<std::string> part_chan_msg(msg, msg + 3);
 			server_relay(u, part_chan_msg, chan_users);
 		}
 	}

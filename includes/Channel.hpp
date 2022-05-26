@@ -18,6 +18,16 @@
 #include <vector>
 #include <iostream>
 
+
+/*
+**         INVITE  - Invite a client to an invite-only channel (mode +i)
+**         KICK    - Eject a client from the channel
+**         MODE    - Change the channel's mode, as well as
+**                   members' privileges
+**         PRIVMSG - Sending messages to the channel (mode +n, +m, +v)
+**         TOPIC   - Change the channel topic in a mode +t channel
+*/
+
 class Channel
 {
 
@@ -47,6 +57,8 @@ class Channel
 		bool 								isTopicSet();
 		bool								hasKey(); //si le flag K est actif pour rentrer 
 		bool 								isBanned(User *u);
+		bool								isOperator(User *u);
+		bool 								isOwner(User *u);
 		std::string							_name; // nom du chan 
 		std::string							_topic;
 
@@ -58,6 +70,7 @@ class Channel
 		std::vector<User *> 				_banned;
 		User*								_owner;
 		std::map<char, bool>				_modes;
+
 		std::string 						_password;
 		
 		//std::vector<User &>				_invite;

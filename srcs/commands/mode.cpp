@@ -6,7 +6,7 @@
 
 
 /*
-**       Command: MODE (channel)
+**    Command: MODE (channel)
 **    Parameters: <channel> *( ( "-" / "+" ) *<modes> *<modeparams> )
 ** 
 **    The MODE command is provided so that users may query and change the

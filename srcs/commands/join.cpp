@@ -28,7 +28,7 @@
 **    a PART command (See Section 3.2.2) for each channel he is a member
 **    of.
 **
-** 	JOIN #foo,#bar fubar,foobar ==> ex with key 
+** 	JOIN #foo,#bar fubar,foobar ==> ex with key
 **    Numeric Replies:
 **
 **            ERR_NEEDMOREPARAMS OK            ERR_BANNEDFROMCHAN
@@ -41,18 +41,39 @@
 
 // a penser : remove User ... + irc root me does not work with this
 
-void Commands::leaveAllChans(User *u) // comment faire ca sur irssi ??????? 
+void Commands::leaveAllChans(User *u) // comment faire ca sur irssi ???????
 {
-	for (std::vector< Channel *>::const_iterator chans = u->getJoinedChannels().begin(); chans != u->getJoinedChannels().end(); chans++)
+	for (std::vector<Channel *>::const_iterator chans = u->getJoinedChannels().begin(); chans != u->getJoinedChannels().end(); chans++)
 	{
 		u->leaveChan(*chans); // il leave le chan, il eprforme le delete user aussi via channel
-		std::vector<std::string> part_msg;
-		part_msg.push_back("PART");
-		part_msg.push_back((*chans)->_name);
+		std::string msg[] = {"PART", (*chans)->_name};
+		std::vector<std::string> part_msg(msg, msg + 2);
 		server_relay(u, part_msg, u);
 	}
 }
 
+void createChan(Server &s, std::string chan_name, User *u, bool *joined)
+{
+	Channel *chan = new Channel(chan_name, u);
+	s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
+	*joined = true;
+}
+
+void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i)
+{
+	if (chan->isInChan(u))
+		return;																			  // do nothing but maybe a specific error ?
+	else if (chan->hasKey() && ((pass->size() < i) || !chan->isCorrectPass(pass->at(i)))) // throw une ex
+		s.numeric_reply(u, ERR_BADCHANNELKEY, chan);
+	else if (chan->isBanned(u))
+		s.numeric_reply(u, ERR_BANNEDFROMCHAN, chan);
+	else
+	{
+		u->joinChan(chan);
+		chan->add_user(u);
+		*joined = true;
+	}
+}
 
 void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou quit
 {
@@ -60,46 +81,45 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 	if (cmd.size() == 1) // un seul mot dans le vec donc juste la cmd sans cmd
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, &(*cmd.begin())));
 
-	std::vector<std::string> args(cmd.begin() +1, cmd.end());
-	std::string new_args = vecToString(args); // only args
-	std::vector<std::string> out = tokenize(new_args, ',');
+	size_t i = 0;
+	bool joined = false;
+	std::vector<std::string> chans = tokenize(*(cmd.begin() + 1), ',');
+	std::vector<std::string> pass;
 
-	for (std::vector<std::string>::iterator nb_chans_it = out.begin(); nb_chans_it != out.end(); nb_chans_it++)
+	if (cmd.size() >= 3)
+		pass = tokenize(*(cmd.begin() + 2), ',');
+
+	for (std::vector<std::string>::iterator nb_chans_it = chans.begin(); nb_chans_it != chans.end(); nb_chans_it++)
 	{
-		std::vector<std::string> args = tokenize(*nb_chans_it, ' '); // onredevise si jamais y a des mdp genre #lol motdepass 
+		std::string chan_name = trim(chans[i]);
+		joined = false;
 
-		std::string chan_name = trim(args[0]);
+		/* Case 0 : Channel name is not well fomatted */
 		if (chan_name[0] != '#')
-			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name));
-		if (*nb_chans_it == "0") // leave all chans que faire si JOIN 0 jakfjskfj derreire ? 
-		{
-			leaveAllChans(u); // return ou non  ? 
-		}
-		std::map<std::string, Channel *>::const_iterator it = s.chans.find(chan_name);
-		if (it == s.chans.end()) // le chan existe pas 
-		{
-			Channel *chan = new Channel(chan_name, u);
-			s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
-		}
-		else // le chan existe 
-		{	
-			if (s.chans[chan_name]->hasKey() && ( (args.size() < 2) || !s.chans[chan_name]->isCorrectPass(args[1])))
-				return (s.numeric_reply(u, ERR_BADCHANNELKEY, s.chans[chan_name]));
-			if (s.chans[chan_name]->isBanned(u))
-				return (s.numeric_reply(u, ERR_BANNEDFROMCHAN, s.chans[chan_name]));
-			s.chans[chan_name]->add_user(u);
-		}
+			s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name);
+		/* Case 1 : JOIN 0 -> leaving all chans */
+		else if (*nb_chans_it == "0")
+			return (leaveAllChans(u)); // return ou non  ?
+		/* Case 2 : Channel does not exist */
+		else if (!s.chanExists(chan_name))
+			createChan(s, chan_name, u, &joined);
+		/* Case 3 : Channel does exist */
+		else
+			simpleAdd(s, s.chans[chan_name], u, &joined, &pass, i);
 
 		/* Server informing all chan users */
-		std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
-		std::vector<std::string> join_chan_msg;
-		join_chan_msg.push_back(*(cmd.begin())); // "JOIN "
-		join_chan_msg.push_back(chan_name);
+		if (joined == true)
+		{
+			std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
+			std::string msg[] = {*(cmd.begin()), chan_name};
+			std::vector<std::string> join_chan_msg(msg, msg + 2);
 
-		server_relay(u, join_chan_msg, chan_users);
-		s.numeric_reply(u, RPL_NAMREPLY, s.chans[chan_name]);
-		s.numeric_reply(u, RPL_ENDOFNAMES, s.chans[chan_name]);
-		if (s.chans[chan_name]->isTopicSet() == true)
-			s.numeric_reply(u, RPL_TOPIC, s.chans[chan_name]);
+			server_relay(u, join_chan_msg, chan_users);
+			s.numeric_reply(u, RPL_NAMREPLY, s.chans[chan_name]);
+			s.numeric_reply(u, RPL_ENDOFNAMES, s.chans[chan_name]);
+			if (s.chans[chan_name]->isTopicSet() == true)
+				s.numeric_reply(u, RPL_TOPIC, s.chans[chan_name]);
+		}
+		i++;
 	}
 }

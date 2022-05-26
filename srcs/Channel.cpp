@@ -12,6 +12,7 @@
 
 #include "Server.hpp"
 #include "Answers.hpp"
+#include <algorithm>
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
@@ -155,23 +156,32 @@ bool								Channel::hasKey()
 
 bool Channel::isBanned(User *u)
 {
-	for (std::vector<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
-	{
-		if ((*it) == u)
-			return true;
-	}
+	std::vector<User *>::iterator it = std::find(_banned.begin(), _banned.end(), u);
+	if (it != _banned.end())
+		return true;
 	return false;
 }
 
+bool								Channel::isOperator(User *u)
+{
+	std::vector<User *>::iterator it = std::find(_banned.begin(), _banned.end(), u);
+	if (it != _banned.end())
+		return true;
+	return false;
+}
 
+bool 								Channel::isOwner(User *u)
+{
+	if (_owner == u)
+		return true;
+	return false;
+}
 
-//add a new_user, what happends if the name already exists ?
 void Channel::add_user(User *new_user)
 {
 	start;
-	new_user->joinChan(this);
 	_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
-	std::cout << "Added users" << std::endl;
+	out ("[" << _name << "] " << "New user added :" << new_user->getNickName());
 }
 
 void Channel::remove_user(User *new_user)

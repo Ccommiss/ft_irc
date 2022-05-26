@@ -46,3 +46,10 @@ std::vector<std::string> tokenize(std::string const &str, const char delim)
     }
     return out;
 }
+
+
+std::string         implodeMessage(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end)
+{
+    std::vector<std::string> 	vec_msg(begin,end);
+    return (vecToString(vec_msg));
+}

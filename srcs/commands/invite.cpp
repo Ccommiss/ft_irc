@@ -9,6 +9,7 @@
 **  Chan does not exist: ok for all  
 **  Invite only : only channel oeprators can say yes 
 */
+
 void Commands::invite(Server &s, User *u, std::vector<std::string> cmd)
 {
 	start;

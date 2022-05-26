@@ -9,7 +9,7 @@ class Channel;
 class User {
     public:
         int         			socket_descriptor;
-        int 					registered;
+        bool 					registered[4]; //trois booleens 
         std::string 			name;
         std::string 			nickname;
 		struct epoll_event	*	event;
@@ -23,9 +23,10 @@ class User {
 
     void                            setSocket(int sd);
     void                            setNickName(std::string newNickName);
+    bool                            HasCompletedRegistration();
     void                            setName(std::string newName);
-    std::string const               &getName();
-    static std::string              getNickName(); //{ return nickname; }
+    std::string const &             getName() const;
+    std::string const &             getNickName() const; //{ return nickname; }
 
     void                            joinChan(Channel *chan);
     void                            leaveChan(Channel *chan);
@@ -33,7 +34,12 @@ class User {
     
     std::vector<Channel *>          joined_chans;
 
-    
+    enum {
+        NICK, 
+        USER,
+        PASS,
+        WELCOMED
+    };
 };
 
 
