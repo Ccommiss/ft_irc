@@ -21,11 +21,9 @@
 
 Channel::Channel() : _owner(0)
 {
-	
 }
 
-
-Channel::Channel(std::string name, User *creator):  _name(name), _topic(""), _password("")
+Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _password("")
 {
 	_modes.insert(std::make_pair('O', false));
 	_modes.insert(std::make_pair('o', false));
@@ -43,25 +41,24 @@ Channel::Channel(std::string name, User *creator):  _name(name), _topic(""), _pa
 	_modes.insert(std::make_pair('l', false));
 	_modes.insert(std::make_pair('b', false));
 	_modes.insert(std::make_pair('e', false));
-	_modes.insert(std::make_pair('I', false)); 
+	_modes.insert(std::make_pair('I', false));
 
 	_owner = creator;
-	out ("Creator :" << _owner->nickname)
-	add_user(creator);
+	out("Creator :" << _owner->nickname)
+		add_user(creator);
 	_operators.push_back(_owner);
 	out("A new chan " << *this << " has been created");
 }
 
-Channel::Channel( const Channel & src ): _name(src._name), _owner(src._owner)
+Channel::Channel(const Channel &src) : _name(src._name), _owner(src._owner)
 {
 	(void)src;
-	//if ( this != &src )
+	// if ( this != &src )
 	//{
-		//this->_value = src.getValue();
+	// this->_value = src.getValue();
 	//}
-	//return (*this);
+	// return (*this);
 }
-
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
@@ -69,52 +66,47 @@ Channel::Channel( const Channel & src ): _name(src._name), _owner(src._owner)
 
 Channel::~Channel()
 {
-
 }
-
 
 /*
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-Channel &				Channel::operator=( Channel const & rhs )
+Channel &Channel::operator=(Channel const &rhs)
 {
 	(void)rhs;
 	return *this;
 }
 
-std::ostream &			operator<<( std::ostream & o, Channel& i )
+std::ostream &operator<<(std::ostream &o, Channel &i)
 {
 	o << i.getName() << std::endl;
 	return o;
 }
 
-
-
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
-std::string& 				Channel::getName() //const 
+std::string &Channel::getName() // const
 {
 	return _name;
-	
 }
-std::map<std::string *, User *>& 	Channel::getUsers() //const 
+std::map<std::string *, User *> &Channel::getUsers() // const
 {
 	start;
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out ("USERS : " << *it->first);
+		out("USERS : " << *it->first);
 	return _users;
 }
 
 /*
-**	Prints the chan _users map (std::map<std::string *, User *>).  
+**	Prints the chan _users map (std::map<std::string *, User *>).
 */
-void	Channel::printUsers() //const 
+void Channel::printUsers() // const
 {
 	start;
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out ("USERS : " << *it->first); //show the nick name 
+		out("USERS : " << *it->first); // show the nick name
 }
 
 /*
@@ -133,11 +125,9 @@ void	Channel::printUsers() //const
 
 bool Channel::isTopicSet()
 {
-	out (" TOPIC IS " << _topic << "-->" << _topic.length())
-	if (_topic.length() != 0)
+	out(" TOPIC IS " << _topic << "-->" << _topic.length()) if (_topic.length() != 0)
 	{
-		out ("TOPIC IS SET")
-		return true;
+		out("TOPIC IS SET") return true;
 	}
 	return false;
 }
@@ -145,6 +135,13 @@ bool Channel::isTopicSet()
 bool Channel::isInChan(User *u)
 {
 	if (_users.count(&u->nickname) == 1)
+		return true;
+	return false;
+}
+
+bool	Channel::isInvited(User *user)
+{
+	if (std::find(_invited.begin(), _invited.end(), user) != _invited.end())
 		return true;
 	return false;
 }
@@ -157,20 +154,22 @@ bool Channel::findByName(std::string nick, User *u)
 	{
 		if (*(it->first) == nick)
 		{
-			u = it->second; // on fait pointer User recu sur l'instance 
-			out ("ON EST BON !!! ")
-			return true;
+			u = it->second; // on fait pointer User recu sur l'instance
+			out("ON EST BON !!! ") return true;
 		}
 	}
 	return false;
 }
 
-
-bool								Channel::hasKey()
+bool Channel::hasKey()
 {
 	return (_modes['k']);
-} //si le flag K est actif pour rentrer 
+} // si le flag K est actif pour rentrer
 
+bool Channel::hasMode(char mode)
+{
+	return (_modes[mode]);
+} // s
 
 bool Channel::isBanned(User *u)
 {
@@ -180,7 +179,7 @@ bool Channel::isBanned(User *u)
 	return false;
 }
 
-bool								Channel::isOperator(User *u)
+bool Channel::isOperator(User *u)
 {
 	std::vector<User *>::iterator it = std::find(_operators.begin(), _operators.end(), u);
 	if (it != _operators.end())
@@ -188,7 +187,7 @@ bool								Channel::isOperator(User *u)
 	return false;
 }
 
-bool 								Channel::isOwner(User *u)
+bool Channel::isOwner(User *u)
 {
 	if (_owner == u)
 		return true;
@@ -199,7 +198,8 @@ void Channel::add_user(User *new_user)
 {
 	start;
 	_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
-	out ("[" << _name << "] " << "New user added :" << new_user->getNickName());
+	out("[" << _name << "] "
+			<< "New user added :" << new_user->getNickName());
 }
 
 void Channel::remove_user(User *new_user)
@@ -214,6 +214,16 @@ void Channel::remove_user(User *new_user)
 		out("Unfound user : cannot remove from " << this->_name);
 }
 
+
+void	Channel::addToInviteList(User *to_add)
+{
+	_invited.push_back(to_add);
+}
+
+void	Channel::removeFromInviteList(User *to_del)
+{
+	_invited.erase(std::find(_invited.begin(), _invited.end(), to_del));
+}
 // void Channel::add_operator(User admin)
 // {
 // 	std::vector<User>::iterator add;
@@ -221,7 +231,7 @@ void Channel::remove_user(User *new_user)
 // 	if (add != _operators.end())
 // 		_operators.push_back(admin);
 // 	else
-// 		std::cout << "this operator already exist" << std::endl;	
+// 		std::cout << "this operator already exist" << std::endl;
 // }
 
 // void	Channel::me()
@@ -231,79 +241,82 @@ void Channel::remove_user(User *new_user)
 // 	// 	std::cout << *it << std::endl;
 // }
 
-std::string 	Channel::setMode(char mode, bool value, std::vector<std::string > params) // on va renvoyer le code erreur ou bien  0 
-{	
+std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::string> params) // on va renvoyer le code erreur ou bien  0
+{
 	if (!_modes.count(mode)) // c un bon caractere
 		return ERR_UNKNOWNMODE;
-	
-	switch ( mode )
+
+	switch (mode)
 	{
-		case 'k':
-			if (trim(params[0]).length() == 0)
-				return ERR_NEEDMOREPARAMS; // faudra renvoyer erreur 
-			if (value == true && _modes['k'] == true) // on veut changer alors que deja existant 
-				return ERR_KEYSET;
-			else if (value == true)
-				_password = trim(params[0]);
-			else if (value == false && trim(params[0]) != _password) // on essaie d'enever le pass mais mavais
-				return ERR_KEYSET; // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
-		case 'o': // give channel op status
-			if (trim(params[0]).length() == 0)
-				return ERR_NEEDMOREPARAMS;
-			User *user = NULL;
-			if (findByName(trim(params[0]) , user) == true)
-				_operators.push_back(user);
-			else
-				out ("UFOUND USER FOR ADDING TO OPS")
-
-
-	} 
+	case 'k':
+	{
+		if (trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;			  // faudra renvoyer erreur
+		if (value == true && _modes['k'] == true) // on veut changer alors que deja existant
+			return ERR_KEYSET;
+		else if (value == true)
+			_password = trim(params[0]);
+		else if (value == false && trim(params[0]) != _password) // on essaie d'enever le pass mais mavais
+			return ERR_KEYSET;									 // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
+		break;
+	}
+	case 'o': // give channel op status
+	{
+		if (trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		User *user = NULL;
+		if (findByName(trim(params[0]), user) == true)
+			_operators.push_back(user);
+		else
+			out("UFOUND USER FOR ADDING TO OPS") break;
+	}
+	case 'i': // Making invite only
+	{
+		if (!isOperator(u)) // celui qui fait la requete
+			return (ERR_CHANOPRIVSNEEDED);
+	}
+	}
 	_modes[mode] = value;
 	return "";
 }
 
-
-void	Channel::setTopic(std::string topic)
+void Channel::setTopic(std::string topic)
 {
 	//_topic.clear();
 	_topic = topic;
 }
 
-std::string&	Channel::getTopic()
+std::string &Channel::getTopic()
 {
 	return _topic;
 }
 
-void			Channel::displayModes()
+void Channel::displayModes()
 {
-	out ("Channel " << _name << " has modes : ")
-	for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
+	out("Channel " << _name << " has modes : ") for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
 	{
 		if (it->second == true)
-			out (it->first << " is active");
+			out(it->first << " is active");
 	}
-	out ("Password is : " << _password);
+	out("Password is : " << _password);
 }
 
-
-std::map<char, bool>&			Channel::getModes()
+std::map<char, bool> &Channel::getModes()
 {
-		return _modes;
+	return _modes;
 }
-bool 						Channel::isCorrectPass(std::string candidate)
+bool Channel::isCorrectPass(std::string candidate)
 {
-	out ("candidate pass : " << candidate)
-	if (candidate == _password)
-		return true; 
+	out("candidate pass : " << candidate) if (candidate == _password) return true;
 	return false;
 }
 
-std::string        printNames(Channel *chan)
+std::string printNames(Channel *chan)
 {
-	 std::string names;
-	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin() ; it != chan->getUsers().end(); it++)
+	std::string names;
+	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin(); it != chan->getUsers().end(); it++)
 	{
-		//if is op... @, sinon +
+		// if is op... @, sinon +
 		if (chan->isOperator(it->second))
 			names.append("@");
 		else

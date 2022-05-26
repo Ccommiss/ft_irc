@@ -33,6 +33,7 @@
 #define MSG_353		 "= " + arg1 + " :" + printNames(s.chans[arg1])  // il faut le serveur ou le chan a minima                    //CHANGER EN FO Status" 
 #define MSG_366		 	arg1 + " :End of NAMES list"  
 #define ERR_403		  arg1 + " :No such channel" 							/* ERR_NOSUCHCHANNEL */
+#define ERR_443		  arg1 + " " + arg2 + " :User already on channel"
 #define ERR_461		  arg1 + " :Not enough parameters" 					 	/* ERR_NEEDMOREPARAMS */
 #define ERR_462		  ":Unauthorized command (already registered)"  
 #define ERR_463		  ":Your host isn't among the privileged"  												/* ERR_NOPERMFORHOST */
@@ -42,7 +43,7 @@
 #define ERR_467		  arg1 + " :Channel key already set"					/* ERR_KEYSET */ 
 #define ERR_471		  arg1 + " :Cannot join channel (+l)" 					/* ERR_CHANNELISFULL */
 #define ERR_472		  arg1 + " :is unknown mode char to me for "  + arg2		/* ERR_UNKNOWNMODE */ 
-#define ERR_473		  arg1 + " :Cannot join channel (+i)" 					/* ERR_INVITEONLYCHAN */ 
+#define ERR_473		  arg1 + " :Cannot join channel (+i) (You must be invited)" 					/* ERR_INVITEONLYCHAN */ 
 #define ERR_474		  arg1 + " :Cannot join channel (+b)"  					/* ERR_BANNEDFROMCHAN */    
 #define ERR_475		  arg1 + " :Cannot join channel (+k)" 					/* ERR_BADCHANNELKEY */
 #define ERR_476		  arg1 + " :Bad Channel Mask" 							/* ERR_BADCHANMASK */
@@ -66,6 +67,7 @@ inline std::string		RPL_341 (Server &s, User *user, std::string arg1, std::strin
 inline std::string		RPL_353 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_353); }   /* RPL_NAMREPLY */
 inline std::string		RPL_366 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_366); }   /* RPL_ENDNAME  */ 
 inline std::string		RPL_403 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_403); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_443 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_443); }   /* RPL_ENDNAME  */ 
 inline std::string		RPL_461 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_461); }   /* RPL_ENDNAME  */ 
 inline std::string		RPL_462 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_462); }   /* RPL_ENDNAME  */ 
 inline std::string		RPL_463 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_463); }   /* RPL_ENDNAME  */ 

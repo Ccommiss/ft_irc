@@ -20,7 +20,7 @@
 
 
 /*
-**         INVITE  - Invite a client to an invite-only channel (mode +i)
+**         INVITE  - Invite a client to an invite-only channel (mode +i) //
 **         KICK    - Eject a client from the channel
 **         MODE    - Change the channel's mode, as well as
 **                   members' privileges
@@ -42,13 +42,16 @@ class Channel
 		void								ban(User kicked);
 		void								add_user( User *new_user);
 		void								remove_user( User *new_user);
-		void								add_operator(User ope);
+		void								add_operator(User *ope);
+		void								addToInviteList(User *to_add);
+		void								removeFromInviteList(User *to_del);
+		bool								isInvited(User *user);
 		void 								setTopic(std::string topic);
 		std::string  &						getTopic() ;
 		void								me();
 		std::string  &						getName();
 		std::map<std::string *, User *>  &	getUsers();
-		std::string							setMode(char mode, bool value, std::vector<std::string > params);
+		std::string							setMode(User *u, char mode, bool value, std::vector<std::string > params);
 		void								displayModes();
 		bool								isCorrectPass(std::string candidate);
 		std::map<char, bool>&				getModes();
@@ -57,6 +60,7 @@ class Channel
 		bool 								findByName(std::string nick, User *u);
 		bool 								isTopicSet();
 		bool								hasKey(); //si le flag K est actif pour rentrer 
+		bool								hasMode(char mode);
 		bool 								isBanned(User *u);
 		bool								isOperator(User *u);
 		bool 								isOwner(User *u);
@@ -71,11 +75,10 @@ class Channel
 		std::vector<User *> 				_banned;
 		User*								_owner;
 		std::map<char, bool>				_modes;
-
 		std::string 						_password;
 		
-		//std::vector<User &>				_invite;
-		//std::vector<User &>				_voice;
+		std::vector<User *>					_invited;
+		//std::vector<User *>				_voice;
 
 };
 

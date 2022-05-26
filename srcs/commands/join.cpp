@@ -61,6 +61,7 @@ void createChan(Server &s, std::string chan_name, User *u, bool *joined)
 
 void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i)
 {
+	start;
 	if (chan->isInChan(u))
 		return;																			  // do nothing but maybe a specific error ?
 	else if (chan->hasKey() && ((pass->size() < i) || !chan->isCorrectPass(pass->at(i)))) // throw une ex
@@ -103,13 +104,17 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		/* Case 2 : Channel does not exist */
 		else if (!s.chanExists(chan_name))
 			createChan(s, chan_name, u, &joined);
-		/* Case 3 : Channel does exist */
+		/* Case 4 : Channel does exist but invite only */
+		else if (s.chans[chan_name]->hasMode('i') && !s.chans[chan_name]->isInvited(u)) // invite only
+			s.numeric_reply(u, ERR_INVITEONLYCHAN, chan_name, NONE, NONE);
+		/* Case 5 : Channel does exist and ok !! */
 		else
 			simpleAdd(s, s.chans[chan_name], u, &joined, &pass, i);
 
 		/* Server informing all chan users */
 		if (joined == true)
 		{
+			out ("JONED TRUE");
 			std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
 			std::string msg[] = {*(cmd.begin()), chan_name};
 			std::vector<std::string> join_chan_msg(msg, msg + 2);

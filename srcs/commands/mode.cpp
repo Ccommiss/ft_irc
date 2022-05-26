@@ -81,7 +81,7 @@ void    Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
             bool value = modes[0] == '+' ? true : false;
             for (size_t i = 1; i < modes.length(); i++)
             {
-                std::string res = chan->setMode(modes[i], value, mode_params);
+                std::string res = chan->setMode(u, modes[i], value, mode_params);
                 if (res.length() != 0)
                     s.numeric_reply(u, res, chan->_name, NONE, NONE);
                 else 
