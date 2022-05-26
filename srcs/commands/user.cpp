@@ -1,11 +1,11 @@
 #include "Server.hpp"
 #include "Answers.hpp"
 
-void Commands::setUser(Server &s, User *u, std::vector<std::string> arg)
+void Commands::setUser(Server &s, User *u, std::vector<std::string> cmd)
 {
 	(void)s;
-	out("Setting name to : " << *(arg.begin() + 1));
-	u->setName(*(arg.begin() + 1));
+	out("Setting name to : " << *(cmd.begin() + 1));
+	u->setName(*(cmd.begin() + 1));
 	if (u->registered == 0)
 	{
 		s.numeric_reply(u, "001", u);

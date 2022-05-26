@@ -73,7 +73,7 @@ void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
 		{
 			Commands::Cmd a = cmd_map.at(*it); //  a proteger try/catch 
 			std::vector<std::string> new_res(res.begin() + std::distance(res.begin(), it), res.end());
-			(this->*a)(s, user, new_res); // on envoie le deuxieme arg
+			(this->*a)(s, user, new_res); // on envoie le deuxieme cmd
 		}                       // pour les messages slt  ; page accueil on peut que faire des cmd !!!
 		while (it != res.end())
 		{

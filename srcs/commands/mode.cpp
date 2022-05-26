@@ -58,17 +58,17 @@
 **             the invite-only flag;
 */
 
-void    Commands::mode(Server &s, User *u, std::vector<std::string> arg)
+void    Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
     (void)u;
-    if ((*(arg.begin() + 1))[0] == '#') // ou & ....
+    if ((*(cmd.begin() + 1))[0] == '#') // ou & ....
     {
         std::string empty = " lol";
-        std::string chan_name = arg.size() > 1 ? *(arg.begin() + 1) : ""; // #truc
-        std::string modes = arg.size() > 2 ? *(arg.begin() + 2) : ""; // +=....
+        std::string chan_name = cmd.size() > 1 ? *(cmd.begin() + 1) : ""; // #truc
+        std::string modes = cmd.size() > 2 ? *(cmd.begin() + 2) : ""; // +=....
         std::vector<std::string> mode_params;
-        (arg.size() > 3) ? (mode_params.insert(mode_params.begin(), arg.begin() + 3, arg.end())) : (mode_params.push_back(""));// tout le reste n fait 
-        // si modes c un +, faut un troisieme arg ssi K par ex
+        (cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back(""));// tout le reste n fait 
+        // si modes c un +, faut un troisieme cmd ssi K par ex
         if (!s.chanExists(chan_name))
         {
             out ("Chan does not exist") // une erreur surement 
@@ -87,7 +87,7 @@ void    Commands::mode(Server &s, User *u, std::vector<std::string> arg)
                 else 
                 {  
                     s.numeric_reply(u, RPL_CHANNELMODEIS, chan); // 
-                    server_relay(u, arg ,u);
+                    server_relay(u, cmd ,u);
                 }
             }
             chan->displayModes();
