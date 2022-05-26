@@ -64,9 +64,9 @@ void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std:
 	if (chan->isInChan(u))
 		return;																			  // do nothing but maybe a specific error ?
 	else if (chan->hasKey() && ((pass->size() < i) || !chan->isCorrectPass(pass->at(i)))) // throw une ex
-		s.numeric_reply(u, ERR_BADCHANNELKEY, chan);
+		s.numeric_reply(u, ERR_BADCHANNELKEY, chan->_name, NONE, NONE);
 	else if (chan->isBanned(u))
-		s.numeric_reply(u, ERR_BANNEDFROMCHAN, chan);
+		s.numeric_reply(u, ERR_BANNEDFROMCHAN, chan->_name, NONE, NONE);
 	else
 	{
 		u->joinChan(chan);
@@ -79,7 +79,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 {
 	start;
 	if (cmd.size() == 1) // un seul mot dans le vec donc juste la cmd sans cmd
-		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, &(*cmd.begin())));
+		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
 	size_t i = 0;
 	bool joined = false;
@@ -96,7 +96,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 
 		/* Case 0 : Channel name is not well fomatted */
 		if (chan_name[0] != '#')
-			s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name);
+			s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE);
 		/* Case 1 : JOIN 0 -> leaving all chans */
 		else if (*nb_chans_it == "0")
 			return (leaveAllChans(u)); // return ou non  ?
@@ -115,10 +115,10 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 			std::vector<std::string> join_chan_msg(msg, msg + 2);
 
 			server_relay(u, join_chan_msg, chan_users);
-			s.numeric_reply(u, RPL_NAMREPLY, s.chans[chan_name]);
-			s.numeric_reply(u, RPL_ENDOFNAMES, s.chans[chan_name]);
+			s.numeric_reply(u, RPL_NAMREPLY, chan_name, NONE, NONE);
+			s.numeric_reply(u, RPL_ENDOFNAMES, chan_name, NONE, NONE);
 			if (s.chans[chan_name]->isTopicSet() == true)
-				s.numeric_reply(u, RPL_TOPIC, s.chans[chan_name]);
+				s.numeric_reply(u, RPL_TOPIC, chan_name, NONE, NONE);
 		}
 		i++;
 	}

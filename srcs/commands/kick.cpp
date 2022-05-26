@@ -51,11 +51,11 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 
     User *to_kick = NULL;
     if (!s.chanExists(chan_name))
-        return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &chan_name));
+        return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE));
     else if (!s.chans[chan_name]->isOperator(u))
-        return(s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, &s.chans[chan_name]));// VERIFIER LES CASTS
+        return(s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan_name, NONE, NONE));// VERIFIER LES CASTS
     else if (s.chans[chan_name]->findByName(user_name, to_kick) == false)
-        return (s.numeric_reply(u, ERR_NOTONCHANNEL, &chan_name));
+        return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, NONE, NONE));
     else if (s.chans[chan_name]->findByName(user_name, to_kick) == true)
     {
         out ("KICKING");

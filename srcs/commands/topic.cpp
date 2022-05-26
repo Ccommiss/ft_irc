@@ -19,7 +19,7 @@ void Commands::topic(Server &s, User *u, std::vector<std::string> cmd)
 	}
 
 	if (chan->isTopicSet() == false) // si ni topic set renvoyer ca 
-		s.numeric_reply(u, "331", chan);
+		s.numeric_reply(u, "331", chan->_name, NONE, NONE);
 	else
-		s.numeric_reply(u, "332", chan);
+		s.numeric_reply(u, "332", chan->_name, chan->_topic, NONE);
 }

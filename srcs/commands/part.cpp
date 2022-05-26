@@ -27,7 +27,7 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 	start;
 
 	if (cmd.size() == 1) // un seul mot dans le vec donc juste la cmd sans cmd 
-		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, &(*cmd.begin())));
+		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
 	std::vector<std::string> 	out = tokenize(*(cmd.begin() + 1), ','); // tous les channels
 	std::string 				bye_msg = implodeMessage(cmd.begin() + 2, cmd.end()); // on va tester sans verif 
@@ -40,7 +40,7 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 		out ("FOUND :" << it->first)
 		s.printChans();
 		if (it == s.chans.end())
-			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, &(chan_name)));
+			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE));
 		if (it != s.chans.end())
 		{
 			std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();

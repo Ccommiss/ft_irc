@@ -41,10 +41,10 @@ void Commands::nick(Server &s, User *u, std::vector<std::string> cmd)
 	}
 	if (u->HasCompletedRegistration() == true && u->registered[User::WELCOMED] == false)
 	{
-		s.numeric_reply(u, "001", u);
-		s.numeric_reply(u, "002", u);
-		s.numeric_reply(u, "003", u);
-		s.numeric_reply(u, "004", u);
+		s.numeric_reply(u, "001", NONE, NONE, NONE);
+		s.numeric_reply(u, "002", NONE, NONE, NONE);
+		s.numeric_reply(u, "003", NONE, NONE, NONE);
+		s.numeric_reply(u, "004", NONE, NONE, NONE);
 		u->registered[User::WELCOMED] = true;
 		out("Answer sent to " << u->socket_descriptor);
 	}

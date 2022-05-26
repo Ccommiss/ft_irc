@@ -83,10 +83,10 @@ void    Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
             {
                 std::string res = chan->setMode(modes[i], value, mode_params);
                 if (res.length() != 0)
-                    s.numeric_reply(u, res, chan);
+                    s.numeric_reply(u, res, chan->_name, NONE, NONE);
                 else 
                 {  
-                    s.numeric_reply(u, RPL_CHANNELMODEIS, chan); // 
+                    s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, NONE, NONE); // 
                     server_relay(u, cmd ,u);
                 }
             }

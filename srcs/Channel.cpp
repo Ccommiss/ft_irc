@@ -304,7 +304,10 @@ std::string        printNames(Channel *chan)
 	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin() ; it != chan->getUsers().end(); it++)
 	{
 		//if is op... @, sinon +
-		names.append("@");
+		if (chan->isOperator(it->second))
+			names.append("@");
+		else
+			names.append("");
 		names.append(*it->first);
 		names.append(" ");
 	}

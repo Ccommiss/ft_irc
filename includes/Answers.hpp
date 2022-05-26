@@ -21,67 +21,67 @@
 **  Define messages 
 */
 
+#define NONE		""
 #define MSG_001		":Welcome to the Internet Relay Network of Clement and Claire " + user->nickname + "!" + user->name + "@" + "localhost"
 #define MSG_002		":Your host is localhost, version 1.0   8-)"
 #define MSG_003		":This server was created not so long time ago."
 #define MSG_004		":You are very welcome. Enjoy !"
-#define MSG_324 	":" + (static_cast<Channel *>(arg))->_name + "<mode> <mode_params>" 	/* RPL_CHANNELMODEIS */
-// VA FALLOIR CHANGER LA STRUCTURE.........
-#define MSG_331		 *(static_cast<std::string*>(arg)) + " :No topic is set."
-#define MSG_332		 (static_cast<Channel *>(arg))->_name + " :" + (static_cast<Channel *>(arg))->_topic  	/* RPL_TOPIC */
-#define MSG_341		 ":" + *(static_cast<std::string*>(arg)) + " " + user->nickname
-#define MSG_353		 "= " + (static_cast<Channel *>(arg))->_name + " :" + printNames((static_cast<Channel *>(arg)))                       //CHANGER EN FO Status" 
-#define MSG_366		 (static_cast<Channel *>(arg))->_name + " :End of NAMES list"  
-#define ERR_403			*(static_cast<std::string*>(arg)) + " :No such channel" 							/* ERR_NOSUCHCHANNEL */
-#define ERR_461		  *(static_cast<std::string*>(arg)) + " :Not enough parameters" 					 	/* ERR_NEEDMOREPARAMS */
+#define MSG_324 	":" + arg1 + "<mode> <mode_params>" 	/* RPL_CHANNELMODEIS */
+#define MSG_331		 arg1 + " :No topic is set."
+#define MSG_332		 arg1 + " :" + arg2 	/* RPL_TOPIC */
+#define MSG_341		 ":" + arg1 + " " + user->nickname
+#define MSG_353		 "= " + arg1 + " :" + printNames(s.chans[arg1])  // il faut le serveur ou le chan a minima                    //CHANGER EN FO Status" 
+#define MSG_366		 	arg1 + " :End of NAMES list"  
+#define ERR_403		  arg1 + " :No such channel" 							/* ERR_NOSUCHCHANNEL */
+#define ERR_461		  arg1 + " :Not enough parameters" 					 	/* ERR_NEEDMOREPARAMS */
 #define ERR_462		  ":Unauthorized command (already registered)"  
 #define ERR_463		  ":Your host isn't among the privileged"  												/* ERR_NOPERMFORHOST */
 #define ERR_464		  ":Password incorrect" 																/* ERR_PASSWDMISMATCH */ 
 #define ERR_465		  ":You are banned from this server"
 #define ERR_466		  "" //ERR_YOUWILLBEBANNED  , no msg 
-#define ERR_467		  (static_cast<Channel *>(arg))->_name + " :Channel key already set"					/* ERR_KEYSET */ 
-#define ERR_471		  (static_cast<Channel *>(arg))->_name + " :Cannot join channel (+l)" 					/* ERR_CHANNELISFULL */
-#define ERR_472		  "<char> :is unknown mode char to me for <channel>" 									/* ERR_UNKNOWNMODE */ 
-#define ERR_473		  (static_cast<Channel *>(arg))->_name + " :Cannot join channel (+i)" 					/* ERR_INVITEONLYCHAN */ 
-#define ERR_474		  (static_cast<Channel *>(arg))->_name + " :Cannot join channel (+b)"  					/* ERR_BANNEDFROMCHAN */    
-#define ERR_475		  (static_cast<Channel *>(arg))->_name + " :Cannot join channel (+k)" 					/* ERR_BADCHANNELKEY */
-#define ERR_476		  (static_cast<Channel *>(arg))->_name + " :Bad Channel Mask" 							/* ERR_BADCHANMASK */
-#define ERR_477		  (static_cast<Channel *>(arg))->_name + " :Channel doesn't support modes" 				/* ERR_NOCHANMODES */
-#define ERR_478		  (static_cast<Channel *>(arg))->_name + " <char> :Channel list is full" 				/* ERR_BANLISTFULL */
-	  
+#define ERR_467		  arg1 + " :Channel key already set"					/* ERR_KEYSET */ 
+#define ERR_471		  arg1 + " :Cannot join channel (+l)" 					/* ERR_CHANNELISFULL */
+#define ERR_472		  arg1 + " :is unknown mode char to me for "  + arg2		/* ERR_UNKNOWNMODE */ 
+#define ERR_473		  arg1 + " :Cannot join channel (+i)" 					/* ERR_INVITEONLYCHAN */ 
+#define ERR_474		  arg1 + " :Cannot join channel (+b)"  					/* ERR_BANNEDFROMCHAN */    
+#define ERR_475		  arg1 + " :Cannot join channel (+k)" 					/* ERR_BADCHANNELKEY */
+#define ERR_476		  arg1 + " :Bad Channel Mask" 							/* ERR_BADCHANMASK */
+#define ERR_477		  arg1 + " :Channel doesn't support modes" 				/* ERR_NOCHANMODES */
+#define ERR_478		  arg1 + " :Channel list is full" 				       /* ERR_BANLISTFULL */
+#define ERR_482		  arg1 + " :You're not channel operator"				/* ERR_CHANOPRIVSNEEDED */
+
 /*
 **      Numeric Replies : 
 **      Functions pointed in server_replies returning content of define messages 
 */
 
-inline std::string		RPL_001 (User *user, void *arg) { (void)arg; return (MSG_001); }
-inline std::string		RPL_002 (User *user, void *arg) { (void)user; (void)arg; return (MSG_002); }
-inline std::string		RPL_003 (User *user, void *arg) { (void)user; (void)arg; return (MSG_003); }
-inline std::string		RPL_004 (User *user, void *arg) { (void)user; (void)arg; return (MSG_004); }
-inline std::string		RPL_324 (User *user, void *arg) { (void)user; (void)arg; return (MSG_324); }   //RPL INVITING 
-inline std::string		RPL_331 (User *user, void *arg) { (void)user; (void)arg; return (MSG_331); }   //RPL INVITING 
-inline std::string		RPL_332 (User *user, void *arg) { (void)user; (void)arg; return (MSG_332); }   //RPL INVITING 
-inline std::string		RPL_341 (User *user, void *arg) { (void)user; (void)arg; return (MSG_341); }   //RPL INVITING 
-inline std::string		RPL_353 (User *user, void *arg) { (void)user; (void)arg; return (MSG_353); }   /* RPL_NAMREPLY */
-inline std::string		RPL_366 (User *user, void *arg) { (void)user; (void)arg; return (MSG_366); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_403 (User *user, void *arg) { (void)user; (void)arg; return (ERR_403); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_461 (User *user, void *arg) { (void)user; (void)arg; return (ERR_461); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_462 (User *user, void *arg) { (void)user; (void)arg; return (ERR_462); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_463 (User *user, void *arg) { (void)user; (void)arg; return (ERR_463); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_464 (User *user, void *arg) { (void)user; (void)arg; return (ERR_464); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_465 (User *user, void *arg) { (void)user; (void)arg; return (ERR_465); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_466 (User *user, void *arg) { (void)user; (void)arg; return (ERR_466); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_467 (User *user, void *arg) { (void)user; (void)arg; return (ERR_467); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_471 (User *user, void *arg) { (void)user; (void)arg; return (ERR_471); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_472 (User *user, void *arg) { (void)user; (void)arg; return (ERR_472); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_473 (User *user, void *arg) { (void)user; (void)arg; return (ERR_473); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_474 (User *user, void *arg) { (void)user; (void)arg; return (ERR_474); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_475 (User *user, void *arg) { (void)user; (void)arg; return (ERR_475); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_476 (User *user, void *arg) { (void)user; (void)arg; return (ERR_476); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_477 (User *user, void *arg) { (void)user; (void)arg; return (ERR_477); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_478 (User *user, void *arg) { (void)user; (void)arg; return (ERR_478); }   /* RPL_ENDNAME  */ 
-inline std::string		RPL_482 (User *user, void *arg) { (void)user; (void)arg; return (ERR_482); }   /* RPL_ENDNAME  */ 
-
+inline std::string		RPL_001 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)arg1; (void)arg2; (void)arg3; return (MSG_001); }
+inline std::string		RPL_002 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_002); }
+inline std::string		RPL_003 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_003); }
+inline std::string		RPL_004 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_004); }
+inline std::string		RPL_324 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_324); }   //RPL INVITING 
+inline std::string		RPL_331 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_331); }   //RPL INVITING 
+inline std::string		RPL_332 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_332); }   //RPL INVITING 
+inline std::string		RPL_341 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_341); }   //RPL INVITING 
+inline std::string		RPL_353 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_353); }   /* RPL_NAMREPLY */
+inline std::string		RPL_366 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_366); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_403 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_403); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_461 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_461); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_462 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_462); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_463 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_463); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_464 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_464); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_465 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_465); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_466 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_466); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_467 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_467); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_471 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_471); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_472 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_472); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_473 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_473); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_474 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_474); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_475 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_475); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_476 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_476); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_477 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_477); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_478 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_478); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_482 (Server &s, User *user, std::string arg1, std::string arg2, std::string arg3) { (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (ERR_482); }   /* RPL_ENDNAME  */ 
 
 
 
@@ -142,8 +142,8 @@ inline std::string server_relay(const User *u, std::vector<std::string> cmd, Use
 **  Their shape is : :<host> <3digits> <nickname> : [...] (depends on the answer)
 */
 
-template <typename T>
-std::string     Server::choose_msg(int code, User *u, T *arg)
+
+inline std::string     Server::choose_msg(int code, User *u, std::string arg1, std::string arg2, std::string arg3)
 {
 	start;
 	out ("anwer code " << code)
@@ -152,11 +152,11 @@ std::string     Server::choose_msg(int code, User *u, T *arg)
 		out ("==> Unfound server_replies");
 		return ("(no reply found)");
 	}
-	return (*(cmds.server_replies.find(code)->second))(u, arg); // second = la function
+	return (*(cmds.server_replies.find(code)->second))(*this, u, arg1, arg2, arg3); // second = la function
 }
 
-template <typename T>
-void            Server::numeric_reply(User *u, std::string code, T *arg) // rajouter autre chose pour le channel par ex ? //numeric reply 
+
+inline void            Server::numeric_reply(User *u, std::string code, std::string arg1, std::string arg2, std::string arg3) // rajouter autre chose pour le channel par ex ? //numeric reply 
 {
 	start;
 	std::string txt;
@@ -167,7 +167,7 @@ void            Server::numeric_reply(User *u, std::string code, T *arg) // rajo
 	txt.append(" ");
 	txt.append(u->nickname); // lui qui va servir commenickname
 	txt.append(" ");
-	txt.append(choose_msg(std::strtol(code.c_str(), &ptr, 10), u, arg));
+	txt.append(choose_msg(std::strtol(code.c_str(), &ptr, 10), u, arg1, arg2, arg3));
 	txt.append("\r\n");
 	
 	out(FG2("Server Reply to be sent:") << code);

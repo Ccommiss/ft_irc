@@ -37,7 +37,7 @@ class Commands
 		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> cmd);
 		std::map<std::string, Cmd> 		cmd_map;
 
-		typedef std::string (*Rep)(User *user, void *arg);
+		typedef std::string (*Rep)(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3);
 		std::map<int, Rep> 	server_replies;
 };
 
