@@ -80,6 +80,7 @@ inline std::string		RPL_475 (User *user, void *arg) { (void)user; (void)arg; ret
 inline std::string		RPL_476 (User *user, void *arg) { (void)user; (void)arg; return (ERR_476); }   /* RPL_ENDNAME  */ 
 inline std::string		RPL_477 (User *user, void *arg) { (void)user; (void)arg; return (ERR_477); }   /* RPL_ENDNAME  */ 
 inline std::string		RPL_478 (User *user, void *arg) { (void)user; (void)arg; return (ERR_478); }   /* RPL_ENDNAME  */ 
+inline std::string		RPL_482 (User *user, void *arg) { (void)user; (void)arg; return (ERR_482); }   /* RPL_ENDNAME  */ 
 
 
 

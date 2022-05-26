@@ -2,6 +2,18 @@
 
 #include "Server.hpp"
 #include "User.hpp"
+
+
+
+/*
+**              a - user is flagged as away;
+**            i - marks a users as invisible;
+**            w - user receives wallops;
+**            r - restricted user connection;
+**            o - operator flag;
+**            O - local operator flag;
+**            s - marks a user for receipt of server notices.
+*/
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
@@ -10,7 +22,22 @@ User::User(int sd) : socket_descriptor(sd), name("Guest"), nickname("Guest"), ev
 {
     for (int i = 0; i < 4; i++)
          registered[i] = false;
+
+    _modes.insert(std::make_pair('a', false));
+	_modes.insert(std::make_pair('i', false));
+	_modes.insert(std::make_pair('w', false));
+	_modes.insert(std::make_pair('r', false));
+	_modes.insert(std::make_pair('o', false));
+	_modes.insert(std::make_pair('O', false));
+	_modes.insert(std::make_pair('s', false));
+	_modes.insert(std::make_pair('q', false));
+
+
+
+
 	nickname.append(to_str(sd));
+
+
 }
 
 User::User( const User & src )

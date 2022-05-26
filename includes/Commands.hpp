@@ -32,7 +32,7 @@ class Commands
 		void part			(Server &s, User *u, std::vector<std::string> cmd) ; // par d'un chan 
 		void topic			(Server &s, User *u, std::vector<std::string> cmd);
 		void mode			(Server &s, User *u, std::vector<std::string> cmd);
-
+		void kick			(Server &s, User *u, std::vector<std::string> cmd);
 
 		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> cmd);
 		std::map<std::string, Cmd> 		cmd_map;

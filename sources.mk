@@ -30,7 +30,7 @@ SOURCES		+=             		\
 		srcs/commands/part.cpp       	\
 		srcs/commands/topic.cpp       	\
 		srcs/commands/mode.cpp       	\
-
+		srcs/commands/kick.cpp       	\
 
 
 

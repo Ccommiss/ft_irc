@@ -22,6 +22,7 @@ Commands::Commands()
 	cmd_map.insert(std::make_pair("PART",  &Commands::part));
 	cmd_map.insert(std::make_pair("TOPIC",  &Commands::topic));
 	cmd_map.insert(std::make_pair("MODE",  &Commands::mode));
+	cmd_map.insert(std::make_pair("KICK",  &Commands::kick));
 	
 
 
@@ -53,6 +54,7 @@ Commands::Commands()
 	server_replies.insert(std::make_pair(476, &RPL_476));
 	server_replies.insert(std::make_pair(477, &RPL_477));
 	server_replies.insert(std::make_pair(478, &RPL_478));
+	server_replies.insert(std::make_pair(482, &RPL_482));
 
 }
 

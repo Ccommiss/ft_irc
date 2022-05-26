@@ -12,6 +12,7 @@
 
 #include "Server.hpp"
 #include "Answers.hpp"
+#include "Channel.hpp"
 #include <algorithm>
 
 /*
@@ -148,6 +149,23 @@ bool Channel::isInChan(User *u)
 	return false;
 }
 
+bool Channel::findByName(std::string nick, User *u)
+{
+	start;
+	std::map<std::string *, User *>::iterator it;
+	for (it = _users.begin(); it != _users.end(); it++)
+	{
+		if (*(it->first) == nick)
+		{
+			u = it->second; // on fait pointer User recu sur l'instance 
+			out ("ON EST BON !!! ")
+			return true;
+		}
+	}
+	return false;
+}
+
+
 bool								Channel::hasKey()
 {
 	return (_modes['k']);
@@ -164,8 +182,8 @@ bool Channel::isBanned(User *u)
 
 bool								Channel::isOperator(User *u)
 {
-	std::vector<User *>::iterator it = std::find(_banned.begin(), _banned.end(), u);
-	if (it != _banned.end())
+	std::vector<User *>::iterator it = std::find(_operators.begin(), _operators.end(), u);
+	if (it != _operators.end())
 		return true;
 	return false;
 }
@@ -229,6 +247,15 @@ std::string 	Channel::setMode(char mode, bool value, std::vector<std::string > p
 				_password = trim(params[0]);
 			else if (value == false && trim(params[0]) != _password) // on essaie d'enever le pass mais mavais
 				return ERR_KEYSET; // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
+		case 'o': // give channel op status
+			if (trim(params[0]).length() == 0)
+				return ERR_NEEDMOREPARAMS;
+			User *user = NULL;
+			if (findByName(trim(params[0]) , user) == true)
+				_operators.push_back(user);
+			else
+				out ("UFOUND USER FOR ADDING TO OPS")
+
 
 	} 
 	_modes[mode] = value;
@@ -246,11 +273,6 @@ std::string&	Channel::getTopic()
 {
 	return _topic;
 }
-// //Channel::invite 
-// //Channel::names ==> list connected users 
-
-// /* ************************************************************************** */
-
 
 void			Channel::displayModes()
 {

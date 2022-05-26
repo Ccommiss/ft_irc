@@ -34,9 +34,9 @@
 /*
 **    The various modes available for channels are as follows:
 ** 
-**         O - give "channel creator" status;
-**         o - give/take channel operator privilege;
-**         v - give/take the voice privilege;
+**         O - give "channel creator" status;               // VECTOR LIST
+**         o - give/take channel operator privilege;        // VECTOR LIST
+**         v - give/take the voice privilege;               // VECTOR LIST
 ** 
 **         a - toggle the anonymous channel flag;
 **         i - toggle the invite-only channel flag;

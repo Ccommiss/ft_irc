@@ -54,6 +54,7 @@ class Channel
 		std::map<char, bool>&				getModes();
 		void 								printUsers();
 		bool 								isInChan(User *u);
+		bool 								findByName(std::string nick, User *u);
 		bool 								isTopicSet();
 		bool								hasKey(); //si le flag K est actif pour rentrer 
 		bool 								isBanned(User *u);

@@ -3,6 +3,7 @@
 
 #include <iostream> 
 #include <vector>
+#include <map>
 
 class Channel;
 
@@ -30,7 +31,11 @@ class User {
 
     void                            joinChan(Channel *chan);
     void                            leaveChan(Channel *chan);
+    std::map<char, bool>&				getModes();
+    	std::string							setMode(char mode, bool value, std::vector<std::string > params);
+		void								displayModes();
     std::vector<Channel *> const & getJoinedChannels();
+    
     
     std::vector<Channel *>          joined_chans;
 
@@ -40,6 +45,8 @@ class User {
         PASS,
         WELCOMED
     };
+    private:
+        std::map<char, bool>			_modes;
 };
 
 
