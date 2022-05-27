@@ -20,16 +20,16 @@
 
 User::User(int sd) : socket_descriptor(sd), name("Guest"), nickname("Guest"), event(NULL)
 {
-    for (int i = 0; i < 4; i++)
-        registered[i] = false;
+	for (int i = 0; i < 4; i++)
+		registered[i] = false;
 
-    initModes();
-    nickname.append(to_str(sd));
+	initModes();
+	nickname.append(to_str(sd));
 }
 
 User::User(const User &src)
 {
-    (void)src;
+	(void)src;
 }
 
 /*
@@ -47,15 +47,15 @@ User::~User()
 User &User::operator=(User const &rhs)
 {
 
-    (void)rhs;
-    return *this;
+	(void)rhs;
+	return *this;
 }
 
 std::ostream &operator<<(std::ostream &o, User const &i)
 {
-    (void)i;
-    // o << "Value = " << i.getValue();
-    return o;
+	(void)i;
+	// o << "Value = " << i.getValue();
+	return o;
 }
 
 /*
@@ -64,15 +64,15 @@ std::ostream &operator<<(std::ostream &o, User const &i)
 
 void User::initModes()
 {
-    /* Initializing modes */
-    _modes.insert(std::make_pair('a', false));
-    _modes.insert(std::make_pair('i', false));
-    _modes.insert(std::make_pair('w', false));
-    _modes.insert(std::make_pair('r', false));
-    _modes.insert(std::make_pair('o', false));
-    _modes.insert(std::make_pair('O', false));
-    _modes.insert(std::make_pair('s', false));
-    _modes.insert(std::make_pair('q', false));
+	/* Initializing modes */
+	_modes.insert(std::make_pair('a', false));
+	_modes.insert(std::make_pair('i', false));
+	_modes.insert(std::make_pair('w', false));
+	_modes.insert(std::make_pair('r', false));
+	_modes.insert(std::make_pair('o', false));
+	_modes.insert(std::make_pair('O', false));
+	_modes.insert(std::make_pair('s', false));
+	_modes.insert(std::make_pair('q', false));
 }
 
 /*
@@ -81,132 +81,137 @@ void User::initModes()
 
 void User::setName(std::string newName)
 {
-    this->name = trim(newName);
+	this->name = trim(newName);
 }
 
 void User::setNickName(std::string newNickName)
 {
-    this->nickname = trim(newNickName);
+	this->nickname = trim(newNickName);
 }
 
 void User::setSocket(int sd)
 {
-    this->socket_descriptor = sd;
+	this->socket_descriptor = sd;
 }
 
 void User::joinChan(Channel *chan)
 {
-    this->joined_chans.push_back(chan);
+	this->joined_chans.push_back(chan);
 }
 
 void User::leaveChan(Channel *chan)
 {
-    std::vector<Channel *>::iterator it = std::find(joined_chans.begin(), joined_chans.end(), chan);
-    if (it != joined_chans.end())
-        joined_chans.erase(it);
+	std::vector<Channel *>::iterator it = std::find(joined_chans.begin(), joined_chans.end(), chan);
+	if (it != joined_chans.end())
+		joined_chans.erase(it);
 }
 
 std::string const &User::getName() const
 {
-    return (this->name);
+	return (this->name);
 }
 
 std::string const &User::getNickName() const
 {
-    return (this->nickname);
+	return (this->nickname);
 }
 
 std::vector<Channel *> const &User::getJoinedChannels()
 {
-    return (this->joined_chans);
+	return (this->joined_chans);
 }
 
 bool User::HasCompletedRegistration()
 {
-    if (!registered[USER] || !registered[NICK])
-        return false;
-    return true;
+	if (!registered[USER] || !registered[NICK])
+		return false;
+	return true;
 }
 
 std::string User::whoIsPrivileges()
 {
-    std::string privileges("privileges :");
-    for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
-    {
-        if (it->second == true)
-        {
-            privileges.append("+"); // je crois c une seule fois le +, a verifier
-            privileges.push_back(it->first);
-        }
-    }
-    return privileges;
+	std::string privileges("privileges :");
+	for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
+	{
+		if (it->second == true)
+		{
+			privileges.append("+"); // je crois c une seule fois le +, a verifier
+			privileges.push_back(it->first);
+		}
+	}
+	return privileges;
 } // print channels for whoiscmd
 
 std::string User::whoIsChannels()
 {
-    std::string answer;
-    for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
-    {
-        if ((*it)->isOperator(this))
-            answer.append("@");
-        answer.append((*it)->_name);
-        answer.append(" ");
-    }
-    out("CHANNES JOIND =" << answer << " SIZE " << joined_chans.size()) return answer;
+	std::string answer;
+	for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
+	{
+		if ((*it)->isOperator(this))
+			answer.append("@");
+		answer.append((*it)->_name);
+		answer.append(" ");
+	}
+	out("CHANNES JOIND =" << answer << " SIZE " << joined_chans.size()) return answer;
 }
 
 bool User::hasMode(char mode)
 {
-    return (_modes[mode]);
+	return (_modes[mode]);
 }
-
 
 /* Mode <nickname> valeur  */
 std::string User::setMode(char mode, bool value, std::vector<std::string> params)
 {
-    if (!_modes.count(mode)) /* Checking if mode exists */
-        return ERR_UMODEUNKNOWNFLAG;
+	if (!_modes.count(mode)) /* Checking if mode exists */
+		return ERR_UMODEUNKNOWNFLAG;
 
-    /* Future target user for O, o and v options*/
-    //User *user = NULL;
-    (void)params;
-    switch (mode)
-    {
-    case 'a': /* Away */
-    {
-        // NOT TOGGLED BY MODE BUT BY AWAY MSG SO RESTRICTION IN MODE MSG FOR a TODO
-        break;
-    }
-    case 'i': /* Invisible */
-    {
-        _modes['i'] = value;
-        break;
-    }
-    case ('o'):
-    {
-        if (value == false) /* An user cannot op himself but through OPER command */
-            _modes['o'] = false;
-        break;
-    }
-    case ('O'):
-    {
-        if (value == false) /* Same as above */
-            _modes['O'] = false;
-        break;
-    }
-    case ('w'): /* Wall ops */
-    {
-        _modes['w'] = value;
-        break;
-    }
-    case ('r'): /* restricted mode */
-    {
-        if (value == true)      /* Same as above */
-            _modes['r'] = true; /* on peut se restricted mais pas se unrestricted */
-        break;
-    }
-    }
-    return "";
+	/* Future target user for O, o and v options*/
+	// User *user = NULL;
+	(void)params;
+	switch (mode)
+	{
+	case 'a': /* Away */
+	{
+		// NOT TOGGLED BY MODE BUT BY AWAY MSG SO RESTRICTION IN MODE MSG FOR a TODO
+		break;
+	}
+	case 'i': /* Invisible */
+	{
+		_modes['i'] = value;
+		break;
+	}
+	case ('o'):
+	{
+		if (value == false) /* An user cannot op himself but through OPER command */
+			_modes['o'] = false;
+		else
+			return "  ";
+		break;
+	}
+	case ('O'):
+	{
+		if (value == false) /* Same as above */
+			_modes['O'] = false;
+		else
+			return "  ";
+		break;
+	}
+	case ('w'): /* Wall ops */
+	{
+		_modes['w'] = value;
+		break;
+	}
+	case ('r'): /* restricted mode */
+	{
+		if (value == true)		/* Same as above */
+			_modes['r'] = true; /* on peut se restricted mais pas se unrestricted */
+		else
+			return "  ";
+		break;
+	}
+	}
+	return "";
 }
 
 /* ************************************************************************** */

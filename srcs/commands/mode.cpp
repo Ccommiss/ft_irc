@@ -109,7 +109,7 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 		(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
 
 		if (nickname_asked != u->nickname)
-			return; // pas le droit de demander mode pour les autres
+			return s.numeric_reply(u, ERR_USERSDONTMATCH, u->nickname, NONE, NONE); // pas le droit de demander mode pour les autres
 
 		bool value = modes[0] == '+' ? true : false;
 		for (size_t i = 1; i < modes.length(); i++)
