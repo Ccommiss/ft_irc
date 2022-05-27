@@ -46,7 +46,8 @@ Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _pa
 	_owner = creator;
 	out("Creator :" << _owner->nickname)
 		add_user(creator);
-	_operators.push_back(_owner);
+	if (name[0] != '+')
+		_operators.push_back(_owner);
 	out("A new chan " << *this << " has been created");
 }
 
