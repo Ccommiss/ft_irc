@@ -34,4 +34,18 @@ bool Server::findByName(std::string nick, User **u)
 	return false;
 }
 
+bool Server::nicknameExists(std::string nick)
+{
+	start;
+	std::map<const std::string *, User *>::iterator it;
+	for (it = server_users.begin(); it != server_users.end(); it++)
+	{
+		if (*(it->first) == nick)
+			return true;
+	}
+	return false;
+}
+
+
+
 //void Server::printUsers();

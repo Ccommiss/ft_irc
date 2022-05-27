@@ -111,6 +111,8 @@ class	Server {
 
 		bool 				chanExists(std::string chan_name);
 		bool 				findByName(std::string nick, User **u);
+		bool 				nicknameExists(std::string nick);
+
 
 
 		//pub_var - END}
