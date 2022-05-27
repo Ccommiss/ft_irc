@@ -47,10 +47,11 @@ void Commands::whois(Server &s, User *u, std::vector<std::string> cmd)
     if (s.findByName(target, &info) == true)
     {  
         s.numeric_reply(u, RPL_WHOISUSER, info->getNickName(), info->getName(), "real_name to set" );
+        s.numeric_reply(u, RPL_WHOISSERVER, info->getNickName(), "localhost", NONE);
+        s.numeric_reply(u, RPL_WHOISOPERATOR, info->getNickName(), NONE, NONE);
+        s.numeric_reply(u, RPL_WHOISIDLE, info->getNickName(), "8 seconds", NONE); // faire un compteur de second de connexion
+        s.numeric_reply(u, RPL_ENDOFWHOIS, info->getNickName(), NONE, NONE);
         s.numeric_reply(u, RPL_WHOISCHANNELS, info->getNickName(), info->whoIsChannels(), NONE);
-        s.numeric_reply(u, RPL_WHOISOPERATOR, info->getNickName(), info->whoIsPrivileges(), NONE);
-        s.numeric_reply(u, RPL_WHOISIDLE, info->getNickName(), info->whoIsPrivileges(), NONE);
-        s.numeric_reply(u, RPL_WHOISIDLE, info->getNickName(), info->whoIsPrivileges(), NONE);
     }
 
 }

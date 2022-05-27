@@ -127,7 +127,7 @@ bool User::HasCompletedRegistration()
     return true;
 }
 
-std::string User::whoIsChannels()
+std::string User::whoIsPrivileges()
 {
     std::string privileges("privileges :");
     for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
@@ -141,7 +141,7 @@ std::string User::whoIsChannels()
     return privileges;
 } // print channels for whoiscmd
 
-std::string User::whoIsPrivileges()
+std::string User::whoIsChannels()
 {
     std::string answer;
     for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
@@ -151,6 +151,7 @@ std::string User::whoIsPrivileges()
         answer.append((*it)->_name);
         answer.append(" ");
     }
+    out ("CHANNES JOIND =" << answer << " SIZE " << joined_chans.size())
     return answer;
 }
 

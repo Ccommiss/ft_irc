@@ -55,6 +55,7 @@ void Commands::leaveAllChans(User *u) // comment faire ca sur irssi ???????
 void createChan(Server &s, std::string chan_name, User *u, bool *joined)
 {
 	Channel *chan = new Channel(chan_name, u);
+	u->joinChan(chan);
 	s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
 	*joined = true;
 }

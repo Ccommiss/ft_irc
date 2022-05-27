@@ -76,15 +76,15 @@
 #define MSG_303 ":*1<nick> *( ' ' <nick> ) Reply to the ISON command (see RFC)"																																							  /* RPL_ISON */
 #define MSG_305 ":<info> Reply from AWAY when no longer marked as away"																																									  /* RPL_UNAWAY */
 #define MSG_306 ":<info> Reply from AWAY when marked away"																																												  /* RPL_NOWAWAY */
-#define MSG_311 arg1+ " " + arg2 + "localhost" + "*" + arg3 + "<real_name>" // Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
+#define MSG_311 arg1+ " " + arg2 + "localhost" + "* :" + arg3 + "<real_name>" // Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
 #define MSG_312 arg1+ " " + "<server> :<server_info> Reply to WHOIS - What server they're on"																																				  /* RPL_WHOISSERVER */
-#define MSG_313 arg1+ " " + arg2 + " " //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
+#define MSG_313 arg1+ " :is an IRC operator" //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
 #define MSG_314 arg1+ " " + "<user> <host> * :<real_name> Reply to WHOWAS - Information about the user"																																		  /* RPL_WHOWASUSER */
 #define MSG_315 "<name> :<info> Used to terminate a list of RPL_WHOREPLY replies"																																						  /* RPL_ENDOFWHO */
 #define MSG_316 ""																																																						  /* RPL_WHOISCHANOP */
-#define MSG_317 arg1 + " " + " <seconds> :seconds idle Reply to WHOIS - Idle information"																																						  /* RPL_WHOISIDLE */
-#define MSG_318 arg1 + " " + " :<info> Reply to WHOIS - End of list"																																											  /* RPL_ENDOFWHOIS */
-#define MSG_319 arg1 + " " + arg2 // " :*( ( '@' / '+' ) <channel> ' ' ) Reply to WHOIS - Channel list for user (See RFC)"																																  /* RPL_WHOISCHANNELS */
+#define MSG_317 arg1 + " " + arg2 + " :seconds idle" //Reply to WHOIS - Idle information"																																						  /* RPL_WHOISIDLE */
+#define MSG_318 arg1 + " " + " :End of WHOIS list"																																										  /* RPL_ENDOFWHOIS */
+#define MSG_319 arg1 + " :" + arg2 // " :*( ( '@' / '+' ) <channel> ' ' ) Reply to WHOIS - Channel list for user (See RFC)"																																  /* RPL_WHOISCHANNELS */
 #define MSG_322 "<channel> <#_visible> :<topic> Channel list - A channel"																																								  /* RPL_LIST */
 #define MSG_323 ":<info> Channel list - End of list"																																													  /* RPL_LISTEND */
 #define MSG_324 ":" + arg1 + " " + arg2 + " " + arg3 																																														  /* RPL_CHANNELMODEIS */
@@ -149,7 +149,7 @@
 #define ERR_436 "<nick> :<reason> Returned by a server to a client when it detects a nickname collision"																																  /* ERR_NICKCOLLISION */
 #define ERR_437 "<nick/channel/service> :<reason> Return when the target is unable to be reached temporarily, eg. a delay mechanism in play, or a service being offline"																  /* ERR_UNAVAILRESOURCE */
 #define ERR_441 arg1 + " " + arg2 + ": They aren't on that channel"																																										  /* ERR_USERNOTINCHANNEL */
-#define ERR_442 "<channel> :<reason> Returned by the server whenever a client tries to perform a channel effecting command for which the client is not a member"																		  /* ERR_NOTONCHANNEL */
+#define ERR_442 arg1 + " :You're not on that channel" 																		  /* ERR_NOTONCHANNEL */
 #define ERR_443 arg1 + " " + arg2 + " :User already on channel"																																											  /* ERR_USERONCHANNEL */
 #define ERR_444 "<user> :<reason> Returned by the SUMMON command if a given user was not logged in and could not be summoned"																											  /* ERR_NOLOGIN */
 #define ERR_445 ":<reason> Returned by SUMMON when it has been disabled or not implemented"																																				  /* ERR_SUMMONDISABLED */
@@ -252,7 +252,6 @@ inline std::string RPL_316(Server &s, User *user, std::string arg1, std::string 
 inline std::string RPL_317(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3){ (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_317);}
 inline std::string RPL_318(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3){ (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_318);}
 inline std::string RPL_319(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3){ (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_319);}
-inline std::string RPL_321(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3){ (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_321);}
 inline std::string RPL_322(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3){ (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_322);}
 inline std::string RPL_323(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3){ (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_323);}
 inline std::string RPL_324(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3){ (void)s; (void)user; (void)arg1; (void)arg2; (void)arg3; return (MSG_324);}

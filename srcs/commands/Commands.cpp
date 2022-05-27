@@ -93,7 +93,6 @@ Commands::Commands()
 	server_replies.insert(std::make_pair(317, &RPL_317));
 	server_replies.insert(std::make_pair(318, &RPL_318));
 	server_replies.insert(std::make_pair(319, &RPL_319));
-	server_replies.insert(std::make_pair(321, &RPL_321));
 	server_replies.insert(std::make_pair(322, &RPL_322));
 	server_replies.insert(std::make_pair(323, &RPL_323));
 	server_replies.insert(std::make_pair(324, &RPL_324));
