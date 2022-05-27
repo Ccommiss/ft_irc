@@ -315,7 +315,7 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 	User *user = NULL;
 	switch (mode)
 	{
-	case 'a': // aninymous mode que sur les hannels & et ! RFC 4.2.1 2811
+	case 'a': // aninymous mode que sur les channels & et ! RFC 4.2.1 2811
 	{
 	}
 	case 'k':
@@ -337,7 +337,7 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 		if (findByName(trim(params[0]), &user) == true)
 			value == true ? addOperator(user) : removeOperator(user); // faut il erreur si ajoute deux fois ?
 		else
-			out("Voice : unfound user"); // surement un erreur ? laquelle ?
+			out(" not in channel "); // surement un erreur ? laquelle ?
 		break;
 	}
 	case 'v': /* Voice privilege */

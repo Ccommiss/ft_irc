@@ -54,7 +54,12 @@
 
 void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
+	if (cmd.size() == 1)
+		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
+
 	std::string target = *(cmd.begin() + 1);
+
+	/* Channel Modes */
 	if (target[0] == '+') // ne supportent pas les chans modes
 		return (s.numeric_reply(u, ERR_NOCHANMODES, target, NONE, NONE));
 	if (target[0] == '#') // ou & ....
@@ -67,19 +72,19 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 		// si modes c un +, faut un troisieme cmd ssi K par ex
 		if (!s.chanExists(chan_name))
 		{
-			out("Chan does not exist") // une erreur surement
-				return;
+			out("Chan does not exist") return; // NO SUCH NICK ? mais pas specifie
 		}
 		else
 		{
 			Channel *chan = s.chans[chan_name];
 
-			// if (modes[0]) ni un - ou +, trouver quoi retrouner
+			// if (modes[0]) ni un - ou +, trouver quoi retrouner / MODE #eu-opers +l 10
 			bool value = modes[0] == '+' ? true : false;
 			for (size_t i = 1; i < modes.length(); i++)
 			{
-				/* A voir. Mode query pour limit par ex (flag l doit etre possible 4.2.9 rfc 2811) */ 
-				/* hypothese : si pas de valeur on voit genre MODE e, a tester */ 
+				/* A voir. Mode query pour limit par ex (flag l doit etre possible 4.2.9 rfc 2811) */
+				/* hypothese : si pas de valeur on voit genre MODE e, a tester */
+
 				if (!chan->isOperator(u)) // Only privileged (eg op and creator) can change modes
 					s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan->_name, NONE, NONE);
 				std::string res = chan->setMode(u, modes[i], value, mode_params);
@@ -94,7 +99,31 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 			chan->displayModes();
 		}
 	}
-	else // mode des gens ? 
+	/* User Modes a factoriser */
+	else
 	{
+		std::string empty = " lol";
+		std::string nickname_asked = cmd.size() > 1 ? *(cmd.begin() + 1) : ""; // #truc
+		std::string modes = cmd.size() > 2 ? *(cmd.begin() + 2) : "";		   // +=....
+		std::vector<std::string> mode_params;
+		(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
+
+		if (nickname_asked != u->nickname)
+			return; // pas le droit de demander mode pour les autres
+
+		bool value = modes[0] == '+' ? true : false;
+		for (size_t i = 1; i < modes.length(); i++)
+		{
+			/* A voir. Mode query pour limit par ex (flag l doit etre possible 4.2.9 rfc 2811) */
+			/* hypothese : si pas de valeur on voit genre MODE e, a tester */
+			std::string res = u->setMode(modes[i], value, mode_params);
+			if (res.length() != 0)
+				s.numeric_reply(u, res, u->nickname, NONE, NONE);
+			else
+			{
+				s.numeric_reply(u, RPL_CHANNELMODEIS, u->nickname, modes, vecToString(mode_params)); //
+				server_relay(u, cmd, u);
+			}
+		}
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "Server.hpp"
 #include "User.hpp"
+#include "Answers.hpp"
 #include <algorithm>
 
 /*
@@ -134,7 +135,7 @@ std::string User::whoIsPrivileges()
     {
         if (it->second == true)
         {
-            privileges.append("+"); // je crois c une seule fois le +, a verifier 
+            privileges.append("+"); // je crois c une seule fois le +, a verifier
             privileges.push_back(it->first);
         }
     }
@@ -151,8 +152,61 @@ std::string User::whoIsChannels()
         answer.append((*it)->_name);
         answer.append(" ");
     }
-    out ("CHANNES JOIND =" << answer << " SIZE " << joined_chans.size())
-    return answer;
+    out("CHANNES JOIND =" << answer << " SIZE " << joined_chans.size()) return answer;
+}
+
+bool User::hasMode(char mode)
+{
+    return (_modes[mode]);
+}
+
+
+/* Mode <nickname> valeur  */
+std::string User::setMode(char mode, bool value, std::vector<std::string> params)
+{
+    if (!_modes.count(mode)) /* Checking if mode exists */
+        return ERR_UMODEUNKNOWNFLAG;
+
+    /* Future target user for O, o and v options*/
+    //User *user = NULL;
+    (void)params;
+    switch (mode)
+    {
+    case 'a': /* Away */
+    {
+        // NOT TOGGLED BY MODE BUT BY AWAY MSG SO RESTRICTION IN MODE MSG FOR a TODO
+        break;
+    }
+    case 'i': /* Invisible */
+    {
+        _modes['i'] = value;
+        break;
+    }
+    case ('o'):
+    {
+        if (value == false) /* An user cannot op himself but through OPER command */
+            _modes['o'] = false;
+        break;
+    }
+    case ('O'):
+    {
+        if (value == false) /* Same as above */
+            _modes['O'] = false;
+        break;
+    }
+    case ('w'): /* Wall ops */
+    {
+        _modes['w'] = value;
+        break;
+    }
+    case ('r'): /* restricted mode */
+    {
+        if (value == true)      /* Same as above */
+            _modes['r'] = true; /* on peut se restricted mais pas se unrestricted */
+        break;
+    }
+    }
+    return "";
 }
 
 /* ************************************************************************** */

@@ -33,7 +33,9 @@ void Commands::nick(Server &s, User *u, std::vector<std::string> cmd)
 		return (s.numeric_reply(u, ERR_NONICKNAMEGIVEN, NONE, NONE, NONE));
 	nickname = *(cmd.begin() + 1);
 	if (s.nicknameExists(nickname) == true)
-		return (s.numeric_reply(u, ERR_NICKNAMEINUSE, NONE, NONE, NONE));
+		return (s.numeric_reply(u, ERR_NICKNAMEINUSE, nickname, NONE, NONE));
+	if (u->hasMode('r'))
+		return (s.numeric_reply(u, ERR_RESTRICTED, nickname, NONE, NONE));
 	if (u->registered[User::NICK] == false)
 	{
 		out (BOLD("Setting nickname to ") << *(cmd.begin() + 1));

@@ -119,7 +119,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		/* Server informing all chan users */
 		if (joined == true)
 		{
-			out ("JONED TRUE");
+			out ("JOINED TRUE");
 			std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
 			std::string msg[] = {*(cmd.begin()), chan_name};
 			std::vector<std::string> join_chan_msg(msg, msg + 2);

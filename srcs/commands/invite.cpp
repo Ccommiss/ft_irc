@@ -68,25 +68,4 @@ void Commands::invite(Server &s, User *u, std::vector<std::string> cmd)
 
 	server_relay(to_invite, cmd, to_invite);
 	s.numeric_reply(u, RPL_INVITING, chan_name, NONE, NONE);
-
-	/* Tester la solution ci dessus avant de tout supprimer */ 
-	// std::map<const std::string *, User *>::iterator it = s.server_users.begin();
-	// while (it != s.server_users.end())
-	// {
-	// 	if (*(cmd.begin() + 1) == it->second->nickname)
-	// 	{
-	// 		out("found user !");
-
-	// 		User *to_add = s.server_users[&(it->second->nickname)]; // car mapped type est const
-	// 		// seulement si user est un op et que invite only
-	// 		if (!s.chans[chan_name]->hasMode('i') || (s.chans[chan_name]->hasMode('i') && s.chans[chan_name]->isOperator(u)))
-	// 			s.chans[chan_name]->addToInviteList(to_add);
-	// 		if (s.chans[chan_name]->isInChan(to_add))
-	// 			return (s.numeric_reply(u, ERR_USERONCHANNEL, to_add->nickname, chan_name, NONE));
-	// 		server_relay(to_add, cmd, to_add);
-	// 		s.numeric_reply(u, RPL_INVITING, chan_name, NONE, NONE);
-	// 		return;
-	// 	}
-	// 	it++;
-	// }
 }
