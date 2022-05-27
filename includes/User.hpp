@@ -38,7 +38,8 @@ public:
     void initModes();
     std::map<char, bool> &getModes();
     std::string setMode(char mode, bool value, std::vector<std::string> params);
-    void displayModes();
+	void setOneKeyMode(char mode, bool value);
+	void displayModes();
     bool hasMode(char mode);
     std::vector<Channel *> const &getJoinedChannels();
 

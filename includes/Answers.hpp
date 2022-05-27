@@ -85,8 +85,8 @@
 #define MSG_317 arg1 + " " + arg2 + " :seconds idle" //Reply to WHOIS - Idle information"																																						  /* RPL_WHOISIDLE */
 #define MSG_318 arg1 + " " + " :End of WHOIS list"																																										  /* RPL_ENDOFWHOIS */
 #define MSG_319 arg1 + " :" + arg2 // " :*( ( '@' / '+' ) <channel> ' ' ) Reply to WHOIS - Channel list for user (See RFC)"																																  /* RPL_WHOISCHANNELS */
-#define MSG_322 "<channel> <#_visible> :<topic> Channel list - A channel"																																								  /* RPL_LIST */
-#define MSG_323 ":<info> Channel list - End of list"																																													  /* RPL_LISTEND */
+#define MSG_322 arg1 + " " + printModes(s.chans[arg1]) + " :" + arg3 // Channel list - A channel"																																								  /* RPL_LIST */
+#define MSG_323 ": End of channel list."																																													  /* RPL_LISTEND */
 #define MSG_324 ":" + arg1 + " " + arg2 + " " + arg3 																																														  /* RPL_CHANNELMODEIS */
 #define MSG_325 "<channel> <nickname>"																																																	  /* RPL_UNIQOPIS */
 #define MSG_331 arg1 + " :No topic is set."																																																  /* RPL_NOPIC */
@@ -116,7 +116,7 @@
 #define MSG_374 ":<info> Termination of an RPL_INFO list"																																												  /* RPL_ENDOFINFO */
 #define MSG_375 ":- <server> Message of the day - Start of an RPL_MOTD list"																																							  /* RPL_MOTDSTART */
 #define MSG_376 ":<info> Termination of an RPL_MOTD list"																																												  /* RPL_ENDOFMOTD */
-#define MSG_381 ":<info> Successful reply from OPER"																																													  /* RPL_YOUREOPER */
+#define MSG_381 ":You are now an IRC operator"																																													  /* RPL_YOUREOPER */
 #define MSG_382 "<config_file> :<info> Successful reply from REHASH"																																									  /* RPL_REHASHING */
 #define MSG_383 ":You are service <service_name> Sent upon successful registration of a service"																																		  /* RPL_YOURESERVICE */
 #define MSG_384 ""																																																						  /* RPL_MYPORTIS */
@@ -125,7 +125,7 @@
 #define MSG_393 ":<username> <ttyline> <hostname> Response to the USERS command (See RFC)"																																				  /* RPL_USERS */
 #define MSG_394 ":<info> Termination of an RPL_USERS list"																																												  /* RPL_ENDOFUSERS */
 #define MSG_395 ":<info> Reply to USERS when nobody is logged in"																																										  /* RPL_NOUSERS */
-#define ERR_401 "<nick> :<reason> Used to indicate the nickname parameter supplied to a command is currently unused"																													  /* ERR_NOSUCHNICK */
+#define ERR_401 arg1 + " :No such nick/channel" 				  /* ERR_NOSUCHNICK */
 #define ERR_402 "<server> :<reason> Used to indicate the server name given currently doesn't exist"																																		  /* ERR_NOSUCHSERVER */
 #define ERR_403 arg1 + " :No such channel"																																																  /* ERR_NOSUCHCHANNEL */
 #define ERR_404 arg1 + " :Cannot send to channel"																																														  /* ERR_CANNOTSENDTOCHAN */
@@ -145,7 +145,7 @@
 #define ERR_424 ":<reason> Generic error message used to report a failed file operation during the processing of a command"																												  /* ERR_FILEERROR */
 #define ERR_431 ":<reason> Returned when a nickname parameter expected for a command isn't found"																																		  /* ERR_NONICKNAMEGIVEN */
 #define ERR_432 "<nick> :<reason> Returned after receiving a NICK message which contains a nickname which is considered invalid, s[...] "																								  /* ERR_ERRONEUSNICKNAME */
-#define ERR_433 "<nick> :<reason> Returned by the NICK command when the given nickname is already in use"																																  /* ERR_NICKNAMEINUSE */
+#define ERR_433 arg1 + " :Nickname is already in use" //Returned by the NICK command when the given nickname is already in use"																																  /* ERR_NICKNAMEINUSE */
 #define ERR_436 "<nick> :<reason> Returned by a server to a client when it detects a nickname collision"																																  /* ERR_NICKCOLLISION */
 #define ERR_437 "<nick/channel/service> :<reason> Return when the target is unable to be reached temporarily, eg. a delay mechanism in play, or a service being offline"																  /* ERR_UNAVAILRESOURCE */
 #define ERR_441 arg1 + " " + arg2 + ": They aren't on that channel"																																										  /* ERR_USERNOTINCHANNEL */

@@ -5,7 +5,7 @@
 #include "Debug.hpp"
 
 
-class Server; 
+class Server;
 
 class Commands
 {
@@ -20,7 +20,7 @@ class Commands
 		void leaveAllChans(User *u);
 
 /*
-** in map 
+** in map
 */
 
 		void quit_s			(Server &s, User *u, std::vector<std::string> nick); // exit ou quit
@@ -29,11 +29,15 @@ class Commands
 		void priv_msg		(Server &s, User *u, std::vector<std::string> cmd);
 		void nick			(Server &s, User *u, std::vector<std::string> cmd);
 		void invite			(Server &s, User *u, std::vector<std::string> cmd);
-		void part			(Server &s, User *u, std::vector<std::string> cmd) ; // par d'un chan 
+		void part			(Server &s, User *u, std::vector<std::string> cmd) ; // par d'un chan
 		void topic			(Server &s, User *u, std::vector<std::string> cmd);
 		void mode			(Server &s, User *u, std::vector<std::string> cmd);
 		void kick			(Server &s, User *u, std::vector<std::string> cmd);
 		void whois			(Server &s, User *u, std::vector<std::string> cmd);
+		void list			(Server &s, User *u, std::vector<std::string> cmd);
+		void names			(Server &s, User *u, std::vector<std::string> cmd);
+		void oper			(Server &s, User *u, std::vector<std::string> cmd);
+		void notice			(Server &s, User *u, std::vector<std::string> cmd);
 
 		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> cmd);
 		std::map<std::string, Cmd> 		cmd_map;

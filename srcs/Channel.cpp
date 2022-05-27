@@ -31,7 +31,7 @@ Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _pa
 	_modes.insert(std::make_pair('a', false));
 	_modes.insert(std::make_pair('i', false));
 	_modes.insert(std::make_pair('m', false));
-	_modes.insert(std::make_pair('n', false));
+	_modes.insert(std::make_pair('n', true)); /* Forbid messages from outside, usually set to true */
 	_modes.insert(std::make_pair('q', false));
 	_modes.insert(std::make_pair('p', false));
 	_modes.insert(std::make_pair('s', false));
@@ -44,6 +44,7 @@ Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _pa
 	_modes.insert(std::make_pair('I', false));
 
 	_owner = creator;
+	_creator = creator;
 	out("Creator :" << _owner->nickname)
 		add_user(creator);
 	if (name[0] != '+')
@@ -67,6 +68,7 @@ Channel::Channel(const Channel &src) : _name(src._name), _owner(src._owner)
 
 Channel::~Channel()
 {
+	out ("deleting channel")
 }
 
 /*
@@ -149,7 +151,7 @@ bool Channel::findByName(std::string nick, User **u)
 	{
 		if (*(it->first) == nick)
 		{
-			*u = (it->second); 
+			*u = (it->second);
 			return true;
 		}
 	}
@@ -295,6 +297,20 @@ std::string printNames(Channel *chan)
 	return names;
 }
 
+
+std::string printModes(Channel *chan)
+{
+	std::string modes("[+");
+	for (std::map<char, bool >::iterator it = chan->getModes().begin(); it != chan->getModes().end(); it++)
+	{
+		if (it->second == true)
+			modes.push_back(it->first);
+	}
+	modes.append("]");
+	return modes;
+}
+
+
 void Channel::printUsers() // const
 {
 	start;
@@ -340,6 +356,14 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 			out(" not in channel "); // surement un erreur ? laquelle ?
 		break;
 	}
+	case 'O': /* give "channel creator" status; see Safe Channels with ! */
+	{
+		if (trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		if (findByName(trim(params[0]), &user) == true)
+			value == true ? _creator = user : _creator = NULL; // je sais pas trop
+		break;
+	}
 	case 'v': /* Voice privilege */
 	{
 		if (trim(params[0]).length() == 0)
@@ -373,7 +397,7 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 			return ERR_NEEDMOREPARAMS;
 		/* peut etre des checks a faire genre si ca commence par - etc. */
 		if (params[0][0] == '-')
-			break ; // Pas d'erreurs specifiques pour ce cas 
+			break ; // Pas d'erreurs specifiques pour ce cas
 		value == true ? _limit = strtol(trim(params[0]).c_str(), NULL, 10) : _limit = 0;
 		value == true ? printf(" added _limit : %lu\n", _limit) : printf(" removed _limit : %lu\n", _limit);
 		break; // to do

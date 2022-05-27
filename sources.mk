@@ -31,7 +31,10 @@ SOURCES		+=             		\
 		srcs/commands/topic.cpp       	\
 		srcs/commands/mode.cpp       	\
 		srcs/commands/kick.cpp       	\
-		srcs/commands/whois.cpp
-
+		srcs/commands/whois.cpp			\
+		srcs/commands/names.cpp 		\
+		srcs/commands/notice.cpp 		\
+		srcs/commands/list.cpp      	\
+		srcs/commands/oper.cpp      	\
 
 

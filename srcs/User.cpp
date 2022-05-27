@@ -160,6 +160,12 @@ bool User::hasMode(char mode)
 	return (_modes[mode]);
 }
 
+void User::setOneKeyMode(char mode, bool value)
+{
+	_modes[mode] = value;
+}
+
+
 /* Mode <nickname> valeur  */
 std::string User::setMode(char mode, bool value, std::vector<std::string> params)
 {

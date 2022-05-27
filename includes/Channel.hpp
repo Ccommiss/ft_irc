@@ -81,6 +81,7 @@ private:
 	std::vector<User *> 				_operators;
 	std::vector<User *> 				_banned;
 	User 								*_owner;
+	User 								*_creator; // quelle est la diff ??
 	std::map<char, bool>				 _modes;
 	std::string 						_password;
 	std::vector<User *> 				_invited;
@@ -91,5 +92,6 @@ private:
 std::ostream &operator<<(std::ostream &o, Channel &i);
 
 std::string printNames(Channel *chan); // formatte, pour command names etc;
+std::string printModes(Channel *chan); // formatte, pour command list etc;
 
 #endif /* ********************************************************* CHANNEL_H */

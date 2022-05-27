@@ -19,9 +19,14 @@ Commands::Commands()
 	cmd_map.insert(std::make_pair("INVITE", &Commands::invite));
 	cmd_map.insert(std::make_pair("PART", &Commands::part));
 	cmd_map.insert(std::make_pair("TOPIC", &Commands::topic));
+	cmd_map.insert(std::make_pair("NAMES", &Commands::names));
+	cmd_map.insert(std::make_pair("LIST", &Commands::list));
 	cmd_map.insert(std::make_pair("MODE", &Commands::mode));
 	cmd_map.insert(std::make_pair("KICK", &Commands::kick));
 	cmd_map.insert(std::make_pair("WHOIS", &Commands::whois));
+	cmd_map.insert(std::make_pair("OPER", &Commands::oper));
+	cmd_map.insert(std::make_pair("NOTICE", &Commands::notice));
+
 
 	// Now storing replies ; idee, ptr sur func genre Answer::&RPL_001   avec RPL 001 qui prendra un user
 	server_replies.insert(std::make_pair(001, &RPL_001));
