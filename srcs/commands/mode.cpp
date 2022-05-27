@@ -86,7 +86,7 @@ void    Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
                     s.numeric_reply(u, res, chan->_name, NONE, NONE);
                 else 
                 {  
-                    s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, NONE, NONE); // 
+                    s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, modes, vecToString(mode_params)); // 
                     server_relay(u, cmd ,u);
                 }
             }

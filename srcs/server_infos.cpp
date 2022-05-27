@@ -18,4 +18,20 @@ void Server::printChans()
 		out ("Chan : "<< it->first)
 }
 
+
+bool Server::findByName(std::string nick, User **u)
+{
+	start;
+	std::map<const std::string *, User *>::iterator it;
+	for (it = server_users.begin(); it != server_users.end(); it++)
+	{
+		if (*(it->first) == nick)
+		{
+			*u = (it->second); // on fait pointer User recu sur l'instance
+			return true;
+		}
+	}
+	return false;
+}
+
 //void Server::printUsers();

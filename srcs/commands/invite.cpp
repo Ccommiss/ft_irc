@@ -50,7 +50,7 @@ void Commands::invite(Server &s, User *u, std::vector<std::string> cmd)
 
 	if (!s.chans[chan_name]->isInChan(u))
 		return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, NONE, NONE));
-	std::map<const std::string *, const User *>::iterator it = s.server_users.begin();
+	std::map<const std::string *, User *>::iterator it = s.server_users.begin();
 	while (it != s.server_users.end())
 	{
 		if (*(cmd.begin() + 1) == it->second->nickname)

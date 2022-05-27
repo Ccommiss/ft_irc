@@ -87,10 +87,12 @@ std::ostream &operator<<(std::ostream &o, Channel &i)
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
+
 std::string &Channel::getName() // const
 {
 	return _name;
 }
+
 std::map<std::string *, User *> &Channel::getUsers() // const
 {
 	start;
@@ -99,29 +101,21 @@ std::map<std::string *, User *> &Channel::getUsers() // const
 	return _users;
 }
 
-/*
-**	Prints the chan _users map (std::map<std::string *, User *>).
-*/
-void Channel::printUsers() // const
+std::string &Channel::getTopic()
 {
-	start;
-	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out("USERS : " << *it->first); // show the nick name
+	return _topic;
 }
 
-/*
-** --------------------------------- OTHERS ----------------------------------
-*/
-// void Channel::ban(User kicked)
-// {
-// 	_banned.push_back(kicked);
-// 	std::vector<User>::iterator kick;
-// 	kick = std::find(_users.begin(), _users.end(), kicked);
-// 	if (kick != _users.end())
-// 		_users.erase(kick);
-// 	else
-// 		std::cout << "this users doesn't exist" << std::endl;
-// }
+std::map<char, bool> &Channel::getModes()
+{
+	return _modes;
+}
+
+void Channel::setTopic(std::string topic)
+{
+	//_topic.clear();
+	_topic = topic;
+}
 
 bool Channel::isTopicSet()
 {
@@ -139,7 +133,7 @@ bool Channel::isInChan(User *u)
 	return false;
 }
 
-bool	Channel::isInvited(User *user)
+bool Channel::isInvited(User *user)
 {
 	if (std::find(_invited.begin(), _invited.end(), user) != _invited.end())
 		return true;
@@ -154,10 +148,8 @@ bool Channel::findByName(std::string nick, User **u)
 	{
 		if (*(it->first) == nick)
 		{
-			out ((it->second)->getNickName())
 			*u = (it->second); // on fait pointer User recu sur l'instance
-			out ((*u)->getNickName());
-			out("ON EST BON !!! ") return true;
+			return true;
 		}
 	}
 	return false;
@@ -166,12 +158,12 @@ bool Channel::findByName(std::string nick, User **u)
 bool Channel::hasKey()
 {
 	return (_modes['k']);
-} // si le flag K est actif pour rentrer
+}
 
 bool Channel::hasMode(char mode)
 {
 	return (_modes[mode]);
-} // s
+}
 
 bool Channel::isBanned(User *u)
 {
@@ -196,6 +188,16 @@ bool Channel::isOwner(User *u)
 	return false;
 }
 
+bool Channel::isCorrectPass(std::string candidate)
+{
+	out("candidate pass : " << candidate) if (candidate == _password) return true;
+	return false;
+}
+
+/*
+** --------------------------------- METHODS ----------------------------------
+*/
+
 void Channel::add_user(User *new_user)
 {
 	start;
@@ -216,81 +218,26 @@ void Channel::remove_user(User *new_user)
 		out("Unfound user : cannot remove from " << this->_name);
 }
 
-
-void	Channel::addToInviteList(User *to_add)
+void Channel::addToInviteList(User *to_add)
 {
 	_invited.push_back(to_add);
 }
 
-void	Channel::removeFromInviteList(User *to_del)
+void Channel::removeFromInviteList(User *to_del)
 {
 	_invited.erase(std::find(_invited.begin(), _invited.end(), to_del));
 }
-// void Channel::add_operator(User admin)
-// {
-// 	std::vector<User>::iterator add;
-// 	add = std::find(_operators.begin(), _operators.end(), admin);
-// 	if (add != _operators.end())
-// 		_operators.push_back(admin);
-// 	else
-// 		std::cout << "this operator already exist" << std::endl;
-// }
 
-// void	Channel::me()
-// {
-// 	// std::vector<User>::iterator it;
-// 	// for (it = _users.begin(); it < _users.end(); it++)
-// 	// 	std::cout << *it << std::endl;
-// }
-
-std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::string> params) // on va renvoyer le code erreur ou bien  0
+void Channel::addOperator(User *to_add)
 {
-	if (!_modes.count(mode)) // c un bon caractere
-		return ERR_UNKNOWNMODE;
-
-	switch (mode)
-	{
-	case 'k':
-	{
-		if (trim(params[0]).length() == 0)
-			return ERR_NEEDMOREPARAMS;			  // faudra renvoyer erreur
-		if (value == true && _modes['k'] == true) // on veut changer alors que deja existant
-			return ERR_KEYSET;
-		else if (value == true)
-			_password = trim(params[0]);
-		else if (value == false && trim(params[0]) != _password) // on essaie d'enever le pass mais mavais
-			return ERR_KEYSET;									 // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
-		break;
-	}
-	case 'o': // give channel op status
-	{
-		if (trim(params[0]).length() == 0)
-			return ERR_NEEDMOREPARAMS;
-		User *user = NULL;
-		if (findByName(trim(params[0]), &user) == true)
-			_operators.push_back(user);
-		else
-			out("UFOUND USER FOR ADDING TO OPS") break;
-	}
-	case 'i': // Making invite only
-	{
-		if (!isOperator(u)) // celui qui fait la requete
-			return (ERR_CHANOPRIVSNEEDED);
-	}
-	}
-	_modes[mode] = value;
-	return "";
+	if (!isOperator(to_add))
+		_operators.push_back(to_add);
 }
 
-void Channel::setTopic(std::string topic)
+void Channel::removeOperator(User *to_del)
 {
-	//_topic.clear();
-	_topic = topic;
-}
-
-std::string &Channel::getTopic()
-{
-	return _topic;
+	if (isOperator(to_del))
+		_operators.erase(std::find(_operators.begin(), _operators.end(), to_del));
 }
 
 void Channel::displayModes()
@@ -301,16 +248,6 @@ void Channel::displayModes()
 			out(it->first << " is active");
 	}
 	out("Password is : " << _password);
-}
-
-std::map<char, bool> &Channel::getModes()
-{
-	return _modes;
-}
-bool Channel::isCorrectPass(std::string candidate)
-{
-	out("candidate pass : " << candidate) if (candidate == _password) return true;
-	return false;
 }
 
 std::string printNames(Channel *chan)
@@ -327,4 +264,64 @@ std::string printNames(Channel *chan)
 		names.append(" ");
 	}
 	return names;
+}
+
+void Channel::printUsers() // const
+{
+	start;
+	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+		out("USERS : " << *it->first); // show the nick name
+}
+
+/*
+** --------------------------------- MODES METHODS ----------------------------------
+*/
+
+std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::string> params) // on va renvoyer le code erreur ou bien  0
+{
+	if (!_modes.count(mode)) // c un bon caractere
+		return ERR_UNKNOWNMODE;
+
+	User *user = NULL;
+	switch (mode)
+	{
+	case 'a': // aninymous mode que sur les hannels & et ! RFC 4.2.1 2811
+	{
+	}
+	case 'k':
+	{
+		if (trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;			  // faudra renvoyer erreur
+		if (value == true && _modes['k'] == true) // on veut changer alors que deja existant
+			return ERR_KEYSET;
+		else if (value == true)
+			_password = trim(params[0]);
+		else if (value == false && trim(params[0]) != _password) // on essaie d'enever le pass mais mavais
+			return ERR_KEYSET;									 // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
+		break;
+	}
+	case 'o': // give channel op status
+	{
+		if (trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		if (findByName(trim(params[0]), &user) == true)
+			value == true ? addOperator(user) : removeOperator(user); // faut il erreur si ajoute deux fois ?
+		else
+			out("UFOUND USER FOR ADDING/REMOVING OPS"); // surement un erreur ? laquelle ?
+		break;
+	}
+	case 'i': /* Making invite only */
+	{
+		if (!isOperator(u)) // celui qui fait la requete
+			return (ERR_CHANOPRIVSNEEDED);
+	}
+	case 'p': /* Private or secret flag -> chan ignored in TOPIC, LIST, NAMES, WHOIS  */
+	{
+	}
+	case 's':
+	{
+	}
+	}
+	_modes[mode] = value;
+	return "";
 }

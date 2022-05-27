@@ -74,7 +74,7 @@ void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string>
 {
 
     out("Sending to people " << dest_nick);
-    std::map<const std::string *, const User *>::iterator it = s.server_users.begin();
+    std::map<const std::string *, User *>::iterator it = s.server_users.begin();
     while (it != s.server_users.end())
     {
         if (dest_nick == it->second->nickname)

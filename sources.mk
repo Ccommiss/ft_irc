@@ -31,6 +31,7 @@ SOURCES		+=             		\
 		srcs/commands/topic.cpp       	\
 		srcs/commands/mode.cpp       	\
 		srcs/commands/kick.cpp       	\
+		srcs/commands/whois.cpp
 
 
 

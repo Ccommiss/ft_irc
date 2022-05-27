@@ -101,7 +101,7 @@ class	Server {
 
 		//pub_var{
 		std::map<std::string, Channel *>			chans;
-		std::map<const std::string *, const User *>	server_users; // sd et ref
+		std::map<const std::string *, User *>	server_users; 
 	
 		Commands                                	cmds; 
 		std::map<int, User *>     					users;
@@ -110,6 +110,8 @@ class	Server {
 
 
 		bool 				chanExists(std::string chan_name);
+		bool 				findByName(std::string nick, User **u);
+
 
 		//pub_var - END}
 

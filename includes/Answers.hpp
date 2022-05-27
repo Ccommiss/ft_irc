@@ -76,19 +76,18 @@
 #define MSG_303 ":*1<nick> *( ' ' <nick> ) Reply to the ISON command (see RFC)"																																							  /* RPL_ISON */
 #define MSG_305 ":<info> Reply from AWAY when no longer marked as away"																																									  /* RPL_UNAWAY */
 #define MSG_306 ":<info> Reply from AWAY when marked away"																																												  /* RPL_NOWAWAY */
-#define MSG_311 "<nick> <user> <host> * :<real_name> Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
-#define MSG_312 "<nick> <server> :<server_info> Reply to WHOIS - What server they're on"																																				  /* RPL_WHOISSERVER */
-#define MSG_313 "<nick> :<privileges> Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
-#define MSG_314 "<nick> <user> <host> * :<real_name> Reply to WHOWAS - Information about the user"																																		  /* RPL_WHOWASUSER */
+#define MSG_311 arg1+ " " + arg2 + "localhost" + "*" + arg3 + "<real_name>" // Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
+#define MSG_312 arg1+ " " + "<server> :<server_info> Reply to WHOIS - What server they're on"																																				  /* RPL_WHOISSERVER */
+#define MSG_313 arg1+ " " + arg2 + " " //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
+#define MSG_314 arg1+ " " + "<user> <host> * :<real_name> Reply to WHOWAS - Information about the user"																																		  /* RPL_WHOWASUSER */
 #define MSG_315 "<name> :<info> Used to terminate a list of RPL_WHOREPLY replies"																																						  /* RPL_ENDOFWHO */
 #define MSG_316 ""																																																						  /* RPL_WHOISCHANOP */
-#define MSG_317 "<nick> <seconds> :seconds idle Reply to WHOIS - Idle information"																																						  /* RPL_WHOISIDLE */
-#define MSG_318 "<nick> :<info> Reply to WHOIS - End of list"																																											  /* RPL_ENDOFWHOIS */
-#define MSG_319 "<nick> :*( ( '@' / '+' ) <channel> ' ' ) Reply to WHOIS - Channel list for user (See RFC)"																																  /* RPL_WHOISCHANNELS */
-#define MSG_321 "Channels :Users Name Channel list - Header"																																											  /* RPL_LISTSTART */
+#define MSG_317 arg1 + " " + " <seconds> :seconds idle Reply to WHOIS - Idle information"																																						  /* RPL_WHOISIDLE */
+#define MSG_318 arg1 + " " + " :<info> Reply to WHOIS - End of list"																																											  /* RPL_ENDOFWHOIS */
+#define MSG_319 arg1 + " " + arg2 // " :*( ( '@' / '+' ) <channel> ' ' ) Reply to WHOIS - Channel list for user (See RFC)"																																  /* RPL_WHOISCHANNELS */
 #define MSG_322 "<channel> <#_visible> :<topic> Channel list - A channel"																																								  /* RPL_LIST */
 #define MSG_323 ":<info> Channel list - End of list"																																													  /* RPL_LISTEND */
-#define MSG_324 ":" + arg1 + "<mode> <mode_params>"																																														  /* RPL_CHANNELMODEIS */
+#define MSG_324 ":" + arg1 + " " + arg2 + " " + arg3 																																														  /* RPL_CHANNELMODEIS */
 #define MSG_325 "<channel> <nickname>"																																																	  /* RPL_UNIQOPIS */
 #define MSG_331 arg1 + " :No topic is set."																																																  /* RPL_NOPIC */
 #define MSG_332 arg1 + " :" + arg2																																																		  /* RPL_TOPIC */
