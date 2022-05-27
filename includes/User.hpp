@@ -31,6 +31,7 @@ class User {
 
     void                            joinChan(Channel *chan);
     void                            leaveChan(Channel *chan);
+    void                            initModes();
     std::map<char, bool>&				getModes();
     	std::string							setMode(char mode, bool value, std::vector<std::string > params);
 		void								displayModes();

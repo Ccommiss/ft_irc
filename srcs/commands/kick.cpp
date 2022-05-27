@@ -54,12 +54,15 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
         return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE));
     else if (!s.chans[chan_name]->isOperator(u))
         return(s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan_name, NONE, NONE));// VERIFIER LES CASTS
-    else if (s.chans[chan_name]->findByName(user_name, to_kick) == false)
-        return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, NONE, NONE));
-    else if (s.chans[chan_name]->findByName(user_name, to_kick) == true)
+    else if (s.chans[chan_name]->findByName(user_name, &to_kick) == false)
+        return (s.numeric_reply(u, ERR_USERNOTINCHANNEL, chan_name, NONE, NONE));
+    else if (s.chans[chan_name]->findByName(user_name, &to_kick) == true)
     {
-        out ("KICKING");
-        server_relay(u, cmd, s.chans[chan_name]->getUsers());
+        out ("KICKING" << to_kick->getNickName());
+        server_relay(u, cmd, s.chans[chan_name]->getUsers()); // comme ca il a aussi la notif 
+        s.chans[chan_name]->remove_user(to_kick);
+        to_kick->leaveChan(s.chans[chan_name]); // ajout tard
+        
     }
 
 

@@ -2,6 +2,7 @@
 
 #include "Server.hpp"
 #include "User.hpp"
+#include <algorithm>
 
 
 
@@ -23,18 +24,11 @@ User::User(int sd) : socket_descriptor(sd), name("Guest"), nickname("Guest"), ev
     for (int i = 0; i < 4; i++)
          registered[i] = false;
 
-    _modes.insert(std::make_pair('a', false));
-	_modes.insert(std::make_pair('i', false));
-	_modes.insert(std::make_pair('w', false));
-	_modes.insert(std::make_pair('r', false));
-	_modes.insert(std::make_pair('o', false));
-	_modes.insert(std::make_pair('O', false));
-	_modes.insert(std::make_pair('s', false));
-	_modes.insert(std::make_pair('q', false));
 
 
 
 
+    initModes();
 	nickname.append(to_str(sd));
 
 
@@ -78,6 +72,19 @@ std::ostream &			operator<<( std::ostream & o, User const & i )
 ** --------------------------------- METHODS ----------------------------------
 */
 
+void        User::initModes()
+{
+    /* Initializing modes */ 
+    _modes.insert(std::make_pair('a', false));
+	_modes.insert(std::make_pair('i', false));
+	_modes.insert(std::make_pair('w', false));
+	_modes.insert(std::make_pair('r', false));
+	_modes.insert(std::make_pair('o', false));
+	_modes.insert(std::make_pair('O', false));
+	_modes.insert(std::make_pair('s', false));
+	_modes.insert(std::make_pair('q', false));
+}
+
 
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
@@ -106,14 +113,9 @@ void        User::joinChan(Channel *chan)
 
 void        User::leaveChan(Channel *chan)
 {
-    for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
-    {
-        if (*it == chan)
-        {
-            this->joined_chans.erase(it);
-            chan->remove_user(this);
-        }
-    }
+    std::vector<Channel *>::iterator it = std::find(joined_chans.begin(), joined_chans.end(), chan);
+    if (it != joined_chans.end())
+        joined_chans.erase(it);
 }
 
 std::string const &       User::getName() const

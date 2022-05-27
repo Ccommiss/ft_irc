@@ -146,7 +146,7 @@ bool	Channel::isInvited(User *user)
 	return false;
 }
 
-bool Channel::findByName(std::string nick, User *u)
+bool Channel::findByName(std::string nick, User **u)
 {
 	start;
 	std::map<std::string *, User *>::iterator it;
@@ -154,7 +154,9 @@ bool Channel::findByName(std::string nick, User *u)
 	{
 		if (*(it->first) == nick)
 		{
-			u = it->second; // on fait pointer User recu sur l'instance
+			out ((it->second)->getNickName())
+			*u = (it->second); // on fait pointer User recu sur l'instance
+			out ((*u)->getNickName());
 			out("ON EST BON !!! ") return true;
 		}
 	}
@@ -265,7 +267,7 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 		if (trim(params[0]).length() == 0)
 			return ERR_NEEDMOREPARAMS;
 		User *user = NULL;
-		if (findByName(trim(params[0]), user) == true)
+		if (findByName(trim(params[0]), &user) == true)
 			_operators.push_back(user);
 		else
 			out("UFOUND USER FOR ADDING TO OPS") break;

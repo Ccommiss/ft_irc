@@ -38,6 +38,9 @@ Commands::Commands()
 	server_replies.insert(std::make_pair(341, &RPL_341));
 	server_replies.insert(std::make_pair(353, &RPL_353));
 	server_replies.insert(std::make_pair(366, &RPL_366));
+	server_replies.insert(std::make_pair(404, &RPL_404));
+	// server_replies.insert(std::make_pair(443, &RPL_443));
+	// server_replies.insert(std::make_pair(443, &RPL_443));
 	server_replies.insert(std::make_pair(443, &RPL_443));
 	server_replies.insert(std::make_pair(461, &RPL_461));
 	server_replies.insert(std::make_pair(462, &RPL_462));
