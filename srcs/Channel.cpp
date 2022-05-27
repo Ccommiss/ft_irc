@@ -23,7 +23,7 @@ Channel::Channel() : _owner(0)
 {
 }
 
-Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _password("")
+Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _password(""), _limit(0)
 {
 	_modes.insert(std::make_pair('O', false));
 	_modes.insert(std::make_pair('o', false));
@@ -113,8 +113,8 @@ std::map<char, bool> &Channel::getModes()
 
 void Channel::setTopic(std::string topic)
 {
-	//_topic.clear();
-	_topic = topic;
+	_topic.clear();
+	_topic = trim(topic);
 }
 
 bool Channel::isTopicSet()
@@ -148,7 +148,7 @@ bool Channel::findByName(std::string nick, User **u)
 	{
 		if (*(it->first) == nick)
 		{
-			*u = (it->second); // on fait pointer User recu sur l'instance
+			*u = (it->second); 
 			return true;
 		}
 	}
@@ -181,6 +181,14 @@ bool Channel::isOperator(User *u)
 	return false;
 }
 
+bool Channel::isVoiced(User *u)
+{
+	std::vector<User *>::iterator it = std::find(_voiced.begin(), _voiced.end(), u);
+	if (it != _voiced.end())
+		return true;
+	return false;
+}
+
 bool Channel::isOwner(User *u)
 {
 	if (_owner == u)
@@ -194,6 +202,11 @@ bool Channel::isCorrectPass(std::string candidate)
 	return false;
 }
 
+size_t	Channel::getLimit()
+{
+	return _limit;
+}
+
 /*
 ** --------------------------------- METHODS ----------------------------------
 */
@@ -201,7 +214,8 @@ bool Channel::isCorrectPass(std::string candidate)
 void Channel::add_user(User *new_user)
 {
 	start;
-	_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
+	if (!isInChan(new_user))
+		_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
 	out("[" << _name << "] "
 			<< "New user added :" << new_user->getNickName());
 }
@@ -220,12 +234,14 @@ void Channel::remove_user(User *new_user)
 
 void Channel::addToInviteList(User *to_add)
 {
-	_invited.push_back(to_add);
+	if (!isInvited(to_add))
+		_invited.push_back(to_add);
 }
 
 void Channel::removeFromInviteList(User *to_del)
 {
-	_invited.erase(std::find(_invited.begin(), _invited.end(), to_del));
+	if (isInvited(to_del))
+		_invited.erase(std::find(_invited.begin(), _invited.end(), to_del));
 }
 
 void Channel::addOperator(User *to_add)
@@ -238,6 +254,18 @@ void Channel::removeOperator(User *to_del)
 {
 	if (isOperator(to_del))
 		_operators.erase(std::find(_operators.begin(), _operators.end(), to_del));
+}
+
+void Channel::addVoiced(User *to_add)
+{
+	if (!isVoiced(to_add))
+		_voiced.push_back(to_add);
+}
+
+void Channel::removeVoiced(User *to_del)
+{
+	if (isVoiced(to_del))
+		_voiced.erase(std::find(_voiced.begin(), _voiced.end(), to_del));
 }
 
 void Channel::displayModes()
@@ -279,9 +307,10 @@ void Channel::printUsers() // const
 
 std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::string> params) // on va renvoyer le code erreur ou bien  0
 {
-	if (!_modes.count(mode)) // c un bon caractere
+	(void)u;
+	if (!_modes.count(mode)) /* Checking if mode exists */
 		return ERR_UNKNOWNMODE;
-
+	/* Future target user for O, o and v options*/
 	User *user = NULL;
 	switch (mode)
 	{
@@ -307,21 +336,49 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 		if (findByName(trim(params[0]), &user) == true)
 			value == true ? addOperator(user) : removeOperator(user); // faut il erreur si ajoute deux fois ?
 		else
-			out("UFOUND USER FOR ADDING/REMOVING OPS"); // surement un erreur ? laquelle ?
+			out("Voice : unfound user"); // surement un erreur ? laquelle ?
+		break;
+	}
+	case 'v': /* Voice privilege */
+	{
+		if (trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		if (findByName(trim(params[0]), &user) == true)
+			value == true ? addVoiced(user) : removeVoiced(user); // faut il erreur si ajoute deux fois ?
+		else
+			out("Voice : unfound user"); // surement un erreur ? laquelle ?
 		break;
 	}
 	case 'i': /* Making invite only */
 	{
-		if (!isOperator(u)) // celui qui fait la requete
-			return (ERR_CHANOPRIVSNEEDED);
+		break;
 	}
 	case 'p': /* Private or secret flag -> chan ignored in TOPIC, LIST, NAMES, WHOIS  */
 	{
+		break;
 	}
 	case 's':
 	{
+		break;
+	}
+	case 'm': /* Moderated chan */
+	{
+		break;
+	}
+	case 'l': /* User limits to channel. ex +l 10 to 10 as limit or -l to remove */
+	{
+		// que se pass t il si set limite inferieure au nb deja en cours ?
+		if (value == true && trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		/* peut etre des checks a faire genre si ca commence par - etc. */
+		if (params[0][0] == '-')
+			break ; // Pas d'erreurs specifiques pour ce cas 
+		value == true ? _limit = strtol(trim(params[0]).c_str(), NULL, 10) : _limit = 0;
+		value == true ? printf(" added _limit : %lu\n", _limit) : printf(" removed _limit : %lu\n", _limit);
+		break; // to do
 	}
 	}
+	/* b, e, I are mask modes */
 	_modes[mode] = value;
 	return "";
 }

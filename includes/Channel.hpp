@@ -48,13 +48,14 @@ public:
 	bool hasMode(char mode);
 	bool isBanned(User *u);
 	bool isOperator(User *u);
+	bool isVoiced(User *u);
 	bool isOwner(User *u);
 	void setTopic(std::string topic);
+	size_t getLimit();
 	std::map<char, bool> &getModes();
 	std::string &getTopic();
 	std::string &getName();
 	std::map<std::string *, User *> &getUsers();
-
 
 	/* Methods */
 
@@ -62,29 +63,29 @@ public:
 	void remove_user(User *new_user);
 	void addOperator(User *to_add);
 	void removeOperator(User *to_del);
+	void addVoiced(User *to_add);
+	void removeVoiced(User *to_del);
 	void addToInviteList(User *to_add);
 	void removeFromInviteList(User *to_del);
 	void printUsers();
 
-	/* Modes related function */ 
+	/* Modes related function */
 	std::string setMode(User *u, char mode, bool value, std::vector<std::string> params);
 	void displayModes();
-	
-	
 
 	std::string _name; // nom du chan
 	std::string _topic;
 
 private:
-	std::map<std::string *, User *> _users;
-	std::vector<User *> _operators;
-	std::vector<User *> _banned;
-	User *_owner;
-	std::map<char, bool> _modes;
-	std::string _password;
-
-	std::vector<User *> _invited;
-	// std::vector<User *>				_voice;
+	std::map<std::string *, User *> 	_users;
+	std::vector<User *> 				_operators;
+	std::vector<User *> 				_banned;
+	User 								*_owner;
+	std::map<char, bool>				 _modes;
+	std::string 						_password;
+	std::vector<User *> 				_invited;
+	std::vector<User *> 				_voiced;
+	size_t								_limit;
 };
 
 std::ostream &operator<<(std::ostream &o, Channel &i);

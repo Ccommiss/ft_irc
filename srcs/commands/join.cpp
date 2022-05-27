@@ -55,6 +55,8 @@ void Commands::leaveAllChans(User *u) // comment faire ca sur irssi ???????
 void createChan(Server &s, std::string chan_name, User *u, bool *joined)
 {
 	Channel *chan = new Channel(chan_name, u);
+	if (chan_name[0] == '+')
+		chan->setMode(u, 't', true, std::vector<std::string>()); /* + channel are unmoderated, only t is toggled see 2.3 rfc 2811 */ 
 	u->joinChan(chan);
 	s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
 	*joined = true;
@@ -69,6 +71,8 @@ void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std:
 		s.numeric_reply(u, ERR_BADCHANNELKEY, chan->_name, NONE, NONE);
 	else if (chan->isBanned(u))
 		s.numeric_reply(u, ERR_BANNEDFROMCHAN, chan->_name, NONE, NONE);
+	else if(chan->hasMode('l') && chan->getUsers().size() + 1 > chan->getLimit())
+		s.numeric_reply(u, ERR_CHANNELISFULL, chan->_name, NONE, NONE);
 	else
 	{
 		u->joinChan(chan);
@@ -97,7 +101,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		joined = false;
 
 		/* Case 0 : Channel name is not well fomatted */
-		if (chan_name[0] != '#')
+		if (chan_name[0] != '#' && chan_name[0] != '+') // + stands for unmoderated chan 
 			s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE);
 		/* Case 1 : JOIN 0 -> leaving all chans */
 		else if (*nb_chans_it == "0")
