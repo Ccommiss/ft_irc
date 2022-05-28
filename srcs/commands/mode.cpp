@@ -103,8 +103,8 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 	else
 	{
 		std::string empty = " lol";
-		std::string nickname_asked = cmd.size() > 1 ? *(cmd.begin() + 1) : ""; // #truc
-		std::string modes = cmd.size() > 2 ? *(cmd.begin() + 2) : "";		   // +=....
+		std::string nickname_asked = cmd.size() > 1 ? trim(*(cmd.begin() + 1)) : ""; // #truc
+		std::string modes = cmd.size() > 2 ? trim(*(cmd.begin() + 2)) : "";		   // +=....
 		std::vector<std::string> mode_params;
 		(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
 
@@ -114,6 +114,7 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 		bool value = modes[0] == '+' ? true : false;
 		for (size_t i = 1; i < modes.length(); i++)
 		{
+			out ("Modes i : " << modes[i]);
 			/* A voir. Mode query pour limit par ex (flag l doit etre possible 4.2.9 rfc 2811) */
 			/* hypothese : si pas de valeur on voit genre MODE e, a tester */
 			std::string res = u->setMode(modes[i], value, mode_params);

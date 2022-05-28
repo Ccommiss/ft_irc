@@ -169,6 +169,8 @@ void User::setOneKeyMode(char mode, bool value)
 /* Mode <nickname> valeur  */
 std::string User::setMode(char mode, bool value, std::vector<std::string> params)
 {
+	start;
+	out (" mode  " << mode << " value " << value)
 	if (!_modes.count(mode)) /* Checking if mode exists */
 		return ERR_UMODEUNKNOWNFLAG;
 
