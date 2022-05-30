@@ -36,11 +36,12 @@ void	Server::delete_user( User *to_del )
 	arg.push_back("chan");
 	arg.push_back(":disconnected from server");
 	std::vector <Channel *>::iterator it = to_del->joined_chans.begin(); 
-	while (it != to_del->joined_chans.end())
+	out ("Nb of chans to leave : " << to_del->joined_chans.size());
+	while (to_del->joined_chans.size() > 0)
 	{
+		it = to_del->joined_chans.begin();
 		arg[1] = (*it)->_name;
 	 	cmds.part(*this, to_del, arg);
-		chanExists(arg[1]) ? it++ : it = to_del->joined_chans.begin();
 	}
 	 //remove from server_users
 	 debug(SV,to_del->presentation(), NOCR);
@@ -64,6 +65,7 @@ void	Server::delete_user( User *to_del )
 	 close_fd(to_del->socket_descriptor, THROW);
 
 	 delete to_del;
+	
 }
 
 bool	Server::pass_check( std::string to_check)

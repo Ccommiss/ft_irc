@@ -4,7 +4,7 @@
 
 #Compiler and Linker
 CC					:= clang
-CXX					:= c++ -g 
+CXX					:= c++ -g -fsanitize=address -fno-omit-frame-pointer
 ifeq ($(shell uname -s),Darwin)
 	CC				:= gcc
 	CXX				:= g++ 
@@ -15,7 +15,7 @@ TARGET				:= out
 TARGET_BONUS		:= out-bonus
 
 
-BUILD				:= valgrind
+BUILD				:= release
 
 
 include sources.mk
@@ -33,11 +33,11 @@ OBJECTS				:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEX
 OBJECTS_BONUS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES_BONUS:.$(SRCEXT)=.$(OBJEXT)))
 
 #Flags, Libraries and Includes
-cflags.release		:= -Wall -Werror -Wextra
-cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV -ggdb
+cflags.release		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV -DDEBUG_US
+cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV 
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))
-CPPFLAGS			:= $(cflags.$(BUILD)) -std=c++98 
+CPPFLAGS			:= $(cflags.$(BUILD)) -std=c++98
 
 lib.release			:= 
 lib.valgrind		:= $(lib.release)

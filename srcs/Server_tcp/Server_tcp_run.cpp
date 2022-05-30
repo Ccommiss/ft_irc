@@ -2,6 +2,7 @@
 #include "Server.hpp"
 void	Server::run( void )
 {
+	start;
 	while (1)
 	{
 		// monitor readfds for readiness for reading. if TIMEOUT = -1 == infinity
@@ -27,4 +28,5 @@ void	Server::run( void )
 		}
 
 	}
+	out ("===> Leaving whil 1 loop")
 }

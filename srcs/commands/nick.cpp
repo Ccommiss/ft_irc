@@ -25,6 +25,12 @@
 **                            nickname to Kilroy.
 */
 
+
+
+
+/*
+** TODO : IGNORER LA CASSE car cleminem Cleminem fout la merde  
+*/
 void Commands::nick(Server &s, User *u, std::vector<std::string> cmd)
 {
 	start;

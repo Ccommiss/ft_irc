@@ -55,7 +55,6 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 				out ("nb chans : " << s.chans.size()); // la c 0 mais remis a un apreS???
 				// ca fait bugguer de free ?? ca rajoute un elem  ????
 				out ("nb chans : " << s.chans.size()); // la c 0 mais remis a un apreS???
-
 			}
 			std::string msg[] = { *(cmd.begin()), chan_name, bye_msg };
 			std::vector<std::string> part_chan_msg(msg, msg + 3);

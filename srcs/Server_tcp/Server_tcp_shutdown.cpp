@@ -3,6 +3,7 @@
 
 void	Server::shutdown(bool does_it_throw)
 {
+	start;
 	if (this->_addrs)
 	{
 		freeaddrinfo (_addrs);

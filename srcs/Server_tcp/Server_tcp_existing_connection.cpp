@@ -3,7 +3,7 @@
 
 void Server::existing_connection( int sd )
 {
-
+	start;
 	memset (&buffer, '\0', sizeof (buffer));
 	ssize_t numbytes = recv (sd, &buffer, sizeof (buffer), 0);
 

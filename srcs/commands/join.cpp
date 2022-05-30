@@ -65,9 +65,10 @@ void createChan(Server &s, std::string chan_name, User *u, bool *joined)
 void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i)
 {
 	start;
+	out (i);
 	if (chan->isInChan(u))
 		return;																			  // do nothing but maybe a specific error ?
-	else if (chan->hasKey() && ((pass->size() < i) || !chan->isCorrectPass(pass->at(i)))) // throw une ex
+	else if (chan->hasKey() && ( (pass->size() <= i) || (!chan->isCorrectPass(pass->at(i))) ) ) // throw une ex
 		s.numeric_reply(u, ERR_BADCHANNELKEY, chan->_name, NONE, NONE);
 	else if (chan->isBanned(u))
 		s.numeric_reply(u, ERR_BANNEDFROMCHAN, chan->_name, NONE, NONE);

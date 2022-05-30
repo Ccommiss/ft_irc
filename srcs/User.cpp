@@ -136,7 +136,7 @@ std::vector<Channel *> const &User::getJoinedChannels()
 
 bool User::HasCompletedRegistration()
 {
-	if (!registered[USER] || !registered[NICK])
+	if (!registered[USER] || !registered[NICK]) // rajouter pass 
 		return false;
 	return true;
 }

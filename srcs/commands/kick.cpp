@@ -43,13 +43,13 @@
 void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 {
 	start;
-	if (cmd.size() < 3) 
+	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
-	std::string chan_name 	= *(cmd.begin() + 1);
-	std::string user_name 	= *(cmd.begin() + 2);
-	std::string msg 		= implodeMessage(cmd.begin() + 3, cmd.end());
-	User *		to_kick 	= NULL;
+	std::string chan_name = *(cmd.begin() + 1);
+	std::string user_name = *(cmd.begin() + 2);
+	std::string msg = implodeMessage(cmd.begin() + 3, cmd.end());
+	User *to_kick = NULL;
 
 	if (!s.chanExists(chan_name))
 		return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE));
@@ -63,5 +63,10 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 		server_relay(u, cmd, s.chans[chan_name]->getUsers());
 		s.chans[chan_name]->remove_user(to_kick);
 		to_kick->leaveChan(s.chans[chan_name]);
+		if (s.chans[chan_name]->getUsers().size() == 0)
+		{
+			delete s.chans[chan_name];				
+			s.chans.erase(s.chans.find(chan_name));
+		}
 	}
 }
