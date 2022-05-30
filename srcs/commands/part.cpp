@@ -61,6 +61,7 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 			std::vector<std::string> part_chan_msg(msg, msg + 3);
 			server_relay(u, part_chan_msg, chan_users);
 		}
+		
 	}
 
 }

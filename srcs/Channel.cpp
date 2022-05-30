@@ -228,8 +228,9 @@ void Channel::remove_user(User *new_user)
 	start;
 	if (isInChan(new_user))
 	{
+		std::cout << "Deleted users : "  << new_user->nickname << std::endl;
 		_users.erase(&new_user->nickname);
-		std::cout << "Deleted users" << std::endl;
+		
 	}
 	else
 		out("Unfound user : cannot remove from " << this->_name);

@@ -30,16 +30,18 @@ User*	Server::create_user( void )
 
 void	Server::delete_user( User *to_del )
 {
+	start;
 	std::vector<std::string> arg;;
 	arg.push_back("PART");
 	arg.push_back("chan");
-	arg.push_back("MESSAGE");
-
-		 for (std::vector <Channel *>::iterator it = to_del->joined_chans.begin(); it != to_del->joined_chans.end(); it++)
-		 {
-			 arg[1] = (*it)->_name;
-			 cmds.part(*this, to_del, arg);
-		 }
+	arg.push_back(":disconnected from server");
+	std::vector <Channel *>::iterator it = to_del->joined_chans.begin(); 
+	while (it != to_del->joined_chans.end())
+	{
+		arg[1] = (*it)->_name;
+	 	cmds.part(*this, to_del, arg);
+		chanExists(arg[1]) ? it++ : it = to_del->joined_chans.begin();
+	}
 	 //remove from server_users
 	 debug(SV,to_del->presentation(), NOCR);
 	 if (server_users.erase(&to_del->nickname))

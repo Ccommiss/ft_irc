@@ -37,7 +37,7 @@
 
 //timeout for epoll wait in ms
 //-1 for infinity
-# define TIMEOUT                10000
+# define TIMEOUT                -1 //10000
 
 //socket's queue size after what ECONNREFUSED ist return
 # define BACKLOG                   10
