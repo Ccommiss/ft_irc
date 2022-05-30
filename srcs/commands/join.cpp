@@ -56,7 +56,7 @@ void createChan(Server &s, std::string chan_name, User *u, bool *joined)
 {
 	Channel *chan = new Channel(chan_name, u);
 	if (chan_name[0] == '+')
-		chan->setMode(u, 't', true, std::vector<std::string>()); /* + channel are unmoderated, only t is toggled see 2.3 rfc 2811 */ 
+		chan->setMode(u, 't', true, std::vector<std::string>()); /* + channel are unmoderated, only t is toggled see 2.3 rfc 2811 */
 	u->joinChan(chan);
 	s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
 	*joined = true;
@@ -97,11 +97,11 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 
 	for (std::vector<std::string>::iterator nb_chans_it = chans.begin(); nb_chans_it != chans.end(); nb_chans_it++)
 	{
-		std::string chan_name = trim(chans[i]);
+		std::string chan_name = chans[i];
 		joined = false;
 
 		/* Case 0 : Channel name is not well fomatted */
-		if (chan_name[0] != '#' && chan_name[0] != '+') // + stands for unmoderated chan 
+		if (chan_name[0] != '#' && chan_name[0] != '+') // + stands for unmoderated chan
 			s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE);
 		/* Case 1 : JOIN 0 -> leaving all chans */
 		else if (*nb_chans_it == "0")

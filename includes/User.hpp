@@ -23,7 +23,7 @@ public:
     User &operator=(User const &rhs);
 
     void setSocket(int sd);
-    std::string whoIsChannels();   // print channels for whoiscmd
+    std::string whoIsChannels(User *u);   // print channels for whoiscmd
     std::string whoIsPrivileges(); // print privileges of user for whois
     void setNickName(std::string newNickName);
     bool HasCompletedRegistration();

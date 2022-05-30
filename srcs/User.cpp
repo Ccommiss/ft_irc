@@ -81,12 +81,12 @@ void User::initModes()
 
 void User::setName(std::string newName)
 {
-	this->name = trim(newName);
+	this->name = newName;
 }
 
 void User::setNickName(std::string newNickName)
 {
-	this->nickname = trim(newNickName);
+	this->nickname = newNickName;
 }
 
 void User::setSocket(int sd)
@@ -142,15 +142,25 @@ std::string User::whoIsPrivileges()
 	return privileges;
 } // print channels for whoiscmd
 
-std::string User::whoIsChannels()
+
+/*
+**	whoIsChannel : displays list of channels a user belongs to.
+**	@param u - the user asking the whois command. It is used not to
+**		display secrets channel the requested user is member of
+**		if requetsing user is not a member.
+*/
+std::string User::whoIsChannels(User *u)
 {
 	std::string answer;
 	for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
 	{
-		if ((*it)->isOperator(this))
-			answer.append("@");
-		answer.append((*it)->_name);
-		answer.append(" ");
+		if (!( (*it)->hasMode('s') || (*it)->hasMode('p')) && !(*it)->isInChan(u)) // a tester
+		{
+			if ((*it)->isOperator(this))
+				answer.append("@");
+			answer.append((*it)->_name);
+			answer.append(" ");
+		}
 	}
 	out("CHANNES JOIND =" << answer << " SIZE " << joined_chans.size()) return answer;
 }

@@ -5,45 +5,48 @@
 /*
 **  Command: TOPIC
 **    Parameters: <channel> [ <topic> ]
-** 
+**
 **    The TOPIC command is used to change or view the topic of a channel.
 **    The topic for channel <channel> is returned if there is no <topic>
 **    given.  If the <topic> parameter is present, the topic for that
 **    channel will be changed, if this action is allowed for the user
 **    requesting it.  If the <topic> parameter is an empty string, the
 **    topic for that channel will be removed.
-** 
+**
 **    Numeric Replies:
-** 
+**
 **            ERR_NEEDMOREPARAMS    ok          ERR_NOTONCHANNEL ok
-**            RPL_NOTOPIC             ok        RPL_TOPIC ok 
+**            RPL_NOTOPIC             ok        RPL_TOPIC ok
 **            ERR_CHANOPRIVSNEEDED    ok        ERR_NOCHANMODES
 ** 		Channels with '+' as prefix do not support channel modes.
-**		t - toggle the topic settable by channel operator only flag; 
+**		t - toggle the topic settable by channel operator only flag;
 **    Examples:
-** 
+**
 **    :WiZ!jto@tolsun.oulu.fi TOPIC #test :New topic ; User Wiz setting the
 **                                    topic.
-** 
+**
 **    TOPIC #test :another topic      ; Command to set the topic on #test
 **                                    to "another topic".
-** 
+**
 **    TOPIC #test :                   ; Command to clear the topic on
 **                                    #test.
-** 
+**
 **    TOPIC #test                     ; Command to check the topic for
 **                                    #test.
-** 
+**
 */
 void Commands::topic(Server &s, User *u, std::vector<std::string> cmd)
 {
 	start;
-	if (cmd.size() == 1) 
+	if (cmd.size() == 1)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 	std::string chan_name = *(cmd.begin() + 1);
+	out ("topic" << *(cmd.begin() + 2));
 	if (!s.chanExists(chan_name)) // une erreur
 		return;
 	Channel *chan = (s.chans[chan_name]); // on recp l'instance
+	if ((chan->hasMode('s') || chan->hasMode('p')) && !chan->isInChan(u)))
+		return;
 	if (!chan->isInChan(u))
 		return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, "", ""));
 	if ((cmd.begin() + 2) != cmd.end()) // si on demande a changer le sujet

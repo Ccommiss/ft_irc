@@ -117,7 +117,7 @@ std::map<char, bool> &Channel::getModes()
 void Channel::setTopic(std::string topic)
 {
 	_topic.clear();
-	_topic = trim(topic);
+	_topic = topic;
 }
 
 bool Channel::isTopicSet()
