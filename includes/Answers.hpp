@@ -422,7 +422,9 @@ inline void Server::numeric_reply(User *u, std::string code, std::string arg1, s
 	std::string txt;
 	char *ptr;
 	txt.append(":");
-	txt.append("localhost "); // remplacer par le define
+//	txt.append("localhost "); // remplacer par le define
+	txt.append(u->ip);
+	txt.append(" ");
 	txt.append(code);
 	txt.append(" ");
 	txt.append(u->nickname); // lui qui va servir commenickname
