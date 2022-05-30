@@ -272,6 +272,18 @@ void Channel::removeVoiced(User *to_del)
 		_voiced.erase(std::find(_voiced.begin(), _voiced.end(), to_del));
 }
 
+void Channel::addBanned(User *to_add)
+{
+	if (!isBanned(to_add))
+		_banned.push_back(to_add);
+}
+
+void Channel::removeBanned(User *to_del)
+{
+	if (isBanned(to_del))
+		_banned.erase(std::find(_banned.begin(), _banned.end(), to_del));
+}
+
 void Channel::displayModes()
 {
 	out("Channel " << _name << " has modes : ") for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)

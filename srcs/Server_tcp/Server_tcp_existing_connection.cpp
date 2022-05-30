@@ -13,6 +13,7 @@ void Server::existing_connection( int sd )
 		delete_user(users[sd]);
 	else //do_action
 	{
+		out ("ici : ")
 		debug(SV, users[sd]->nickname,NOCR);
 		debug(SV, " - BUFF_MAX_SIZE = ", NOCR);
 		debug(SV, sizeof(buffer), NOCR);
@@ -23,5 +24,7 @@ void Server::existing_connection( int sd )
 		debug(SV, " - MESSAGE = ", NOCR);
 		debug(SV, buffer);
 		cmds.parse_cmd(users[sd], *this);
+		out (users[sd]->presentation()); 
 	}
+	out ("end existing conn waiting")
 }
