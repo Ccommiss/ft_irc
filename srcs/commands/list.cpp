@@ -34,7 +34,7 @@ void Commands::list			(Server &s, User *u, std::vector<std::string> cmd)
 
 	for (std::map<std::string, Channel *>::iterator it = chans.begin(); it != chans.end(); it++)
 	{
-		if (!((it->second->hasMode('s') || it->second->hasMode('p') && !it->second->isInChan(u)) // a tester
+		if (!(( (it->second->hasMode('s') || it->second->hasMode('p')) && !it->second->isInChan(u)))) // a tester
 			s.numeric_reply(u, RPL_LIST, it->second->_name, it->second->_name, it->second->getTopic());
 	}
 	s.numeric_reply(u, RPL_LISTEND, NONE, NONE, NONE);

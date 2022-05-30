@@ -49,7 +49,7 @@ void Commands::names			(Server &s, User *u, std::vector<std::string> cmd)
 		{
 			out ("nb chans : " << s.chans.size());
 			out ("i " << chans[i]);
-			if (s.chanExists(chans[i]) &&  (!((chans[i]->hasMode('s') || chans[i]->hasMode('p')) && !chans[i]->isInChan(u)))) // a tester
+			if (s.chanExists(chans[i]) &&  (!((s.chans[chans[i]]->hasMode('s') || s.chans[chans[i]]->hasMode('p')) && !s.chans[chans[i]]->isInChan(u)))) // a tester
 			{
 				s.numeric_reply(u, RPL_NAMREPLY, chans[i], NONE, NONE);
 				s.numeric_reply(u, RPL_ENDOFNAMES ,chans[i], NONE, NONE);

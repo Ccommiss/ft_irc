@@ -45,7 +45,7 @@ void Commands::topic(Server &s, User *u, std::vector<std::string> cmd)
 	if (!s.chanExists(chan_name)) // une erreur
 		return;
 	Channel *chan = (s.chans[chan_name]); // on recp l'instance
-	if ((chan->hasMode('s') || chan->hasMode('p')) && !chan->isInChan(u)))
+	if ((chan->hasMode('s') || chan->hasMode('p')) && !chan->isInChan(u))
 		return;
 	if (!chan->isInChan(u))
 		return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, "", ""));
