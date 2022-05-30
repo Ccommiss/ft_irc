@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 16:35:44 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/24 10:44:18 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/25 14:40:21 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,9 @@ void	close_fd(int &fd, bool exception);
 	template <class T>
 void debug( int debug_flag, T message, bool cr = true)
 {
-	if (DEBUG)
+	if (DEBUG && (debug_flag == US || debug_flag == SV))
 	{
-		switch( debug_flag )
-		{
-			case DEBUG_SV:
-				std::cout << message;
-				break;
-			default:
-				std::cout << "no debug flag foud";
-				break;
-		}
+		std::cout << message;
 		if (cr)
 			std::cout << std::endl;
 	}

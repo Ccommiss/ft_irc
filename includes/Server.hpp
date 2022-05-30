@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:50:03 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/24 18:33:21 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/25 15:59:59 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //Class_Name = Server
@@ -85,7 +85,6 @@ class	Server {
 		//pub_exception - END}
 
 		//pub_fct{
-		void	end_connection( int sd );
 		void	shutdown(bool does_throw);
 		void	run( void );
 		bool	pass_check( std::string to_check);
@@ -129,9 +128,8 @@ class	Server {
 
 		//in_loop
 		char	*	get_ip( void );
-		void 		new_connection( void );
 		void 		existing_connection( int sd );
-		User 	*	create_user(int sd);
+		User 	*	create_user( void );
 
 
 		//priv_fct - END}

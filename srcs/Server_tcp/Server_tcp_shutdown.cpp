@@ -1,15 +1,19 @@
 
 #include "Server.hpp"
 
-		void	Server::shutdown(bool does_it_throw)
+void	Server::shutdown(bool does_it_throw)
 {
-		if (this->_addrs)
-		{
-			freeaddrinfo (_addrs);
-			_addrs = NULL;
-		}
-		close_fd(_listener, does_it_throw);
-		for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); it++)
-			delete_user(it->second);
-		//clear??
+	if (this->_addrs)
+	{
+		freeaddrinfo (_addrs);
+		_addrs = NULL;
+	}
+	while(users.begin() != users.end())
+		delete_user(users.begin()->second);
+	close_fd(_listener, does_it_throw);
+	users.clear();
+	server_users.clear();
+	chans.clear();
+
+	//clear??
 }

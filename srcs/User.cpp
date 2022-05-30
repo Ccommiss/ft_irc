@@ -18,13 +18,15 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-User::User(int sd) : socket_descriptor(sd), name("Guest"), nickname("Guest"), event(NULL)
+User::User(int sd, std::string ip) : socket_descriptor(sd), name("Guest"), nickname("Guest"), ip(ip)
 {
 	for (int i = 0; i < 4; i++)
 		registered[i] = false;
 
 	initModes();
 	nickname.append(to_str(sd));
+	debug(US, presentation(), NOCR);
+	debug(US, "CONNECTED");
 }
 
 User::User(const User &src)
@@ -38,6 +40,10 @@ User::User(const User &src)
 
 User::~User()
 {
+	debug(US, presentation(), NOCR);
+	debug(US, "CLOSED");
+	std::cout << "NEED TO LEAVE ALL CHANS" << std::endl;
+	joined_chans.clear();
 }
 
 /*
@@ -73,6 +79,13 @@ void User::initModes()
 	_modes.insert(std::make_pair('O', false));
 	_modes.insert(std::make_pair('s', false));
 	_modes.insert(std::make_pair('q', false));
+}
+
+std::string	User::presentation( void )
+{
+	std::string to_ret(nickname);
+	to_ret = to_ret + "[" + ip + ":" + to_str(socket_descriptor) + "] - ";
+	return (to_ret);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 11:07:57 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/20 16:21:43 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/25 14:29:31 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void Server::get_addr( void )
 	//http://manpagesfr.free.fr/man/man3/getaddrinfo.3.html
 	struct addrinfo hints;
 	memset(&hints, 0, sizeof (struct addrinfo));
-	hints.ai_family = AF_UNSPEC;    /* allow IPv4 or IPv6 */
+	//hints.ai_family = AF_UNSPEC;    /* allow IPv4 or IPv6 */
+	hints.ai_family = AF_INET;    /* allow IPv4 */
 	hints.ai_socktype = SOCK_STREAM; /* Stream socket */
 	hints.ai_flags = AI_PASSIVE;    /* for wildcard IP address */
 

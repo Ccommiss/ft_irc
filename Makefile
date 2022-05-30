@@ -15,7 +15,7 @@ TARGET				:= out
 TARGET_BONUS		:= out-bonus
 
 
-BUILD				:= release
+BUILD				:= valgrind
 
 
 include sources.mk
@@ -24,7 +24,7 @@ include sources.mk
 SRCDIR				:= srcs
 INCDIR				:= includes
 BUILDDIR			:= obj
-TARGETDIR			:= .
+TARGETDIR			:= ./
 SRCEXT				:= cpp
 DEPEXT				:= d
 OBJEXT				:= o
@@ -33,7 +33,7 @@ OBJECTS				:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEX
 OBJECTS_BONUS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES_BONUS:.$(SRCEXT)=.$(OBJEXT)))
 
 #Flags, Libraries and Includes
-cflags.release		:= -Wall -Werror -Wextra -I./includes/ 
+cflags.release		:= -Wall -Werror -Wextra
 cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV -ggdb
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))
@@ -86,7 +86,7 @@ clean:
 
 # Full Clean, Objects and Binaries
 fclean: clean
-	@$(RM) -rf $(TARGETDIR)
+	@$(RM) -rf $(TARGETDIR)/$(TARGET)
 
 
 # Pull in dependency info for *existing* .o files

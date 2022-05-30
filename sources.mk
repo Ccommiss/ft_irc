@@ -16,9 +16,7 @@ SOURCES		+=             		\
 		srcs/Server_tcp/Server_tcp_start_listening.cpp \
 		srcs/Server_tcp/Server_tcp_run.cpp \
 		srcs/Server_tcp/Server_tcp_shutdown.cpp \
-		srcs/Server_tcp/Server_tcp_new_connection.cpp \
 		srcs/Server_tcp/Server_tcp_existing_connection.cpp \
-		srcs/Server_tcp/Server_tcp_end_connection.cpp \
 		srcs/commands/Commands.cpp       	\
 		srcs/commands/Parse.cpp       	\
 		srcs/commands/exit.cpp       	\

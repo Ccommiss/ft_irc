@@ -14,15 +14,17 @@ public:
     bool registered[4]; // trois booleens
     std::string name;
     std::string nickname;
+    std::string 			ip;
     struct epoll_event *event;
 
     // User();
-    User(int sd);
+    User( int sd, std::string ip );
     User(User const &src);
     ~User();
     User &operator=(User const &rhs);
 
     void setSocket(int sd);
+    std::string						presentation( void );
     std::string whoIsChannels(User *u);   // print channels for whoiscmd
     std::string whoIsPrivileges(); // print privileges of user for whois
     void setNickName(std::string newNickName);
