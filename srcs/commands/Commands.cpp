@@ -18,6 +18,7 @@ Commands::Commands()
 	cmd_map.insert(std::make_pair("EXIT", &Commands::quit_s));
 	cmd_map.insert(std::make_pair("INVITE", &Commands::invite));
 	cmd_map.insert(std::make_pair("PART", &Commands::part));
+	cmd_map.insert(std::make_pair("PASS", &Commands::pass));
 	cmd_map.insert(std::make_pair("PING", &Commands::ping));
 	cmd_map.insert(std::make_pair("TOPIC", &Commands::topic));
 	cmd_map.insert(std::make_pair("NAMES", &Commands::names));

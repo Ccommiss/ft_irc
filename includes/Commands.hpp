@@ -30,6 +30,7 @@ class Commands
 		void nick			(Server &s, User *u, std::vector<std::string> cmd);
 		void invite			(Server &s, User *u, std::vector<std::string> cmd);
 		void part			(Server &s, User *u, std::vector<std::string> cmd) ; // par d'un chan
+		void pass			(Server &s, User *u, std::vector<std::string> cmd) ;
 		void topic			(Server &s, User *u, std::vector<std::string> cmd);
 		void mode			(Server &s, User *u, std::vector<std::string> cmd);
 		void kick			(Server &s, User *u, std::vector<std::string> cmd);
