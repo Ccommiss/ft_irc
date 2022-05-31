@@ -18,7 +18,7 @@
 */
 
 #define NONE ""
-#define MSG_001 ":Welcome to the Internet Relay Network of Clement and Claire " + user->nickname + "!" + user->name + "@" + "localhost"
+#define MSG_001 ":Welcome to the Internet Relay Network of Clement and Claire " + user->nickname + "!" + user->name + "@" + s.hostname
 #define MSG_002 ":Your host is localhost, version 1.0   8-)"
 #define MSG_003 ":This server was created not so long time ago."
 #define MSG_004 ":You are very welcome. Enjoy !"
@@ -423,7 +423,7 @@ inline void Server::numeric_reply(User *u, std::string code, std::string arg1, s
 	char *ptr;
 	txt.append(":");
 //	txt.append("localhost "); // remplacer par le define
-	txt.append(_hostname);
+	txt.append(hostname);
 	txt.append(" ");
 	txt.append(code);
 	txt.append(" ");

@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 11:07:57 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/31 11:03:55 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/31 15:24:11 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ void Server::get_infos( void )
 	if (getaddrinfo (NULL, (to_str(_port)).c_str(), &hints, &_addrs))
 		throw std::runtime_error("getaddr(info) info failed");
 
-	if(gethostname(_hostname, HOSTNAME_SIZE))
+	if(gethostname(hostname, HOSTNAME_SIZE))
 		throw std::runtime_error("getaddr(host) info failed");
 }
