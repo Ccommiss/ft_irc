@@ -52,6 +52,72 @@
 **             the invite-only flag;
 */
 
+
+
+
+
+
+
+void handleUserModes()
+{
+
+}
+
+
+void handleChannelModes(Server &s, User *u, std::vector<std::string> cmd)
+{
+	std::string chan_name 				= *(cmd.begin() + 1);
+	if (!s.chanExists(chan_name))
+	{
+		out("Chan does not exist") 
+		return; // NO SUCH NICK ? mais pas specifie
+	}
+	if (cmd.size() == 2) // just MODE #chan 
+		return (s.numeric_reply(u, RPL_CHANNELMODEIS, chan_name, printModes(s.chans[chan_name]), NONE)); //
+	
+	std::string modes 					= *(cmd.begin() + 2);
+	std::vector<std::string> mode_params;
+	(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
+		
+
+	/* Note : to list info, one can ask for e.g. /mode #chan +b or /mode #chan I, so +/- is not
+	alway set. This is not taken into account yet */
+	Channel *chan = s.chans[chan_name];
+	bool value = modes[0] == '+' ? true : false;
+	out ("value " << value << " Modes " << modes
+	for (size_t i = 1; i < modes.length(); i++)
+	{
+		std::string res = chan->setMode(u, modes[i], value, mode_params)
+		/* FOR RPL_BAN LIST, one answer per ban mask */
+		if (res == RPL_BANLIST || res == RPL_INVITELIST)// || res == RPL_EXCEPTLIST)
+		{
+			if (res == RPL_BANLIST)
+			{
+				for (size_t i = 0; i < chan->getBannedMasks().size(); i++)
+					s.numeric_reply(u, RPL_BANLIST, chan->_name, chan->getBannedMasks().at(i), NONE);
+				s.numeric_reply(u, RPL_ENDOFBANLIST, chan->_name, to_str(chan->getBannedMasks().size()), NONE);
+			}
+			else if (res == RPL_INVITELIST)
+			{
+				for (size_t i = 0; i < chan->getInvitedMasks().size(); i++)
+					s.numeric_reply(u, RPL_INVITELIST, chan->_name, chan->getInvitedMasks().at(i), NONE);
+				s.numeric_reply(u, RPL_ENDOFINVITELIST, chan->_name, NONE, NONE);
+			}
+		}
+		else if (res.length() != 0)
+			s.numeric_reply(u, res, chan->_name, NONE, NONE);
+		else
+		{
+			std::string params = mode_params.size() > 0 ? vecToString(mode_params) : "No params";
+			s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, to_str(modes[i]), params); //
+			
+		}
+	}
+	server_relay(u, cmd, chan->getUsers());
+	chan->displayModes();
+
+}
+
 void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
 	if (cmd.size() == 1)
@@ -64,55 +130,7 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 		return (s.numeric_reply(u, ERR_NOCHANMODES, target, NONE, NONE));
 	if (target[0] == '#') // ou & ....
 	{
-		std::string empty = " lol";
-		std::string chan_name = cmd.size() > 1 ? *(cmd.begin() + 1) : ""; // #truc
-		std::string modes = cmd.size() > 2 ? *(cmd.begin() + 2) : "";	  // +=....
-		std::vector<std::string> mode_params;
-		(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
-		// si modes c un +, faut un troisieme cmd ssi K par ex
-		if (!s.chanExists(chan_name))
-		{
-			out("Chan does not exist") return; // NO SUCH NICK ? mais pas specifie
-		}
-		else
-		{
-			Channel *chan = s.chans[chan_name];
-
-			// if (modes[0]) ni un - ou +, trouver quoi retrouner / MODE #eu-opers +l 10
-			bool value = modes[0] == '+' ? true : false;
-			for (size_t i = 1; i < modes.length(); i++)
-			{
-				/* A voir. Mode query pour limit par ex (flag l doit etre possible 4.2.9 rfc 2811) */
-				/* hypothese : si pas de valeur on voit genre MODE e, a tester */
-
-				std::string res = chan->setMode(u, modes[i], value, mode_params);
-				
-				/* FOR RPL_BAN LIST, one answer per ban mask */
-				if (res == RPL_BANLIST || res == RPL_INVITELIST)// || res == RPL_EXCEPTLIST)
-				{
-					if (res == RPL_BANLIST)
-					{
-						for (size_t i = 0; i < chan->getBannedMasks().size(); i++)
-							s.numeric_reply(u, RPL_BANLIST, chan->_name, chan->getBannedMasks().at(i), NONE);
-						s.numeric_reply(u, RPL_ENDOFBANLIST, chan->_name, to_str(chan->getBannedMasks().size()), NONE);
-					}
-					else if (res == RPL_INVITELIST)
-					{
-						for (size_t i = 0; i < chan->getInvitedMasks().size(); i++)
-							s.numeric_reply(u, RPL_INVITELIST, chan->_name, chan->getInvitedMasks().at(i), NONE);
-						s.numeric_reply(u, RPL_ENDOFINVITELIST, chan->_name, NONE, NONE);
-					}
-				}
-				else if (res.length() != 0)
-					s.numeric_reply(u, res, chan->_name, NONE, NONE);
-				else
-				{
-					s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, modes, vecToString(mode_params)); //
-					server_relay(u, cmd, chan->getUsers());
-				}
-			}
-			chan->displayModes();
-		}
+		handleChannelModes(s, u, cmd);
 	}
 	/* User Modes a factoriser */
 	else
