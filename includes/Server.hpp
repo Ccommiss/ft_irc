@@ -6,12 +6,9 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:50:03 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/31 11:21:23 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/31 15:39:21 by csejault         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
-//Class_Name = Server
-
-//define{
+/* ************************************************************************** */ //Class_Name = Server //define{
 #ifndef SERVER_TCP_HPP
 # define SERVER_TCP_HPP
 
@@ -92,9 +89,9 @@ class	Server {
 		bool	pass_check( std::string to_check);
 
 		void	printChans();
-    	void	printUsers();
+		void	printUsers();
 
-		
+
 		std::string     choose_msg(int code, User *u, std::string arg1, std::string arg2, std::string arg3);
 
 		void 			numeric_reply(User *u, std::string code, std::string arg1, std::string arg2, std::string arg3);
@@ -106,7 +103,8 @@ class	Server {
 		std::map<std::string, Channel *>			chans;
 		Commands                                	cmds; 
 
-    	char          				buffer[RECV_BUFF_SIZE];
+		char          				buffer[RECV_BUFF_SIZE];
+		char        				hostname[HOSTNAME_SIZE];
 		void						delete_user(User * to_del);
 
 		bool 				chanExists(std::string chan_name);
@@ -143,7 +141,6 @@ class	Server {
 		//priv_static - END}
 
 		//priv_var{
-    	char        				_hostname[HOSTNAME_SIZE];
 		int							_port;
 		std::string					_pass;
 		struct addrinfo			*	_addrs;
