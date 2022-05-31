@@ -3,8 +3,8 @@
 ## SRCS ##
 
 SOURCES		+=             		\
-		srcs/Channel.cpp      	\
 		srcs/utils.cpp        	\
+		srcs/Channel.cpp      	\
 		srcs/close_fd.cpp\
 		srcs/main.cpp         	\
 		srcs/User.cpp         	\

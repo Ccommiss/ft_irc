@@ -61,7 +61,6 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 	{
 		out("KICKING" << to_kick->getNickName());
 		server_relay(u, cmd, s.chans[chan_name]->getUsers());
-		s.chans[chan_name]->addBanned(to_kick); // a tester 
 		s.chans[chan_name]->remove_user(to_kick);
 		to_kick->leaveChan(s.chans[chan_name]);
 		if (s.chans[chan_name]->getUsers().size() == 0)

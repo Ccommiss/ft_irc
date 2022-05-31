@@ -324,12 +324,37 @@ std::string printModes(Channel *chan)
 }
 
 
+void	Channel::seeBannedmasks()
+{
+	out ("Banned masks are :")
+	for (size_t i = 0; i < _masks.size(); i++)
+		out (" - " <<  _masks[i]);
+	out ("");
+}
+
+
 void Channel::printUsers() // const
 {
 	start;
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
 		out("USERS : " << *it->first); // show the nick name
 }
+
+void Channel::printBanned() // const
+{
+	start;
+	out ("Banned :")
+	for (std::vector<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
+		out("- : " << (*it)->fullID()); // show the nick name
+	out ("");
+}
+
+// void Channel::printUsers() // const
+// {
+// 	start;
+// 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+// 		out("USERS : " << *it->first); // show the nick name
+// }
 
 /*
 ** --------------------------------- MODES METHODS ----------------------------------
@@ -346,6 +371,25 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 	{
 	case 'a': // aninymous mode que sur les channels & et ! RFC 4.2.1 2811
 	{
+	}
+	case 'b': /* Bannir un user/un masque */ 
+	{
+		if (trim(params[0]).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		_masks.push_back(trim(params[0]));
+		seeBannedmasks();
+		if (findByName(trim(params[0]), &user) == true)
+			value == true ? addBanned(user) : removeBanned(user); // faut il erreur si ajoute deux fois ?
+	
+		for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it ++)
+		{
+			for (std::vector<std::string>::iterator ite = _masks.begin(); ite != _masks.end(); ite++)
+				if (pattern_match((it->second)->fullID(), *ite))
+					addBanned(it->second);
+		}
+		printBanned();
+		//out(" not in channel "); // surement un erreur ? laquelle ?
+		break;
 	}
 	case 'k':
 	{

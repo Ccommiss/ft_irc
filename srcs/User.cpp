@@ -6,7 +6,7 @@
 #include <algorithm>
 
 /*
-**              a - user is flagged as away;
+**			a - user is flagged as away;
 **            i - marks a users as invisible;
 **            w - user receives wallops;
 **            r - restricted user connection;
@@ -155,6 +155,17 @@ std::string User::whoIsPrivileges()
 	return privileges;
 } // print channels for whoiscmd
 
+std::string		User::fullID()
+{
+	std::string txt;
+	txt.append(nickname);
+	txt.append("!");
+	txt.append(name); // username
+	txt.append("@");
+	txt.append(ip);
+
+	return txt;
+}
 
 /*
 **	whoIsChannel : displays list of channels a user belongs to.

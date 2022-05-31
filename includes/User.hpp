@@ -35,6 +35,7 @@ public:
 
     void joinChan(Channel *chan);
     void leaveChan(Channel *chan);
+    std::string     fullID();
 
     /* Modes */
     void initModes();

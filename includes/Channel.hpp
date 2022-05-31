@@ -70,6 +70,8 @@ public:
 	void addToInviteList(User *to_add);
 	void removeFromInviteList(User *to_del);
 	void printUsers();
+	void printBanned();
+	void seeBannedmasks();
 
 	/* Modes related function */
 	std::string setMode(User *u, char mode, bool value, std::vector<std::string> params);
@@ -88,6 +90,7 @@ private:
 	std::string 						_password;
 	std::vector<User *> 				_invited;
 	std::vector<User *> 				_voiced;
+	std::vector<std::string> 			_masks; // faire une list de masks 
 	size_t								_limit;
 };
 
