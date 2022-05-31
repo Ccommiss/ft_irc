@@ -152,7 +152,7 @@ std::string &User::getAwayMsg()
 
 bool User::HasCompletedRegistration()
 {
-	if (!registered[USER] || !registered[NICK]) // rajouter pass 
+	if (!registered[USER] || !registered[NICK] || !registered[PASS])
 		return false;
 	return true;
 }
