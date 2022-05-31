@@ -60,7 +60,7 @@ public:
     };
 
 private:
-    std::map<char, bool> _modes;
+    std::map<char, bool>    _modes;
     std::string            _away_msg;
 };
 
