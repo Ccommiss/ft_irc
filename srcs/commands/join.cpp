@@ -111,7 +111,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		else if (!s.chanExists(chan_name))
 			createChan(s, chan_name, u, &joined);
 		/* Case 4 : Channel does exist but invite only */
-		else if (s.chans[chan_name]->hasMode('i') && !s.chans[chan_name]->isInvited(u)) // invite only
+		else if (s.chans[chan_name]->hasMode('i') && (!s.chans[chan_name]->isInvited(u) && !s.chans[chan_name]->matchInviteMask(u))) // invite only
 			s.numeric_reply(u, ERR_INVITEONLYCHAN, chan_name, NONE, NONE);
 		/* Case 5 : Channel does exist and ok !! */
 		else

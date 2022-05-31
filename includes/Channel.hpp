@@ -43,6 +43,8 @@ public:
 	bool isCorrectPass(std::string candidate);
 	bool isInChan(User *u);
 	bool findByName(std::string nick, User **u);
+	bool matchInviteMask(User *u); //  a mettre dans isInvited ? separe pour l'instant dans join.
+	bool matchBannedMask(User *u);
 	bool isTopicSet();
 	bool hasKey(); // si le flag K est actif pour rentrer
 	bool hasMode(char mode);
@@ -55,6 +57,8 @@ public:
 	std::map<char, bool> &getModes();
 	std::string &getTopic();
 	std::string &getName();
+	std::vector<std::string> &getBannedMasks(); // for banned
+	std::vector<std::string> &getInvitedMasks(); // for banned
 	std::map<std::string *, User *> &getUsers();
 
 	/* Methods */
@@ -70,6 +74,8 @@ public:
 	void addToInviteList(User *to_add);
 	void removeFromInviteList(User *to_del);
 	void printUsers();
+	void printBanned();
+	void seeBannedmasks();
 
 	/* Modes related function */
 	std::string setMode(User *u, char mode, bool value, std::vector<std::string> params);
@@ -88,6 +94,8 @@ private:
 	std::string 						_password;
 	std::vector<User *> 				_invited;
 	std::vector<User *> 				_voiced;
+	std::vector<std::string> 			_bannedMasks; // faire une list de masks 
+	std::vector<std::string> 			_invitedMasks; // faire une list de masks 
 	size_t								_limit;
 };
 

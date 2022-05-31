@@ -71,11 +71,11 @@
 #define MSG_262 "<server_name> <version>[.<debug_level>] :<info> Used to terminate a list of RPL_TRACE* replies"																														  /* RPL_TRACEEND */
 #define MSG_263 "<command> :<info> When a server drops a command without processing it, it MUST use this reply."																														  /* RPL_TRYAGAIN */
 #define MSG_300 "Dummy reply, supposedly only used for debugging/testing new features, however has appeared in production daemons."																										  /* RPL_NONE */
-#define MSG_301 "<nick> :<message> Used in reply to a command directed at a user who is marked as away"																																	  /* RPL_AWAY */
+#define MSG_301 arg1 + " :" + arg2 //Used in reply to a command directed at a user who is marked as away"																																	  /* RPL_AWAY */
 #define MSG_302 ":*1<reply> *( ' ' <reply> ) Reply used by USERHOST (see RFC)"																																							  /* RPL_USERHOST */
 #define MSG_303 ":*1<nick> *( ' ' <nick> ) Reply to the ISON command (see RFC)"																																							  /* RPL_ISON */
-#define MSG_305 ":<info> Reply from AWAY when no longer marked as away"																																									  /* RPL_UNAWAY */
-#define MSG_306 ":<info> Reply from AWAY when marked away"																																												  /* RPL_NOWAWAY */
+#define MSG_305 ": You are no longer marked as AWAY :)" 																																								  /* RPL_UNAWAY */
+#define MSG_306 ": You are marked as AWAY zZzZ" 																																											  /* RPL_NOWAWAY */
 #define MSG_311 arg1+ " " + arg2 + "localhost" + "* :" + arg3 + "<real_name>" // Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
 #define MSG_312 arg1+ " " + "<server> :<server_info> Reply to WHOIS - What server they're on"																																				  /* RPL_WHOISSERVER */
 #define MSG_313 arg1+ " :is an IRC operator" //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
@@ -93,8 +93,8 @@
 #define MSG_332 arg1 + " :" + arg2																																																		  /* RPL_TOPIC */
 #define MSG_341 ":" + arg1 + " " + user->nickname																																														  /* RPL_INVITING */
 #define MSG_342 "<user> :<info> Returned by a server answering a SUMMON message to indicate that it is summoning that user"																												  /* RPL_SUMMONING */
-#define MSG_346 "<channel> <invitemask> An invite mask for the invite mask list"																																						  /* RPL_INVITELIST */
-#define MSG_347 "<channel> :<info> Termination of an RPL_INVITELIST list"																																								  /* RPL_ENDOFINVITELIST */
+#define MSG_346 arg1 + " " + arg2 // <invitemask> An invite mask for the invite mask list"																																						  /* RPL_INVITELIST */
+#define MSG_347 arg1 + " :End of invite list ! :) "// Termination of an RPL_INVITELIST list"																																								  /* RPL_ENDOFINVITELIST */
 #define MSG_348 "<channel> <exceptionmask> An exception mask for the exception mask list. Also known as RPL_EXLIST (Unreal, Ultimate)"																									  /* RPL_EXCEPTLIST */
 #define MSG_349 "<channel> :<info> Termination of an RPL_EXCEPTLIST list. Also known as RPL_ENDOFEXLIST (Unreal, Ultimate)"																												  /* RPL_ENDOFEXCEPTLIST */
 #define MSG_351 "<version>[.<debuglevel>] <server> :<comments> Reply by the server showing its version details, however this format is not often adhered to"																			  /* RPL_VERSION */
@@ -107,16 +107,16 @@
 #define MSG_364 "<mask> <server> :<hopcount> <server_info> Reply to the LINKS command"																																					  /* RPL_LINKS */
 #define MSG_365 "<mask> :<info> Termination of an RPL_LINKS list"																																										  /* RPL_ENDOFLINKS */
 #define MSG_366 arg1 + " :End of NAMES list"																																															  /* RPL_ENDOFNAMES */
-#define MSG_367 "<channel> <banid> [<time_left> :<reason>] A ban-list item (See RFC); <time left> and <reason> are additions used by KineIRCd"																							  /* RPL_BANLIST */
-#define MSG_368 "<channel> :<info> Termination of an RPL_BANLIST list"																																									  /* RPL_ENDOFBANLIST */
+#define MSG_367 arg1 + " " + arg2// [<time_left> :<reason>] A ban-list item (See RFC); <time left> and <reason> are additions used by KineIRCd"																							  /* RPL_BANLIST */
+#define MSG_368 arg1 + " :End of ban list (" + arg2 + " masks set)" //:<info> Termination of an RPL_BANLIST list"																																									  /* RPL_ENDOFBANLIST */
 #define MSG_369 "<nick> :<info> Reply to WHOWAS - End of list"																																											  /* RPL_ENDOFWHOWAS */
 #define MSG_371 ":<string> Reply to INFO"																																																  /* RPL_INFO */
 #define MSG_372 ":- <string> Reply to MOTD"																																																  /* RPL_MOTD */
 #define MSG_373 ""																																																						  /* RPL_INFOSTART */
-#define MSG_374 ":<info> Termination of an RPL_INFO list"																																												  /* RPL_ENDOFINFO */
-#define MSG_375 ":- <server> Message of the day - Start of an RPL_MOTD list"																																							  /* RPL_MOTDSTART */
-#define MSG_376 ":<info> Termination of an RPL_MOTD list"																																												  /* RPL_ENDOFMOTD */
-#define MSG_381 ":You are now an IRC operator"																																													  /* RPL_YOUREOPER */
+#define MSG_374 " :<info> Termination of an RPL_INFO list"																																												  /* RPL_ENDOFINFO */
+#define MSG_375 " :- <server> Message of the day - Start of an RPL_MOTD list"																																							  /* RPL_MOTDSTART */
+#define MSG_376 " :<info> Termination of an RPL_MOTD list"																																												  /* RPL_ENDOFMOTD */
+#define MSG_381 " :You are now an IRC operator"																																													  /* RPL_YOUREOPER */
 #define MSG_382 "<config_file> :<info> Successful reply from REHASH"																																									  /* RPL_REHASHING */
 #define MSG_383 ":You are service <service_name> Sent upon successful registration of a service"																																		  /* RPL_YOURESERVICE */
 #define MSG_384 ""																																																						  /* RPL_MYPORTIS */

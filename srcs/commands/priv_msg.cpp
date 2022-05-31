@@ -72,7 +72,11 @@ void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string>
 {
 	User *target = NULL;
 	if (s.findByName(dest_nick, &target) == true)
+	{
 		server_relay(u, cmd, target);
+		if (target->isAway())
+			s.numeric_reply(u, RPL_AWAY, dest_nick, target->getAwayMsg(), NONE);
+	}
 	else
 		return (s.numeric_reply(u, ERR_NOSUCHNICK, dest_nick, NONE, NONE));
 }

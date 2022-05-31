@@ -27,6 +27,7 @@ Commands::Commands()
 	cmd_map.insert(std::make_pair("WHOIS", &Commands::whois));
 	cmd_map.insert(std::make_pair("OPER", &Commands::oper));
 	cmd_map.insert(std::make_pair("NOTICE", &Commands::notice));
+	cmd_map.insert(std::make_pair("AWAY", &Commands::away));
 
 
 	// Now storing replies ; idee, ptr sur func genre Answer::&RPL_001   avec RPL 001 qui prendra un user
