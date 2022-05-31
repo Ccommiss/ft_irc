@@ -85,10 +85,25 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 				/* A voir. Mode query pour limit par ex (flag l doit etre possible 4.2.9 rfc 2811) */
 				/* hypothese : si pas de valeur on voit genre MODE e, a tester */
 
-				if (!chan->isOperator(u)) // Only privileged (eg op and creator) can change modes
-					s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan->_name, NONE, NONE);
 				std::string res = chan->setMode(u, modes[i], value, mode_params);
-				if (res.length() != 0)
+				
+				/* FOR RPL_BAN LIST, one answer per ban mask */
+				if (res == RPL_BANLIST || res == RPL_INVITELIST)// || res == RPL_EXCEPTLIST)
+				{
+					if (res == RPL_BANLIST)
+					{
+						for (size_t i = 0; i < chan->getBannedMasks().size(); i++)
+							s.numeric_reply(u, RPL_BANLIST, chan->_name, chan->getBannedMasks().at(i), NONE);
+						s.numeric_reply(u, RPL_ENDOFBANLIST, chan->_name, to_str(chan->getBannedMasks().size()), NONE);
+					}
+					else if (res == RPL_INVITELIST)
+					{
+						for (size_t i = 0; i < chan->getInvitedMasks().size(); i++)
+							s.numeric_reply(u, RPL_INVITELIST, chan->_name, chan->getInvitedMasks().at(i), NONE);
+						s.numeric_reply(u, RPL_ENDOFINVITELIST, chan->_name, NONE, NONE);
+					}
+				}
+				else if (res.length() != 0)
 					s.numeric_reply(u, res, chan->_name, NONE, NONE);
 				else
 				{
