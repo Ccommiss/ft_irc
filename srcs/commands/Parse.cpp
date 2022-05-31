@@ -59,7 +59,7 @@ void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
 	for (std::vector<std::string>::iterator line = res.begin(); line != res.end(); line++)
 	{
 		std::vector<std::string> cmd = tokenize(*line, ' ');
-		if (cmd_map.find(*(cmd.begin())) != cmd_map.end())
+		if (cmd.size() > 0 && cmd_map.find(*(cmd.begin())) != cmd_map.end())
 		{
 			Commands::Cmd a = cmd_map.at(*(cmd.begin()));
 			(this->*a)(s, user, cmd);

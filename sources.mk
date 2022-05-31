@@ -26,6 +26,7 @@ SOURCES		+=             		\
 		srcs/commands/user.cpp       	\
 		srcs/commands/invite.cpp       	\
 		srcs/commands/part.cpp       	\
+		srcs/commands/ping.cpp       	\
 		srcs/commands/topic.cpp       	\
 		srcs/commands/mode.cpp       	\
 		srcs/commands/kick.cpp       	\
