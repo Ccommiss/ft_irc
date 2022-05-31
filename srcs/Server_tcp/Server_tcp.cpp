@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:30:35 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/24 16:47:25 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/31 11:04:16 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 //Class_Name = Server
@@ -30,7 +30,7 @@ Server::Server( const char * port, const char * pass ) : _port(strtol(port, NULL
 
 	try
 	{
-		this->get_addr();
+		this->get_infos();
 		this->start_listening();
 		this->set_monitoring();
 	}
@@ -40,6 +40,8 @@ Server::Server( const char * port, const char * pass ) : _port(strtol(port, NULL
 		shutdown(NO_THROW);
 		throw e;
 	}
+	debug(SV, _hostname, NOCR);
+	debug(SV," - SUCCESSFULLY CREATED");
 
 }
 

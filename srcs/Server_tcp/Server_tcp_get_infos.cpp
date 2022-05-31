@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server_tcp_get_addr.cpp                            :+:      :+:    :+:   */
+/*   Server_tcp_get_infos.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 11:07:57 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/25 14:29:31 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/31 11:03:55 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "Server.hpp"
-void Server::get_addr( void )
+void Server::get_infos( void )
 {
 	//L'argument hints pointe sur une structure addrinfo qui spécifie les critères de sélection des structures d'adresses de sockets renvoyée dans la liste pointé par res. Si hints n'est pas NULL, il doit pointer sur une structure addrinfo dont les membres ai_family, ai_socktype, et ai_protocol indiquent les critères limitant l'ensemble d'adresses de sockets renvoyées par getaddrinfo(), de la façon suivante 
 	//ai_family
@@ -36,7 +36,9 @@ void Server::get_addr( void )
 	//utilise les criteres de selection defini dans hints.
 	//La fonction getaddrinfo() alloue et initialise une liste chaînée de structures addrinfo, une pour chaque adresse réseau correspondant à node et service, soumise aux restrictions imposées par l'argument hints, et renvoie dans res un pointeur sur le début de la liste. Les éléments de la liste chaînée sont chaînés par le champ ai_next. Il y a plusieurs raisons pour lesquelles la liste chaînée peut avoir plus d'une structure addrinfo : l'hôte réseau est « multi-homed » ; le même service est disponible à partir de plusieurs protocoles de socket (par exemple, un est d'adresse SOCK_STREAM et l'autre d'adresse SOCK_DGRAM).
 	//La fonction freeaddrinfo() libère la mémoire qui a été allouée dynamiquement pour la liste chaînée res.   
-	int ret = getaddrinfo (NULL, (to_str(_port)).c_str(), &hints, &_addrs);
-	if (ret)
-		throw std::runtime_error("getaddr info failed");
+	if (getaddrinfo (NULL, (to_str(_port)).c_str(), &hints, &_addrs))
+		throw std::runtime_error("getaddr(info) info failed");
+
+	if(gethostname(_hostname, HOSTNAME_SIZE))
+		throw std::runtime_error("getaddr(host) info failed");
 }

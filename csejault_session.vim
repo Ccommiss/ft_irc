@@ -143,8 +143,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 181 + 181) / 363)
-exe 'vert 2resize ' . ((&columns * 181 + 181) / 363)
+exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
+exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -271,7 +271,7 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 43) / 86)
+let s:l = 1 - ((0 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -405,15 +405,15 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 43) / 86)
+let s:l = 1 - ((0 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 181 + 181) / 363)
-exe 'vert 2resize ' . ((&columns * 181 + 181) / 363)
+exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
+exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 tabnext
 edit includes/User.hpp
 set splitbelow splitright
@@ -428,8 +428,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 181 + 181) / 363)
-exe 'vert 2resize ' . ((&columns * 181 + 181) / 363)
+exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
+exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 argglobal
 if bufexists("includes/User.hpp") | buffer includes/User.hpp | else | edit includes/User.hpp | endif
 setlocal keymap=
@@ -557,7 +557,7 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 43) / 86)
+let s:l = 1 - ((0 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -691,17 +691,17 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 43) / 86)
+let s:l = 1 - ((0 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 181 + 181) / 363)
-exe 'vert 2resize ' . ((&columns * 181 + 181) / 363)
+exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
+exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 tabnext
-edit srcs/Server_tcp/Server_tcp_get_addr.cpp
+edit srcs/Server_tcp/Server_tcp_get_infos.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -717,11 +717,12 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 120 + 181) / 363)
-exe 'vert 2resize ' . ((&columns * 120 + 181) / 363)
-exe 'vert 3resize ' . ((&columns * 121 + 181) / 363)
+exe 'vert 1resize ' . ((&columns * 70 + 105) / 211)
+exe 'vert 2resize ' . ((&columns * 69 + 105) / 211)
+exe 'vert 3resize ' . ((&columns * 70 + 105) / 211)
 argglobal
 5argu
+if bufexists("srcs/Server_tcp/Server_tcp_get_infos.cpp") | buffer srcs/Server_tcp/Server_tcp_get_infos.cpp | else | edit srcs/Server_tcp/Server_tcp_get_infos.cpp | endif
 setlocal keymap=
 setlocal noarabic
 setlocal noautoindent
@@ -847,11 +848,11 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 23 - ((22 * winheight(0) + 43) / 86)
+let s:l = 1 - ((0 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-23
+1
 normal! 0
 wincmd w
 argglobal
@@ -982,7 +983,7 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 43) / 86)
+let s:l = 1 - ((0 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1117,16 +1118,16 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 4 - ((3 * winheight(0) + 43) / 86)
+let s:l = 4 - ((3 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 4
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 120 + 181) / 363)
-exe 'vert 2resize ' . ((&columns * 120 + 181) / 363)
-exe 'vert 3resize ' . ((&columns * 121 + 181) / 363)
+exe 'vert 1resize ' . ((&columns * 70 + 105) / 211)
+exe 'vert 2resize ' . ((&columns * 69 + 105) / 211)
+exe 'vert 3resize ' . ((&columns * 70 + 105) / 211)
 tabnext
 edit srcs/Server_tcp/Server_tcp_run.cpp
 set splitbelow splitright
@@ -1152,16 +1153,16 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 43 + 44) / 89)
-exe 'vert 1resize ' . ((&columns * 181 + 181) / 363)
-exe '2resize ' . ((&lines * 43 + 44) / 89)
-exe 'vert 2resize ' . ((&columns * 181 + 181) / 363)
-exe '3resize ' . ((&lines * 42 + 44) / 89)
-exe 'vert 3resize ' . ((&columns * 120 + 181) / 363)
-exe '4resize ' . ((&lines * 42 + 44) / 89)
-exe 'vert 4resize ' . ((&columns * 121 + 181) / 363)
-exe '5resize ' . ((&lines * 42 + 44) / 89)
-exe 'vert 5resize ' . ((&columns * 120 + 181) / 363)
+exe '1resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
+exe '2resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
+exe '3resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 3resize ' . ((&columns * 70 + 105) / 211)
+exe '4resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 4resize ' . ((&columns * 69 + 105) / 211)
+exe '5resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 5resize ' . ((&columns * 70 + 105) / 211)
 argglobal
 3argu
 if bufexists("srcs/Server_tcp/Server_tcp_run.cpp") | buffer srcs/Server_tcp/Server_tcp_run.cpp | else | edit srcs/Server_tcp/Server_tcp_run.cpp | endif
@@ -1290,7 +1291,7 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 4 - ((3 * winheight(0) + 21) / 43)
+let s:l = 4 - ((3 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1425,7 +1426,7 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 2 - ((1 * winheight(0) + 21) / 43)
+let s:l = 2 - ((1 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1560,11 +1561,11 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 45 - ((40 * winheight(0) + 21) / 42)
+let s:l = 1 - ((0 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-45
+1
 normal! 0
 wincmd w
 argglobal
@@ -1695,7 +1696,7 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 3 - ((2 * winheight(0) + 21) / 42)
+let s:l = 3 - ((0 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1829,23 +1830,23 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 2 - ((1 * winheight(0) + 21) / 42)
+let s:l = 1 - ((0 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-2
+1
 normal! 0
 wincmd w
-exe '1resize ' . ((&lines * 43 + 44) / 89)
-exe 'vert 1resize ' . ((&columns * 181 + 181) / 363)
-exe '2resize ' . ((&lines * 43 + 44) / 89)
-exe 'vert 2resize ' . ((&columns * 181 + 181) / 363)
-exe '3resize ' . ((&lines * 42 + 44) / 89)
-exe 'vert 3resize ' . ((&columns * 120 + 181) / 363)
-exe '4resize ' . ((&lines * 42 + 44) / 89)
-exe 'vert 4resize ' . ((&columns * 121 + 181) / 363)
-exe '5resize ' . ((&lines * 42 + 44) / 89)
-exe 'vert 5resize ' . ((&columns * 120 + 181) / 363)
+exe '1resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
+exe '2resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
+exe '3resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 3resize ' . ((&columns * 70 + 105) / 211)
+exe '4resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 4resize ' . ((&columns * 69 + 105) / 211)
+exe '5resize ' . ((&lines * 25 + 27) / 54)
+exe 'vert 5resize ' . ((&columns * 70 + 105) / 211)
 tabnext
 edit srcs/Server_tcp/Server_tcp_utils.cpp
 set splitbelow splitright
@@ -1984,7 +1985,7 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 2 - ((1 * winheight(0) + 43) / 86)
+let s:l = 2 - ((1 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -2002,11 +2003,12 @@ badd +8 srcs/Server_tcp/Server_tcp_run.cpp
 badd +1 srcs/Server_tcp/Server_tcp_set_monitoring.cpp
 badd +1 srcs/Server_tcp/Server_tcp_shutdown.cpp
 badd +1 srcs/Server_tcp/Server_tcp_start_listening.cpp
-badd +0 srcs/Server_tcp/Server_tcp_utils.cpp
+badd +1 srcs/Server_tcp/Server_tcp_utils.cpp
+badd +1 includes/User.hpp
+badd +1 srcs/User.cpp
 badd +1 rest
 badd +91 ~/.vimrc
-badd +0 includes/User.hpp
-badd +0 srcs/User.cpp
+badd +0 srcs/Server_tcp/Server_tcp_get_infos.cpp
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

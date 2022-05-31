@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 16:31:45 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/25 14:36:17 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/31 10:41:23 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@
 //Flag used for throwin (or not) exception
 # define THROW true
 # define NO_THROW false
+
+//Buffer size for HOSTNAME
+#define HOSTNAME_SIZE 256
 
 //Buffer size for RECV message
 #define RECV_BUFF_SIZE 512

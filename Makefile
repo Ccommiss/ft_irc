@@ -11,8 +11,8 @@ ifeq ($(shell uname -s),Darwin)
 endif
 
 #The Target Binary Program
-TARGET				:= out
-TARGET_BONUS		:= out-bonus
+TARGET				:= ircserv
+TARGET_BONUS		:= ircserv-bonus
 
 
 BUILD				:= release

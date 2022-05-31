@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 11:42:25 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/24 19:10:48 by csejault         ###   ########.fr       */
+/*   Updated: 2022/05/31 10:52:40 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void Server::set_monitoring( void )
 	if ( 0 > (_efd = epoll_create1 (0)))
 		throw std::runtime_error("epoll_create1 failed");
 
-	debug(SV, "EFD = ", NOCR);
-	debug(SV, _efd);
 	//add listener to efd. Watch the event Epollin
 	struct epoll_event ev;
 	ev.events = EPOLLIN;
