@@ -42,7 +42,6 @@ User::~User()
 {
 	debug(US, presentation(), NOCR);
 	debug(US, "CLOSED");
-	std::cout << "NEED TO LEAVE ALL CHANS" << std::endl;
 	joined_chans.clear();
 }
 

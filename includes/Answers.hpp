@@ -423,7 +423,7 @@ inline void Server::numeric_reply(User *u, std::string code, std::string arg1, s
 	char *ptr;
 	txt.append(":");
 //	txt.append("localhost "); // remplacer par le define
-	txt.append(u->ip);
+	txt.append(_hostname);
 	txt.append(" ");
 	txt.append(code);
 	txt.append(" ");
