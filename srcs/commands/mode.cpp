@@ -3,6 +3,102 @@
 #include "Answers.hpp"
 
 /*
+** 
+**    Command: MODE
+**    Parameters: <nickname>
+**                *( ( "+" / "-" ) *( "i" / "w" / "o" / "O" / "r" ) )
+** 
+**    The user MODE's are typically changes which affect either how the
+**    client is seen by others or what 'extra' messages the client is sent.
+** 
+**    A user MODE command MUST only be accepted if both the sender of the
+**    message and the nickname given as a parameter are both the same.  If
+**    no other parameter is given, then the server will return the current
+**    settings for the nick.
+** 
+**       The available modes are as follows:
+** 
+**            a - user is flagged as away;
+**            i - marks a users as invisible;
+**            w - user receives wallops;
+**            r - restricted user connection;
+**            o - operator flag;
+**            O - local operator flag;
+**            s - marks a user for receipt of server notices.
+** 
+**    Additional modes may be available later on.
+** 
+**    The flag 'a' SHALL NOT be toggled by the user using the MODE command,
+**    instead use of the AWAY command is REQUIRED.
+** 
+**    If a user attempts to make themselves an operator using the "+o" or
+**    "+O" flag, the attempt SHOULD be ignored as users could bypass the
+**    authentication mechanisms of the OPER command.  There is no
+**    restriction, however, on anyone `deopping' themselves (using "-o" or
+**    "-O").
+** 
+**    On the other hand, if a user attempts to make themselves unrestricted
+**    using the "-r" flag, the attempt SHOULD be ignored.  There is no
+**    restriction, however, on anyone `deopping' themselves (using "+r").
+**    This flag is typically set by the server upon connection for
+**    administrative reasons.  While the restrictions imposed are left up
+**    to the implementation, it is typical that a restricted user not be
+**    allowed to change nicknames, nor make use of the channel operator
+**    status on channels.
+** 
+**    The flag 's' is obsolete but MAY still be used.
+** 
+**    Numeric Replies:
+** 
+**            ERR_NEEDMOREPARAMS              ERR_USERSDONTMATCH
+**            ERR_UMODEUNKNOWNFLAG            RPL_UMODEIS
+** 
+**    Examples:
+** 
+**    MODE WiZ -w                     ; Command by WiZ to turn off
+**                                    reception of WALLOPS messages.
+** 
+**    MODE Angel +i                   ; Command from Angel to make herself
+**                                    invisible.
+** 
+**    MODE WiZ -o                     ; WiZ 'deopping' (removing operator
+**                                    status).
+** 
+*/
+
+void handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector<std::string> cmd)
+{
+	/* No argument supplied, e.g. "MODE Wiz" : information is sent back */ 
+	if (cmd.size() == 2) 
+		return (s.numeric_reply(u, RPL_UMODEIS, nickname_asked, NONE, NONE));
+
+	std::string modes = trim(*(cmd.begin() + 2));		   // +=letters....
+	std::vector<std::string> mode_params; // vaut peut etre le coup d'envoyer juste une string car pas sure que puisse y avoir plusieurs args
+
+	(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); 
+	
+	/* Cannot ask modification for another username */ 
+	if (nickname_asked != u->nickname)
+		return s.numeric_reply(u, ERR_USERSDONTMATCH, u->nickname, NONE, NONE); // pas le droit de demander mode pour les autres
+
+	/* Setting the value. + is true, - is false */ 
+	bool value = modes[0] == '+' ? true : false;
+	for (size_t i = 1; i < modes.length(); i++)
+	{
+		std::string res = u->setMode(modes[i], value, mode_params);
+		if (res.length() != 0)
+			s.numeric_reply(u, res, u->nickname, NONE, NONE);
+		else
+		{
+			s.numeric_reply(u, RPL_CHANNELMODEIS, u->nickname, modes, vecToString(mode_params)); //
+			server_relay(u, cmd, u);
+		}
+	}
+}
+
+
+
+/*
 **    Command: MODE (channel)
 **    Parameters: <channel> *( ( "-" / "+" ) *<modes> *<modeparams> )
 **
@@ -22,15 +118,12 @@
 **            RPL_EXCEPTLIST (mask etc)       RPL_ENDOFEXCEPTLIST
 **            RPL_INVITELIST                  RPL_ENDOFINVITELIST
 **            RPL_UNIQOPIS
-*/
-// MODE #TRUC -/+[options] [mode params]
-
-/*
+**
 **    The various modes available for channels are as follows:
 **
-**         O - give "channel creator" status;               // VECTOR LIST
-**         o - give/take channel operator privilege;        // VECTOR LIST
-**         v - give/take the voice privilege;               // VECTOR LIST
+**         O - give "channel creator" status;               
+**         o - give/take channel operator privilege;        
+**         v - give/take the voice privilege;              
 **
 **         a - toggle the anonymous channel flag;
 **         i - toggle the invite-only channel flag;
@@ -55,18 +148,17 @@
 
 
 
-
-
-
-void handleUserModes()
+void	rpl_lists(Server &s, User *u, std::string chan_name, std::vector<std::string> list, std::string rpl_name, std::string rpl_end_name)
 {
-
+	for (size_t i = 0; i < list.size(); i++)
+		s.numeric_reply(u, rpl_name, chan_name, list.at(i), NONE);
+	s.numeric_reply(u, rpl_end_name, chan_name, to_str(list.size()), NONE);
 }
 
 
-void handleChannelModes(Server &s, User *u, std::vector<std::string> cmd)
+
+void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd)
 {
-	std::string chan_name 				= *(cmd.begin() + 1);
 	if (!s.chanExists(chan_name))
 	{
 		out("Chan does not exist") 
@@ -82,26 +174,21 @@ void handleChannelModes(Server &s, User *u, std::vector<std::string> cmd)
 
 	/* Note : to list info, one can ask for e.g. /mode #chan +b or /mode #chan I, so +/- is not
 	alway set. This is not taken into account yet */
+
 	Channel *chan = s.chans[chan_name];
-	bool value = modes[0] == '+' ? true : false;
-	for (size_t i = 1; i < modes.length(); i++)
+	int a = (modes[0] == '-' || modes[0] == '+') ? 1 : 0;
+	bool value = modes[0] == '-' ? false : true; /* Making true even if no + before mode option. */
+	/* if we have MODE something, starting at 0; else, starting at 1 to skip the +/- */ 
+	for (size_t i = a; i < modes.length(); i++)
 	{
 		std::string res = chan->setMode(u, modes[i], value, mode_params);
 		/* FOR RPL_BAN LIST, one answer per ban mask */
 		if (res == RPL_BANLIST || res == RPL_INVITELIST)// || res == RPL_EXCEPTLIST)
 		{
 			if (res == RPL_BANLIST)
-			{
-				for (size_t i = 0; i < chan->getBannedMasks().size(); i++)
-					s.numeric_reply(u, RPL_BANLIST, chan->_name, chan->getBannedMasks().at(i), NONE);
-				s.numeric_reply(u, RPL_ENDOFBANLIST, chan->_name, to_str(chan->getBannedMasks().size()), NONE);
-			}
+				rpl_lists(s, u, chan_name, chan->getBannedMasks(), RPL_BANLIST, RPL_ENDOFBANLIST);
 			else if (res == RPL_INVITELIST)
-			{
-				for (size_t i = 0; i < chan->getInvitedMasks().size(); i++)
-					s.numeric_reply(u, RPL_INVITELIST, chan->_name, chan->getInvitedMasks().at(i), NONE);
-				s.numeric_reply(u, RPL_ENDOFINVITELIST, chan->_name, NONE, NONE);
-			}
+				rpl_lists(s, u, chan_name, chan->getInvitedMasks(), RPL_INVITELIST, RPL_ENDOFINVITELIST);
 		}
 		else if (res.length() != 0)
 			s.numeric_reply(u, res, chan->_name, NONE, NONE);
@@ -109,53 +196,24 @@ void handleChannelModes(Server &s, User *u, std::vector<std::string> cmd)
 		{
 			std::string params = mode_params.size() > 0 ? vecToString(mode_params) : "No params";
 			s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, to_str(modes[i]), params); //
-			
 		}
 	}
 	server_relay(u, cmd, chan->getUsers());
 	chan->displayModes();
-
 }
+
+
+
 
 void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
 	if (cmd.size() == 1)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
-
 	std::string target = *(cmd.begin() + 1);
-
-	/* Channel Modes */
-	if (target[0] == '+') // ne supportent pas les chans modes
+	if (target[0] == '+') /* + (unmoderated) chans do not support modes or operators */ 
 		return (s.numeric_reply(u, ERR_NOCHANMODES, target, NONE, NONE));
 	if (target[0] == '#') // ou & ....
-	{
-		handleChannelModes(s, u, cmd);
-	}
-	/* User Modes a factoriser */
+		handleChannelModes(s, u, target, cmd);
 	else
-	{
-		std::string empty = " lol";
-		std::string nickname_asked = cmd.size() > 1 ? *(cmd.begin() + 1) : ""; // #truc
-		std::string modes = cmd.size() > 2 ? *(cmd.begin() + 2) : "";		   // +=....
-		std::vector<std::string> mode_params;
-		(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
-
-		if (nickname_asked != u->nickname)
-			return s.numeric_reply(u, ERR_USERSDONTMATCH, u->nickname, NONE, NONE); // pas le droit de demander mode pour les autres
-
-		bool value = modes[0] == '+' ? true : false;
-		for (size_t i = 1; i < modes.length(); i++)
-		{
-			/* A voir. Mode query pour limit par ex (flag l doit etre possible 4.2.9 rfc 2811) */
-			/* hypothese : si pas de valeur on voit genre MODE e, a tester */
-			std::string res = u->setMode(modes[i], value, mode_params);
-			if (res.length() != 0)
-				s.numeric_reply(u, res, u->nickname, NONE, NONE);
-			else
-			{
-				s.numeric_reply(u, RPL_CHANNELMODEIS, u->nickname, modes, vecToString(mode_params)); //
-				server_relay(u, cmd, u);
-			}
-		}
-	}
+		handleUserModes(s, u, target, cmd);
 }
