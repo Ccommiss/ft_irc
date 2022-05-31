@@ -129,7 +129,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 			s.numeric_reply(u, RPL_NAMREPLY, chan_name, NONE, NONE);
 			s.numeric_reply(u, RPL_ENDOFNAMES, chan_name, NONE, NONE);
 			if (s.chans[chan_name]->isTopicSet() == true)
-				s.numeric_reply(u, RPL_TOPIC, chan_name, NONE, NONE);
+				s.numeric_reply(u, RPL_TOPIC, chan_name, s.chans[chan_name]->getTopic(), NONE);
 		}
 		i++;
 	}

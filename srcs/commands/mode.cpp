@@ -198,7 +198,8 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 			s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, to_str(modes[i]), params); //
 		}
 	}
-	server_relay(u, cmd, chan->getUsers());
+	server_relay(u, cmd, chan->getUsers()); // si il est ban faut l'enlever apres... comment faire sans alourdir ?
+	chan->removeBannedFromUsers(); // trouver plus opti que le faire a chaque fois
 	chan->displayModes();
 }
 

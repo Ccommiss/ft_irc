@@ -54,6 +54,7 @@ public:
 	bool isOwner(User *u);
 	void setTopic(std::string topic);
 	size_t getLimit();
+	void	removeBannedFromUsers();
 	std::map<char, bool> &getModes();
 	std::string &getTopic();
 	std::string &getName();
