@@ -364,7 +364,9 @@ inline std::string server_relay(const User *u, std::vector<std::string> cmd, T u
 	txt.append(u->nickname);
 	txt.append("!");
 	txt.append(u->name); // username
-	txt.append("@localhost ");
+	txt.append("@");
+	txt.append(u->ip);
+	txt.append(" ");
 	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
 		txt.append(*it + " "); // on met touts les commandes dans le prefixe
 	txt = trim(txt);
@@ -383,7 +385,9 @@ inline std::string server_relay(const User *u, std::vector<std::string> cmd, Use
 	txt.append(u->nickname);
 	txt.append("!");
 	txt.append(u->name); // username
-	txt.append("@localhost ");
+	txt.append("@");
+	txt.append(u->ip);
+	txt.append(" ");
 	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
 		txt.append(*it + " "); // on met touts les commandes dans le prefixe
 	txt = trim(txt);
@@ -418,7 +422,9 @@ inline void Server::numeric_reply(User *u, std::string code, std::string arg1, s
 	std::string txt;
 	char *ptr;
 	txt.append(":");
-	txt.append("localhost "); // remplacer par le define
+//	txt.append("localhost "); // remplacer par le define
+	txt.append(u->ip);
+	txt.append(" ");
 	txt.append(code);
 	txt.append(" ");
 	txt.append(u->nickname); // lui qui va servir commenickname

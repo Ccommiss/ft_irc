@@ -53,3 +53,11 @@ std::string         implodeMessage(std::vector<std::string>::iterator begin, std
     std::vector<std::string> 	vec_msg(begin,end);
     return (vecToString(vec_msg));
 }
+
+std::string         toLower(std::string str)
+{
+    std::string res;
+    for (size_t x=0; x<str.length(); x++)
+        res.push_back(tolower(str[x]));
+    return res;
+}

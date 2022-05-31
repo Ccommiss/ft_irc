@@ -63,6 +63,8 @@ public:
 	void remove_user(User *new_user);
 	void addOperator(User *to_add);
 	void removeOperator(User *to_del);
+	void addBanned(User *to_add);
+	void removeBanned(User *to_del);
 	void addVoiced(User *to_add);
 	void removeVoiced(User *to_del);
 	void addToInviteList(User *to_add);
