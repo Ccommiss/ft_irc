@@ -134,6 +134,23 @@ std::vector<Channel *> const &User::getJoinedChannels()
 	return (this->joined_chans);
 }
 
+void    User::setAway(std::string msg)
+{
+	_modes['a'] = true;
+	_away_msg = msg;
+}
+
+bool 	User::isAway()
+{
+	return _modes['a'];
+}
+
+std::string &User::getAwayMsg()
+{
+	return _away_msg;
+}
+
+
 bool User::HasCompletedRegistration()
 {
 	if (!registered[USER] || !registered[NICK]) // rajouter pass 
@@ -216,7 +233,8 @@ std::string User::setMode(char mode, bool value, std::vector<std::string> params
 	case 'a': /* Away */
 	{
 		// NOT TOGGLED BY MODE BUT BY AWAY MSG SO RESTRICTION IN MODE MSG FOR a TODO
-		break;
+		return ERR_UMODEUNKNOWNFLAG;
+		//break;
 	}
 	case 'i': /* Invisible */
 	{

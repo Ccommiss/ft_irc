@@ -71,11 +71,11 @@
 #define MSG_262 "<server_name> <version>[.<debug_level>] :<info> Used to terminate a list of RPL_TRACE* replies"																														  /* RPL_TRACEEND */
 #define MSG_263 "<command> :<info> When a server drops a command without processing it, it MUST use this reply."																														  /* RPL_TRYAGAIN */
 #define MSG_300 "Dummy reply, supposedly only used for debugging/testing new features, however has appeared in production daemons."																										  /* RPL_NONE */
-#define MSG_301 "<nick> :<message> Used in reply to a command directed at a user who is marked as away"																																	  /* RPL_AWAY */
+#define MSG_301 arg1 + " :" + arg2 //Used in reply to a command directed at a user who is marked as away"																																	  /* RPL_AWAY */
 #define MSG_302 ":*1<reply> *( ' ' <reply> ) Reply used by USERHOST (see RFC)"																																							  /* RPL_USERHOST */
 #define MSG_303 ":*1<nick> *( ' ' <nick> ) Reply to the ISON command (see RFC)"																																							  /* RPL_ISON */
-#define MSG_305 ":<info> Reply from AWAY when no longer marked as away"																																									  /* RPL_UNAWAY */
-#define MSG_306 ":<info> Reply from AWAY when marked away"																																												  /* RPL_NOWAWAY */
+#define MSG_305 ": You are no longer marked as AWAY :)" 																																								  /* RPL_UNAWAY */
+#define MSG_306 ": You are marked as AWAY zZzZ" 																																											  /* RPL_NOWAWAY */
 #define MSG_311 arg1+ " " + arg2 + "localhost" + "* :" + arg3 + "<real_name>" // Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
 #define MSG_312 arg1+ " " + "<server> :<server_info> Reply to WHOIS - What server they're on"																																				  /* RPL_WHOISSERVER */
 #define MSG_313 arg1+ " :is an IRC operator" //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */

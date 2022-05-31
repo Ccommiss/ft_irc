@@ -34,5 +34,6 @@ SOURCES		+=             		\
 		srcs/commands/notice.cpp 		\
 		srcs/commands/list.cpp      	\
 		srcs/commands/oper.cpp      	\
+		srcs/commands/away.cpp      	\
 
 

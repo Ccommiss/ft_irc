@@ -36,6 +36,9 @@ public:
     void joinChan(Channel *chan);
     void leaveChan(Channel *chan);
     std::string     fullID();
+    void    setAway(std::string msg);
+    std::string &getAwayMsg();
+    bool isAway();
 
     /* Modes */
     void initModes();
@@ -58,6 +61,7 @@ public:
 
 private:
     std::map<char, bool> _modes;
+    std::string            _away_msg;
 };
 
 #endif
