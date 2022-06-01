@@ -4,11 +4,14 @@
 
 void Commands::pass(Server &s, User *u, std::vector<std::string> cmd)
 {
-	(void)s;
-	(void)u;
-	(void)cmd;
-
-	out("NEET TO CHECK NUERIC REPLY");
+	if (cmd.size() <= 1)
+		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, NONE, NONE, NONE));
 	if (s.pass_check(cmd[1]))
-		u->registered[User::PASS] = true;
+	{
+		if (!u->registered[User::PASS])
+			u->registered[User::PASS] = true;
+		else
+			return (s.numeric_reply(u, ERR_ALREADYREGISTERED, NONE, NONE, NONE));
+	}
+
 }
