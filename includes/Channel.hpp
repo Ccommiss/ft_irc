@@ -17,6 +17,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+# include <list>
 
 /*
 **         INVITE  - Invite a client to an invite-only channel (mode +i) //
@@ -88,15 +89,15 @@ public:
 private:
 	std::map<std::string *, User *> 	_users;
 	std::vector<User *> 				_operators;
-	std::vector<User *> 				_banned;
+	std::list<User *> 					_banned;
 	User 								*_owner;
 	User 								*_creator; // quelle est la diff ??
 	std::map<char, bool>				 _modes;
 	std::string 						_password;
 	std::vector<User *> 				_invited;
 	std::vector<User *> 				_voiced;
-	std::vector<std::string> 			_bannedMasks; // faire une list de masks 
-	std::vector<std::string> 			_invitedMasks; // faire une list de masks 
+	std::vector<std::string> 			_bannedMasks; // faire une list de masks
+	std::vector<std::string> 			_invitedMasks; // faire une list de masks
 	size_t								_limit;
 };
 

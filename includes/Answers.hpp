@@ -165,7 +165,7 @@
 #define ERR_471 arg1 + " :Cannot join channel (+l)"																																														  /* ERR_CHANNELISFULL */
 #define ERR_472 arg1 + " :is unknown mode char to me for " + arg2																																										  /* ERR_UNKNOWNMODE */
 #define ERR_473 arg1 + " :Cannot join channel (+i) (You must be invited)"																																								  /* ERR_INVITEONLYCHAN */
-#define ERR_474 arg1 + " :Cannot join channel (+b)"																																														  /* ERR_BANNEDFROMCHAN */
+#define ERR_474 arg1 + " :Cannot join channel (+b) (You're banned)"																																														  /* ERR_BANNEDFROMCHAN */
 #define ERR_475 arg1 + " :Cannot join channel (+k)"																																														  /* ERR_BADCHANNELKEY */
 #define ERR_476 arg1 + " :Bad Channel Mask"																																																  /* ERR_BADCHANMASK */
 #define ERR_477 arg1 + " :Channel doesn't support modes"																																												  /* ERR_NOCHANMODES */
