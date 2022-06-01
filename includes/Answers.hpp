@@ -126,14 +126,14 @@
 #define MSG_394 ":<info> Termination of an RPL_USERS list"																																												  /* RPL_ENDOFUSERS */
 #define MSG_395 ":<info> Reply to USERS when nobody is logged in"																																										  /* RPL_NOUSERS */
 #define ERR_401 arg1 + " :No such nick/channel" 				  /* ERR_NOSUCHNICK */
-#define ERR_402 "<server> :<reason> Used to indicate the server name given currently doesn't exist"																																		  /* ERR_NOSUCHSERVER */
+#define ERR_402 arg1 + " :Used to indicate the server name given currently doesn't exist"																																		  /* ERR_NOSUCHSERVER */
 #define ERR_403 arg1 + " :No such channel"																																																  /* ERR_NOSUCHCHANNEL */
 #define ERR_404 arg1 + " :Cannot send to channel"																																														  /* ERR_CANNOTSENDTOCHAN */
 #define ERR_405 "<channel> :<reason> Sent to a user when they have joined the maximum number of allowed channels and they tried to join another channel"																				  /* ERR_TOOMANYCHANNELS */
 #define ERR_406 "<nick> :<reason> Returned by WHOWAS to indicate there was no history information for a given nickname"																													  /* ERR_WASNOSUCHNICK */
 #define ERR_407 "<target> :<reason> The given target(s) for a command are ambiguous in that they relate to too many targets"																											  /* ERR_TOOMANYTARGETS */
 #define ERR_408 "<service_name> :<reason> Returned to a client which is attempting to send an SQUERY (or other message) to a service which does not exist"																				  /* ERR_NOSUCHSERVICE */
-#define ERR_409 ":<reason> PING or PONG message missing the originator parameter which is required since these commands must work without valid prefixes"																				  /* ERR_NOORIGIN */
+#define ERR_409 ":PING or PONG message missing the originator parameter which is required since these commands must work without valid prefixes"																				  /* ERR_NOORIGIN */
 #define ERR_411 ":<reason> Returned when no recipient is given with a command"																																							  /* ERR_NORECIPIENT */
 #define ERR_412 ":<reason> Returned when NOTICE/PRIVMSG is used with no message given"																																					  /* ERR_NOTEXTTOSEND */
 #define ERR_413 "<mask> :<reason> Used when a message is being sent to a mask without being limited to a top-level domain (i.e. * instead of *.au)"																						  /* ERR_NOTOPLEVEL */
