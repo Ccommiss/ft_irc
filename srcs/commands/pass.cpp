@@ -13,5 +13,7 @@ void Commands::pass(Server &s, User *u, std::vector<std::string> cmd)
 		else
 			return (s.numeric_reply(u, ERR_ALREADYREGISTERED, NONE, NONE, NONE));
 	}
+	else
+		s.numeric_reply(u, ERR_PASSWDMISMATCH, NONE, NONE, NONE);
 
 }

@@ -4,36 +4,36 @@
 
 
 /*
-**    Command: USER
-**    Parameters: <user> <mode> <unused> <realname>
-** 
-**    The USER command is used at the beginning of connection to specify
-**    the username, hostname and realname of a new user.
-** 
-**    The <mode> parameter should be a numeric, and can be used to
-**    automatically set user modes when registering with the server.  This
-**    parameter is a bitmask, with only 2 bits having any signification: if
-**    the bit 2 is set, the user mode 'w' will be set and if the bit 3 is
-**    set, the user mode 'i' will be set.  (See Section 3.1.5 "User
-**    Modes").
-** 
-**    The <realname> may contain space characters.
-** 
-**    Numeric Replies:
-** 
-**            ERR_NEEDMOREPARAMS              ERR_ALREADYREGISTRED
-** 
-**    Example:
-** 
-**    USER guest 0 * :Ronnie Reagan   ; User registering themselves with a
-**                                    username of "guest" and real name
-**                                    "Ronnie Reagan".
-** 
-**    USER guest 8 * :Ronnie Reagan   ; User registering themselves with a
-**                                    username of "guest" and real name
-**                                    "Ronnie Reagan", and asking to be set
-**                                    invisible.
-*/
+ **    Command: USER
+ **    Parameters: <user> <mode> <unused> <realname>
+ ** 
+ **    The USER command is used at the beginning of connection to specify
+ **    the username, hostname and realname of a new user.
+ ** 
+ **    The <mode> parameter should be a numeric, and can be used to
+ **    automatically set user modes when registering with the server.  This
+ **    parameter is a bitmask, with only 2 bits having any signification: if
+ **    the bit 2 is set, the user mode 'w' will be set and if the bit 3 is
+ **    set, the user mode 'i' will be set.  (See Section 3.1.5 "User
+ **    Modes").
+ ** 
+ **    The <realname> may contain space characters.
+ ** 
+ **    Numeric Replies:
+ ** 
+ **            ERR_NEEDMOREPARAMS              ERR_ALREADYREGISTRED
+ ** 
+ **    Example:
+ ** 
+ **    USER guest 0 * :Ronnie Reagan   ; User registering themselves with a
+ **                                    username of "guest" and real name
+ **                                    "Ronnie Reagan".
+ ** 
+ **    USER guest 8 * :Ronnie Reagan   ; User registering themselves with a
+ **                                    username of "guest" and real name
+ **                                    "Ronnie Reagan", and asking to be set
+ **                                    invisible.
+ */
 
 void Commands::setUser(Server &s, User *u, std::vector<std::string> cmd)
 {
@@ -43,7 +43,15 @@ void Commands::setUser(Server &s, User *u, std::vector<std::string> cmd)
 	out("Setting name to : " << *(cmd.begin() + 1));
 	u->setName(*(cmd.begin() + 1));
 	if (u->registered[User::USER] == false)
+	{
+		if (!u->registered[User::PASS])
+		{
+			s.numeric_reply(u, ERR_NEEDMOREPARAMS, NONE, NONE, NONE);
+			quit_s(s, u, cmd);
+			return;
+		}
 		u->registered[User::USER] = true;
+	}
 	if (u->HasCompletedRegistration() == true && u->registered[User::WELCOMED] == false)
 	{
 		s.numeric_reply(u, "001", NONE, NONE, NONE);

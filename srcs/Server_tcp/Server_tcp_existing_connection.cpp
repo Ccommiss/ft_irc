@@ -23,8 +23,8 @@ void Server::existing_connection( int sd )
 		debug(SV, strlen(buffer), NOCR);
 		debug(SV, " - MESSAGE = ", NOCR);
 		debug(SV, buffer);
-		cmds.parse_cmd(users[sd], *this);
 		out (users[sd]->presentation()); 
+		cmds.parse_cmd(users[sd], *this);
 	}
 	out ("end existing conn waiting")
 }
