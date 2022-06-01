@@ -53,6 +53,7 @@ void print(std::vector<std::string> vec)
 void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
 {
 	start;
+	out ("WESH");
 	out ("Buffer : " << s.buffer);
 	std::string buff(s.buffer);
 	std::vector<std::string> res = tokenize(buff, '\n');
