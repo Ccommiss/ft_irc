@@ -104,7 +104,7 @@ private:
 
 std::ostream &operator<<(std::ostream &o, Channel &i);
 
-std::string printNames(Channel *chan); // formatte, pour command names etc;
+std::string printNames(Channel *chan, User *u); // formatte, pour command names etc;
 std::string printModes(Channel *chan); // formatte, pour command list etc;
 
 #endif /* ********************************************************* CHANNEL_H */

@@ -87,11 +87,11 @@
 #define MSG_319 arg1 + " :" + arg2 // " :*( ( '@' / '+' ) <channel> ' ' ) Reply to WHOIS - Channel list for user (See RFC)"																																  /* RPL_WHOISCHANNELS */
 #define MSG_322 arg1 + " " + printModes(s.chans[arg1]) + " :" + arg3 // Channel list - A channel"																																								  /* RPL_LIST */
 #define MSG_323 ": End of channel list."																																													  /* RPL_LISTEND */
-#define MSG_324 ":" + arg1 + " " + arg2 + " " + arg3 																																														  /* RPL_CHANNELMODEIS */
+#define MSG_324 arg1 + " " + arg2 + " " + arg3 																																														  /* RPL_CHANNELMODEIS */
 #define MSG_325 "<channel> <nickname>"																																																	  /* RPL_UNIQOPIS */
 #define MSG_331 arg1 + " :No topic is set."																																																  /* RPL_NOPIC */
 #define MSG_332 arg1 + " :" + arg2																																																		  /* RPL_TOPIC */
-#define MSG_341 ":" + arg1 + " " + user->nickname																																														  /* RPL_INVITING */
+#define MSG_341 arg1 + " " + arg2 // "<channel> <nick>" 																																														  /* RPL_INVITING */
 #define MSG_342 "<user> :<info> Returned by a server answering a SUMMON message to indicate that it is summoning that user"																												  /* RPL_SUMMONING */
 #define MSG_346 arg1 + " " + arg2 // <invitemask> An invite mask for the invite mask list"																																						  /* RPL_INVITELIST */
 #define MSG_347 arg1 + " :End of invite list ! :) "// Termination of an RPL_INVITELIST list"																																								  /* RPL_ENDOFINVITELIST */
@@ -99,7 +99,7 @@
 #define MSG_349 "<channel> :<info> Termination of an RPL_EXCEPTLIST list. Also known as RPL_ENDOFEXLIST (Unreal, Ultimate)"																												  /* RPL_ENDOFEXCEPTLIST */
 #define MSG_351 "<version>[.<debuglevel>] <server> :<comments> Reply by the server showing its version details, however this format is not often adhered to"																			  /* RPL_VERSION */
 #define MSG_352 "<channel> <user> <host> <server> <nick> <H|G>[*][@|+] :<hopcount> <real_name> Reply to vanilla WHO (See RFC)."																											  /* RPL_WHOREPLY */
-#define MSG_353 "= " + arg1 + " :" + printNames(s.chans[arg1])																																											  // il faut le serveur ou le chan a minima                    //CHANGER EN FO Status"
+#define MSG_353 "= " + arg1 + " :" + printNames(s.chans[arg1], user)																																											  // il faut le serveur ou le chan a minima                    //CHANGER EN FO Status"
 #define MSG_354 "Reply to WHO, however it is a 'special' reply because it is returned using a non-standard "																															  /* RPL_WHOSPCRPL */
 #define MSG_361 ""																																																						  /* RPL_KILLDONE */
 #define MSG_362 ""																																																						  /* RPL_CLOSING */

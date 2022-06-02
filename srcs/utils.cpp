@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iterator>
 #include <cstring>
+#include <list>
 
 const std::string WHITESPACE = " \n\r\t\f\v";
 
@@ -34,11 +35,28 @@ std::string vecToString(std::vector<std::string> input)
     return imploded.str();
 }
 
+
 std::vector<std::string> tokenize(std::string const &str, const char delim)
 {
     size_t start;
     size_t end = 0;
     std::vector<std::string> out;
+
+    while ((start = str.find_first_not_of(delim, end)) != std::string::npos)
+    {
+        end = str.find(delim, start);
+        out.push_back(trim(str.substr(start, end - start))); // test addinng trim there
+    }
+    return out;
+}
+
+
+
+std::list<std::string> tokenize_list(std::string const &str, const char delim)
+{
+    size_t start;
+    size_t end = 0;
+    std::list<std::string> out;
 
     while ((start = str.find_first_not_of(delim, end)) != std::string::npos)
     {

@@ -46,27 +46,45 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
-	std::string chan_name = *(cmd.begin() + 1);
-	std::string user_name = *(cmd.begin() + 2);
+	std::list<std::string> chan_names = tokenize_list(*(cmd.begin() + 1), ',');
+	std::list<std::string> user_names = tokenize_list(*(cmd.begin() + 2), ',');
 	std::string msg = implodeMessage(cmd.begin() + 3, cmd.end());
 	User *to_kick = NULL;
 
-	if (!s.chanExists(chan_name))
-		return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE));
-	else if (!s.chans[chan_name]->isOperator(u))
-		return (s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan_name, NONE, NONE));
-	else if (s.chans[chan_name]->findByName(user_name, &to_kick) == false)
-		return (s.numeric_reply(u, ERR_USERNOTINCHANNEL, chan_name, NONE, NONE));
-	else if (s.chans[chan_name]->findByName(user_name, &to_kick) == true)
+	/* Two option to be syntaxically correct : or one channel and multiple user, or as much ppl as channel */
+	//if (chan_names.size() != 1 && user_names.size() != chan_names.size())
+	//	return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
+	/* Ignored to be compliant with Irssi way of doing */ 
+
+
+	for (std::list<std::string>::iterator chanToKick = chan_names.begin(); chanToKick != chan_names.end(); chanToKick++)
 	{
-		out("KICKING" << to_kick->getNickName());
-		server_relay(u, cmd, s.chans[chan_name]->getUsers());
-		s.chans[chan_name]->remove_user(to_kick);
-		to_kick->leaveChan(s.chans[chan_name]);
-		if (s.chans[chan_name]->getUsers().size() == 0)
+		std::vector<std::string> txt;
+		txt.push_back("KICK");
+		std::string chan_name = *chanToKick;
+		txt.push_back(chan_name);
+		if (!s.chanExists(chan_name))
+			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE));
+		else if (!s.chans[chan_name]->isOperator(u))
+			return (s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan_name, NONE, NONE));
+		for (std::list<std::string>::iterator user_name = user_names.begin(); user_name != user_names.end(); user_name++)
 		{
-			delete s.chans[chan_name];				
-			s.chans.erase(s.chans.find(chan_name));
+			if (s.chans[chan_name]->findByName(*user_name, &to_kick) == false)
+				return (s.numeric_reply(u, ERR_USERNOTINCHANNEL, chan_name, NONE, NONE));
+			else if (s.chans[chan_name]->findByName(*user_name, &to_kick) == true)
+			{
+				out("KICKING" << to_kick->getNickName());
+				txt.push_back(to_kick->getNickName());
+				txt.push_back(msg);
+				server_relay(u, txt, s.chans[chan_name]->getUsers());
+				s.chans[chan_name]->remove_user(to_kick);
+				to_kick->leaveChan(s.chans[chan_name]);
+				if (s.chans[chan_name]->getUsers().size() == 0)
+				{
+					delete s.chans[chan_name];
+					s.chans.erase(s.chans.find(chan_name));
+				}
+			}
 		}
 	}
 }

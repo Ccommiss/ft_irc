@@ -339,18 +339,21 @@ void Channel::displayModes()
 	out("Password is : " << _password);
 }
 
-std::string printNames(Channel *chan)
+std::string printNames(Channel *chan, User *u)
 {
 	std::string names;
 	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin(); it != chan->getUsers().end(); it++)
 	{
 		// if is op... @, sinon +
-		if (chan->isOperator(it->second))
-			names.append("@");
-		else
-			names.append("");
-		names.append(*it->first);
-		names.append(" ");
+		if (!(it->second->hasMode('i') && !chan->isInChan(u))) // invisible 
+		{
+			if (chan->isOperator(it->second))
+				names.append("@");
+			else
+				names.append("");
+			names.append(*it->first);
+			names.append(" ");
+		}
 	}
 	return names;
 }
@@ -492,7 +495,7 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 		if (findByName(trim(param), &user) == true)
 			value == true ? addOperator(user) : removeOperator(user); // faut il erreur si ajoute deux fois ?
 		else
-			out(" not in channel "); // surement un erreur ? laquelle ?
+			return ERR_NOSUCHNICK; // surement un erreur ? laquelle ?
 		break;
 	}
 	case 'O': /* give "channel creator" status; see Safe Channels with ! */
@@ -514,7 +517,7 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 		if (findByName(trim(param), &user) == true)
 			value == true ? addVoiced(user) : removeVoiced(user); // faut il erreur si ajoute deux fois ?
 		else
-			out("Voice : unfound user"); // surement un erreur ? laquelle ?
+			return ERR_NOSUCHNICK; // surement un erreur ? laquelle ?
 		break;
 	}
 	case 'i': /* Making invite only */

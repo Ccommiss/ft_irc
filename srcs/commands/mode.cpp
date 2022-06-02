@@ -163,12 +163,20 @@ bool	takeArg(char mode)
 	{
 		case 'l':
 			return true;
+		case 'e':
+			return true;
+		case 'I':
+			return true;
 		case 'k':
 			return true;
 		case 'b':
 			return true;
-		case 'I':
-			return true; 
+		case 'v':
+			return true;
+		case 'o':
+			return true;
+		case 'O':
+			return true;
 	}
 	out ("NOT TAKE ARG");
 	return false;
@@ -230,6 +238,8 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 			else if (res == RPL_INVITELIST)
 				rpl_lists(s, u, chan_name, chan->getInvitedMasks(), RPL_INVITELIST, RPL_ENDOFINVITELIST);
 		}
+		else if (res == ERR_NOSUCHNICK)
+			s.numeric_reply(u, res, currParam, NONE, NONE);
 		else if (res.length() != 0) /* Erreur */
 			s.numeric_reply(u, res, chan->_name, NONE, NONE);
 		else /* ca a marche */ 
@@ -242,7 +252,8 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 	}
 	/* Si une erreur, ne pas envoyer ? */
 	msg += " " + workingparams;
-	server_relay(u, tokenize(msg, ' '), chan->getUsers()); // si il est ban faut l'enlever apres... comment faire sans alourdir ?
+	if (workingparams.length() != 0) // meme si vide y a des espaces 
+		server_relay(u, tokenize(msg, ' '), chan->getUsers()); // si il est ban faut l'enlever apres... comment faire sans alourdir ?
 	chan->removeBannedFromUsers(); // trouver plus opti que le faire a chaque fois
 	chan->displayModes();
 }
