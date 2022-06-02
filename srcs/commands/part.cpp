@@ -34,16 +34,14 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 
 	for (std::vector<std::string>::iterator nb_chans_it = out.begin(); nb_chans_it != out.end(); nb_chans_it++)
 	{
-		out ("CURR FOUND" << *nb_chans_it)
 		std::string chan_name 									= trim(*nb_chans_it);
-		std::map<std::string, Channel *>::const_iterator it 	= s.chans.find(chan_name);
-		out ("FOUND :" << it->first)
-		s.printChans();
-		if (it == s.chans.end())
+		if (!s.chanExists(chan_name) || (s.chanExists(chan_name) && s.chans[chan_name]->isPrivateForUser(u)))
 			return (s.numeric_reply(u, ERR_NOSUCHCHANNEL, chan_name, NONE, NONE));
-		if (it != s.chans.end())
+		else
 		{
 			std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
+			if (!s.chans[chan_name]->isInChan(u))
+				return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, NONE, NONE));
 			s.chans[chan_name]->remove_user(u);
 			u->leaveChan(s.chans[chan_name]);
 			if (s.chans[chan_name]->getUsers().size() == 0)
@@ -60,7 +58,7 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 			std::vector<std::string> part_chan_msg(msg, msg + 3);
 			server_relay(u, part_chan_msg, chan_users);
 		}
-		
+
 	}
 
 }

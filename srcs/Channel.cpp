@@ -170,6 +170,13 @@ bool Channel::findByName(std::string nick, User **u)
 	return false;
 }
 
+bool	Channel::isPrivateForUser(User *u)
+{
+	if ((hasMode('s') || hasMode('p')) && !isInChan(u))
+			return true;
+	return false;
+}
+
 bool Channel::hasKey()
 {
 	return (_modes['k']);

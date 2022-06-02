@@ -53,6 +53,7 @@ public:
 	bool isOperator(User *u);
 	bool isVoiced(User *u);
 	bool isOwner(User *u);
+	bool	isPrivateForUser(User *u);
 	void setTopic(std::string topic);
 	size_t getLimit();
 	void	removeBannedFromUsers();
