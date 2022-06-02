@@ -158,7 +158,7 @@
 #define ERR_461 arg1 + " :Not enough parameters"																																														  /* ERR_NEEDMOREPARAMS */
 #define ERR_462 ":Unauthorized command (already registered)"																																											  /* ERR_ALREADYREGISTERED */
 #define ERR_463 ":Your host isn't among the privileged"																																													  /* ERR_NOPERMFORHOST */
-#define ERR_464 ":Password incorrect"																																																	  /* ERR_PASSWDMISMATCH */
+#define ERR_464 arg1 + ":Password incorrect"																																																	  /* ERR_PASSWDMISMATCH */
 #define ERR_465 ":You are banned from this server"																																														  /* ERR_YOUREBANNEDCREEP */
 #define ERR_466 ""																																																						  /* ERR_YOUWILLBEBANNED  , no msg */
 #define ERR_467 arg1 + " :Channel key already set"																																														  /* ERR_KEYSET */

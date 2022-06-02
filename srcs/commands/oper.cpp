@@ -31,8 +31,8 @@ void Commands::oper			(Server &s, User *u, std::vector<std::string> cmd)
 	std::string pass = *(cmd.begin() + 2);
 
 	// si password avec le serveur est pas bon ? what is password ?
-	if (s.oper_pass_check(pass))
-		return (s.numeric_reply(u, ERR_PASSWDMISMATCH, pass, NULL, NULL));
+	if (!s.oper_pass_check(pass))
+		return (s.numeric_reply(u, ERR_PASSWDMISMATCH, pass, NONE, NONE));
 
 	u->setOneKeyMode('O', true); // grand O ou petit o ?
 	return (s.numeric_reply(u, RPL_YOUREOPER, NONE, NONE, NONE));
