@@ -1,6 +1,7 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 #include <map>
+#include <list>
 #include "User.hpp"
 #include "Debug.hpp"
 
@@ -58,6 +59,7 @@ bool					pattern_match (std::string str, std::string pattern);
 std::string					trim(const std::string &s);
 std::string					ltrim(const std::string &s);
 std::vector<std::string> 	tokenize(std::string const &str, const char delim);
+std::list<std::string> 		tokenize_list(std::string const &str, const char delim);
 std::string					vecToString(std::vector<std::string> input);
 std::string					implodeMessage(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end);
 std::string					toLower(std::string str);

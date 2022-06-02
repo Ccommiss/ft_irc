@@ -36,20 +36,26 @@
 **                                    channels and users
 **
 */
+
 void Commands::names			(Server &s, User *u, std::vector<std::string> cmd)
 {
 	if (cmd.size() == 1) // tous les channel et tous users
 	{
-		//printNames
+		for (std::map<std::string, Channel*>::iterator it = s.chans.begin(); it != s.chans.end(); it++)
+		{
+			if (!it->second->isPrivateForUser(u))
+			{
+				s.numeric_reply(u, RPL_NAMREPLY, it->first, NONE, NONE);
+				s.numeric_reply(u, RPL_ENDOFNAMES, it->first, NONE, NONE);
+			}	
+		}
 	}
 	else
 	{
 		std::vector<std::string> chans  = tokenize(*(cmd.begin() + 1), ',');
 		for (size_t i = 0; i < chans.size(); i++)
 		{
-			out ("nb chans : " << s.chans.size());
-			out ("i " << chans[i]);
-			if (s.chanExists(chans[i]) &&  (!((s.chans[chans[i]]->hasMode('s') || s.chans[chans[i]]->hasMode('p')) && !s.chans[chans[i]]->isInChan(u)))) // a tester
+			if (s.chanExists(chans[i]) && !s.chans[chans[i]]->isPrivateForUser(u))
 			{
 				s.numeric_reply(u, RPL_NAMREPLY, chans[i], NONE, NONE);
 				s.numeric_reply(u, RPL_ENDOFNAMES ,chans[i], NONE, NONE);

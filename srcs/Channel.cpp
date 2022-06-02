@@ -170,6 +170,13 @@ bool Channel::findByName(std::string nick, User **u)
 	return false;
 }
 
+bool	Channel::isPrivateForUser(User *u)
+{
+	if ((hasMode('s') || hasMode('p')) && !isInChan(u))
+			return true;
+	return false;
+}
+
 bool Channel::hasKey()
 {
 	return (_modes['k']);
@@ -332,18 +339,21 @@ void Channel::displayModes()
 	out("Password is : " << _password);
 }
 
-std::string printNames(Channel *chan)
+std::string printNames(Channel *chan, User *u)
 {
 	std::string names;
 	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin(); it != chan->getUsers().end(); it++)
 	{
 		// if is op... @, sinon +
-		if (chan->isOperator(it->second))
-			names.append("@");
-		else
-			names.append("");
-		names.append(*it->first);
-		names.append(" ");
+		if (!(it->second->hasMode('i') && !chan->isInChan(u))) // invisible 
+		{
+			if (chan->isOperator(it->second))
+				names.append("@");
+			else
+				names.append("");
+			names.append(*it->first);
+			names.append(" ");
+		}
 	}
 	return names;
 }
@@ -410,10 +420,9 @@ void Channel::printBanned() // const
 ** --------------------------------- MODES METHODS ----------------------------------
 */
 
-std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::string> params) // on va renvoyer le code erreur ou bien  0
+std::string Channel::setMode(User *u, char mode, bool value, std::string param) // on va renvoyer le code erreur ou bien  0
 {
 	start;
-	out ("PARAMS SIZE = " << params.size())
 	(void)u;
 	if (!_modes.count(mode)) /* Checking if mode exists */
 		return ERR_UNKNOWNMODE;
@@ -429,15 +438,15 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 	}
 	case 'b': /* Bannir un user/un masque */
 	{
-		if (value == true && params.size() == 0)
+		if (value == true && trim(param).length() == 0)
 			return RPL_BANLIST;
-		if (value == false && params.size() == 0)
+		if (value == false && trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS; //  a verifier
 		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
 			return ERR_CHANOPRIVSNEEDED;
 		if (value == true)
 		{
-			_bannedMasks.push_back(trim(params[0]));
+			_bannedMasks.push_back(trim(param));
 
 			for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it ++)
 			{
@@ -447,8 +456,8 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 		}
 		else if (value == false)
 		{
-			if (std::find(_bannedMasks.begin(), _bannedMasks.end(), trim(params[0])) != _bannedMasks.end())
-				_bannedMasks.erase(std::find(_bannedMasks.begin(), _bannedMasks.end(), trim(params[0])));
+			if (std::find(_bannedMasks.begin(), _bannedMasks.end(), trim(param)) != _bannedMasks.end())
+				_bannedMasks.erase(std::find(_bannedMasks.begin(), _bannedMasks.end(), trim(param)));
 			for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); )
 			{
 				std::list<User *>::iterator tmp = it;
@@ -467,48 +476,48 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 	}
 	case 'k':
 	{
-		if (params.size() == 0)
+		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;			  // faudra renvoyer erreur
 		if (value == true && _modes['k'] == true) // on veut changer alors que deja existant
 			return ERR_KEYSET;
 		else if (value == true)
-			_password = trim(params[0]);
-		else if (value == false && trim(params[0]) != _password) // on essaie d'enever le pass mais mavais
+			_password = trim(param);
+		else if (value == false && trim(param) != _password) // on essaie d'enever le pass mais mavais
 			return ERR_KEYSET;									 // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
 		break;
 	}
 	case 'o': // give channel op status
 	{
-		if (params.size() == 0)
+		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
 		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
 			return ERR_CHANOPRIVSNEEDED;
-		if (findByName(trim(params[0]), &user) == true)
+		if (findByName(trim(param), &user) == true)
 			value == true ? addOperator(user) : removeOperator(user); // faut il erreur si ajoute deux fois ?
 		else
-			out(" not in channel "); // surement un erreur ? laquelle ?
+			return ERR_NOSUCHNICK; // surement un erreur ? laquelle ?
 		break;
 	}
 	case 'O': /* give "channel creator" status; see Safe Channels with ! */
 	{
-		if (params.size() == 0)
+		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
 		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
 			return ERR_CHANOPRIVSNEEDED;
-		if (findByName(trim(params[0]), &user) == true)
+		if (findByName(trim(param), &user) == true)
 			value == true ? _creator = user : _creator = NULL; // je sais pas trop
 		break;
 	}
 	case 'v': /* Voice privilege */
 	{
-		if (params.size() == 0)
+		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
 		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
 			return ERR_CHANOPRIVSNEEDED;
-		if (findByName(trim(params[0]), &user) == true)
+		if (findByName(trim(param), &user) == true)
 			value == true ? addVoiced(user) : removeVoiced(user); // faut il erreur si ajoute deux fois ?
 		else
-			out("Voice : unfound user"); // surement un erreur ? laquelle ?
+			return ERR_NOSUCHNICK; // surement un erreur ? laquelle ?
 		break;
 	}
 	case 'i': /* Making invite only */
@@ -517,17 +526,17 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 	}
 	case 'I': /* Overrides invite only by setting masks ; can be form MODE +b *.*@fsjkf.com OR MODE +b username */
 	{
-		if (value == true && trim(params[0]).length() == 0)
+		if (value == true && trim(param).length() == 0)
 			return RPL_INVITELIST; // list invite
 		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
 			return ERR_CHANOPRIVSNEEDED;
 		/* Just push back invite masks ; then, join has to do the check */
 		if (value == true)
-			_invitedMasks.push_back(trim(params[0]));
+			_invitedMasks.push_back(trim(param));
 		else if (value == false) // enlever le pattern de la list invite
 		{
-			if (std::find(_invitedMasks.begin(), _invitedMasks.end(), trim(params[0])) != _invitedMasks.end())
-				_invitedMasks.erase(std::find(_invitedMasks.begin(), _invitedMasks.end(), trim(params[0])));
+			if (std::find(_invitedMasks.begin(), _invitedMasks.end(), trim(param)) != _invitedMasks.end())
+				_invitedMasks.erase(std::find(_invitedMasks.begin(), _invitedMasks.end(), trim(param)));
 		}
 		break;
 	}
@@ -546,12 +555,13 @@ std::string Channel::setMode(User *u, char mode, bool value, std::vector<std::st
 	case 'l': /* User limits to channel. ex +l 10 to 10 as limit or -l to remove */
 	{
 		// que se pass t il si set limite inferieure au nb deja en cours ?
-		if (value == true && params.size() == 0)
+		out ("PARMAS SIZE = " << param.size());
+		if (value == true && trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
 		/* peut etre des checks a faire genre si ca commence par - etc. */
-		if (params[0][0] == '-')
-			break ; // Pas d'erreurs specifiques pour ce cas
-		value == true ? _limit = strtol(trim(params[0]).c_str(), NULL, 10) : _limit = 0;
+		if (param[0] == '-')
+			break ; // Pas d'erreurs specifiques pour ce cas, limite -10 par ex
+		value == true ? _limit = strtol(trim(param).c_str(), NULL, 10) : _limit = 0;
 		value == true ? printf(" added _limit : %lu\n", _limit) : printf(" removed _limit : %lu\n", _limit);
 		break; // to do
 	}

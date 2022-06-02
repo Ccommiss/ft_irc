@@ -53,6 +53,7 @@ public:
 	bool isOperator(User *u);
 	bool isVoiced(User *u);
 	bool isOwner(User *u);
+	bool	isPrivateForUser(User *u);
 	void setTopic(std::string topic);
 	size_t getLimit();
 	void	removeBannedFromUsers();
@@ -80,7 +81,7 @@ public:
 	void seeBannedmasks();
 
 	/* Modes related function */
-	std::string setMode(User *u, char mode, bool value, std::vector<std::string> params);
+	std::string setMode(User *u, char mode, bool value, std::string param);
 	void displayModes();
 
 	std::string _name; // nom du chan
@@ -103,7 +104,7 @@ private:
 
 std::ostream &operator<<(std::ostream &o, Channel &i);
 
-std::string printNames(Channel *chan); // formatte, pour command names etc;
+std::string printNames(Channel *chan, User *u); // formatte, pour command names etc;
 std::string printModes(Channel *chan); // formatte, pour command list etc;
 
 #endif /* ********************************************************* CHANNEL_H */
