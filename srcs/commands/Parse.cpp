@@ -24,7 +24,7 @@ void print(std::vector<std::string> vec)
 void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
 {
 	start;
-	out ("Buffer : " << user->buffer);
+	out ("Buffer - START" << std::endl  << user->buffer << std::endl << "Buffer - STOP");
 	std::string buff(user->buffer);
 	std::vector<std::string> res = tokenize(buff, '\n');
 	for (std::vector<std::string>::iterator line = res.begin(); line != res.end(); line++)
