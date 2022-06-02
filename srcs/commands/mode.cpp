@@ -260,8 +260,6 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 }
 
 
-
-
 void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
 	if (cmd.size() == 1)
