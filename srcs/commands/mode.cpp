@@ -157,6 +157,18 @@ void	rpl_lists(Server &s, User *u, std::string chan_name, std::vector<std::strin
 }
 
 
+bool	takeArg(char mode)
+{
+	switch (mode)
+	{
+		case 'l':
+			return true;
+		case 'k':
+			return true; 
+	}
+	out ("NOT TAKE ARG");
+	return false;
+}
 
 void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd)
 {
@@ -170,7 +182,7 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 		return (s.numeric_reply(u, RPL_CHANNELMODEIS, chan_name, printModes(s.chans[chan_name]), NONE)); //
 
 	std::string modes 					= *(cmd.begin() + 2);
-	std::vector<std::string> mode_params;
+	std::vector<std::string> 			mode_params;
 	(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
 
 
@@ -182,10 +194,30 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 	bool value = modes[0] == '-' ? false : true; /* Making true even if no + before mode option. */
 	/* if we have MODE something, starting at 0; else, starting at 1 to skip the +/- */
 	out ("Before loop")
+
+	int paramLocation = 0;
+	std::string msg = "MODE " + chan_name + " "; /*Le msg n'affiche que ce qui a fonctionne */ 
+	msg += modes[0]; //
+	std::string workingparams = "";
 	for (size_t i = a; i < modes.length(); i++)
 	{
+		
 		out ("in loop")
-		std::string res = chan->setMode(u, modes[i], value, mode_params);
+		std::string currParam = "";
+		if (takeArg(modes[i]) && i <= mode_params.size() + 1) // i commence a 1; donc arg 1 va avec param 0 etc.
+		{
+			try 
+			{
+				currParam = mode_params.at(paramLocation);
+				paramLocation++;
+			}
+			catch (std::exception &e)
+			{
+				currParam = "";
+			}
+		}
+		std::string res = chan->setMode(u, modes[i], value, currParam);
+
 		/* FOR RPL_BAN LIST, one answer per ban mask */
 		if (res == RPL_BANLIST || res == RPL_INVITELIST)// || res == RPL_EXCEPTLIST)
 		{
@@ -194,15 +226,19 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 			else if (res == RPL_INVITELIST)
 				rpl_lists(s, u, chan_name, chan->getInvitedMasks(), RPL_INVITELIST, RPL_ENDOFINVITELIST);
 		}
-		else if (res.length() != 0)
+		else if (res.length() != 0) /* Erreur */
 			s.numeric_reply(u, res, chan->_name, NONE, NONE);
-		else
+		else /* ca a marche */ 
 		{
-			std::string params = mode_params.size() > 0 ? vecToString(mode_params) : "No params";
+			workingparams += currParam + " ";
+			msg += modes[i]; // on rajoute la lettre
+			std::string params = trim(mode_params[0]).length() > 0 ? vecToString(mode_params) : "";
 			s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, to_str(modes[i]), params); //
 		}
 	}
-	server_relay(u, cmd, chan->getUsers()); // si il est ban faut l'enlever apres... comment faire sans alourdir ?
+	/* Si une erreur, ne pas envoyer ? */
+	msg += " " + workingparams;
+	server_relay(u, tokenize(msg, ' '), chan->getUsers()); // si il est ban faut l'enlever apres... comment faire sans alourdir ?
 	chan->removeBannedFromUsers(); // trouver plus opti que le faire a chaque fois
 	chan->displayModes();
 }

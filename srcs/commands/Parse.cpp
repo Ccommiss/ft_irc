@@ -15,35 +15,6 @@ void print(std::vector<std::string> vec)
 }
 
 /*
-**  split
-**  @brief parses the commands as received for example : NICK <newname>
-**  @param x the string to be parsed
-**  @returns a vector of string containeing the totality of the given string
-*/
-// std::vector<std::string> split(std::string x)
-// {
-// 	char delim = ' ';
-// 	x += delim; // includes a delimiter at the end so last word is also read
-// 	std::vector<std::string> splitted;
-// 	std::string temp = "";
-// 	for (unsigned long i = 0; i < x.length(); i++)
-// 	{
-// 		if (x[i] == delim || x[i] == '\n')
-// 		{
-// 			splitted.push_back(trim(temp)); // store words in "splitted" vector
-// 			temp = "";
-// 			if (x[i] == '\n')
-// 			{
-// 				splitted.push_back("\n");
-// 			}
-// 			i++;
-// 		}
-// 		temp += x[i];
-// 	}
-// 	return splitted;
-// }
-
-/*
 **  parse_cmd
 **  @brief parses the commands as received for example : NICK <newname>
 **  @param user the user (client) that initiated the request
@@ -53,7 +24,6 @@ void print(std::vector<std::string> vec)
 void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
 {
 	start;
-	out ("WESH");
 	out ("Buffer : " << s.buffer);
 	std::string buff(s.buffer);
 	std::vector<std::string> res = tokenize(buff, '\n');

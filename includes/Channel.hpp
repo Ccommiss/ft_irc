@@ -81,7 +81,7 @@ public:
 	void seeBannedmasks();
 
 	/* Modes related function */
-	std::string setMode(User *u, char mode, bool value, std::vector<std::string> params);
+	std::string setMode(User *u, char mode, bool value, std::string param);
 	void displayModes();
 
 	std::string _name; // nom du chan

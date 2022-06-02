@@ -56,7 +56,7 @@ void createChan(Server &s, std::string chan_name, User *u, bool *joined)
 {
 	Channel *chan = new Channel(chan_name, u);
 	if (chan_name[0] == '+')
-		chan->setMode(u, 't', true, std::vector<std::string>()); /* + channel are unmoderated, only t is toggled see 2.3 rfc 2811 */
+		chan->setMode(u, 't', true, ""); /* + channel are unmoderated, only t is toggled see 2.3 rfc 2811 */
 	u->joinChan(chan);
 	s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
 	*joined = true;
