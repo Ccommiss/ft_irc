@@ -25,23 +25,23 @@ Channel::Channel() : _owner(0)
 
 Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _password(""), _limit(0)
 {
-	_modes.insert(std::make_pair('O', false));
-	_modes.insert(std::make_pair('o', false));
-	_modes.insert(std::make_pair('v', false));
-	_modes.insert(std::make_pair('a', false));
-	_modes.insert(std::make_pair('i', false));
-	_modes.insert(std::make_pair('m', false));
-	_modes.insert(std::make_pair('n', true)); /* Forbid messages from outside, usually set to true */
-	_modes.insert(std::make_pair('q', false));
-	_modes.insert(std::make_pair('p', false));
-	_modes.insert(std::make_pair('s', false));
-	_modes.insert(std::make_pair('r', false));
-	_modes.insert(std::make_pair('t', false));
-	_modes.insert(std::make_pair('k', false));
-	_modes.insert(std::make_pair('l', false));
-	_modes.insert(std::make_pair('b', false));
-	_modes.insert(std::make_pair('e', false));
-	_modes.insert(std::make_pair('I', false));
+	_modes.insert(std::pair<char, bool>('O', false));
+	_modes.insert(std::pair<char, bool>('o', false));
+	_modes.insert(std::pair<char, bool>('v', false));
+	_modes.insert(std::pair<char, bool>('a', false));
+	_modes.insert(std::pair<char, bool>('i', false));
+	_modes.insert(std::pair<char, bool>('m', false));
+	_modes.insert(std::pair<char, bool>('n', true)); /* Forbid messages from outside, usually set to true */
+	_modes.insert(std::pair<char, bool>('q', false));
+	_modes.insert(std::pair<char, bool>('p', false));
+	_modes.insert(std::pair<char, bool>('s', false));
+	_modes.insert(std::pair<char, bool>('r', false));
+	_modes.insert(std::pair<char, bool>('t', false));
+	_modes.insert(std::pair<char, bool>('k', false));
+	_modes.insert(std::pair<char, bool>('l', false));
+	_modes.insert(std::pair<char, bool>('b', false));
+	_modes.insert(std::pair<char, bool>('e', false));
+	_modes.insert(std::pair<char, bool>('I', false));
 
 	_owner = creator;
 	_creator = creator;
@@ -184,6 +184,8 @@ bool Channel::hasKey()
 
 bool Channel::hasMode(char mode)
 {
+	if (_modes.count(mode) == 0)
+		return false;
 	return (_modes[mode]);
 }
 
@@ -424,8 +426,16 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 {
 	start;
 	(void)u;
-	if (!_modes.count(mode)) /* Checking if mode exists */
+	if (_modes.count(mode) == 0) /* Checking if mode exists */
+	{
 		return ERR_UNKNOWNMODE;
+	}
+	else
+	{
+		out("FOUND " << (_modes.find(mode)->first))
+		out("FOUND " << (_modes.find(mode)->second))
+
+	}
 	/* Future target user for O, o and v options*/
 	User *user = NULL;
 	switch (mode)
@@ -555,7 +565,6 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 	case 'l': /* User limits to channel. ex +l 10 to 10 as limit or -l to remove */
 	{
 		// que se pass t il si set limite inferieure au nb deja en cours ?
-		out ("PARMAS SIZE = " << param.size());
 		if (value == true && trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
 		/* peut etre des checks a faire genre si ca commence par - etc. */

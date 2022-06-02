@@ -33,7 +33,7 @@ OBJECTS				:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEX
 OBJECTS_BONUS		:= $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES_BONUS:.$(SRCEXT)=.$(OBJEXT)))
 
 #Flags, Libraries and Includes
-cflags.release		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV -DDEBUG_US
+cflags.release		:= -Wall -Werror -Wextra #-DDEBUG -DDEBUG_SV -DDEBUG_US
 cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV 
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))

@@ -99,7 +99,7 @@ void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std:
 	if (chan->isBanned(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
 	if (chan->hasMode('n') && !chan->isInChan(u))
-		return (s.numeric_reply(u, ERR_NOTONCHANNEL, dest_channel, NONE, NONE));
+		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
 	/* On moderated channel ('m' flag), only operators and voiced ppl can talk */
 	if (chan->hasMode('m') && !chan->isOperator(u) && !chan->isVoiced(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
@@ -123,6 +123,8 @@ void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std:
 void Commands::priv_msg(Server &s, User *u, std::vector<std::string> cmd)
 {
 	start;
+	if (cmd.size() < 3)
+		return (s.numeric_reply(u, ERR_NOTEXTTOSEND, NONE, NONE, NONE));
 	std::string dest = *(cmd.begin() + 1);
 	if (dest.compare(0, 1, "#", 0, 1) == 0 || dest.compare(0, 1, "+", 0, 1) == 0 )
 		send_channel(s, u, dest, cmd);
