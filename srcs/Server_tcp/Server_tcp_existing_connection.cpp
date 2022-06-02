@@ -21,6 +21,12 @@ void Server::existing_connection( int sd )
 		//	i = buffer[a];
 		//	std::cout << "char ="<<buffer[a]<<"[" << i << "]" << std::endl;
 		//}
+		debug(SV, "ASCII - CODE");
+		for (size_t i = 0; i < st.size(); i++)
+		{
+			int a = st[i];
+			std::cout << st[i] << "[" << a << "]" << std::endl;
+		}
 		if (strlen(buffer) >= 2)
 		{
 			size_t old_pos;
@@ -43,7 +49,7 @@ void Server::existing_connection( int sd )
 					out("LOOP SEND TO PARS : " + users[sd]->buffer);
 					cmds.parse_cmd(users[sd], *this);
 					users[sd]->buffer.clear();
-					pos += 2 ;
+					pos += 2;
 				}
 			}
 			if (users[sd]->buffer.find("\r\n") != std::string::npos)
