@@ -1,6 +1,7 @@
 
 #include "Server.hpp"
 
+
 void Server::existing_connection( int sd )
 {
 	start;
@@ -13,8 +14,57 @@ void Server::existing_connection( int sd )
 		delete_user(users[sd]);
 	else //do_action
 	{
+		std::string	st = buffer;
+		//int i = buffer[numbytes];
+		//for(int a = 0; a <= numbytes; a++)
+		//{
+		//	i = buffer[a];
+		//	std::cout << "char ="<<buffer[a]<<"[" << i << "]" << std::endl;
+		//}
+		if (strlen(buffer) >= 2)
+		{
+			size_t old_pos;
+			for (size_t pos = 0; pos < st.size();)
+			{
+				old_pos = pos;
+				pos = st.find("\r\n", old_pos);
+				if (pos == std::string::npos)
+				{
+	start;
+					out("no \r\n");
+					users[sd]->buffer.append(st.substr(old_pos));
+					break;
+				}
+				else
+				{
+	start;
+					out("old_pos - pos : " << old_pos << " " << pos);
+					users[sd]->buffer.append(st.substr(old_pos, pos));
+					out("LOOP SEND TO PARS : " + users[sd]->buffer);
+					cmds.parse_cmd(users[sd], *this);
+					users[sd]->buffer.clear();
+					pos += 2 ;
+				}
+			}
+			if (users[sd]->buffer.find("\r\n") != std::string::npos)
+			{
+					out("OUT LOOP SEND TO PARS : " + users[sd]->buffer);
+					cmds.parse_cmd(users[sd], *this);
+					users[sd]->buffer.clear();
+			}
+
+
+
+			if (buffer[numbytes -1] == '\n' && buffer[numbytes -2] == '\r')
+				std::cout << "line correct" << std::endl;
+			else
+				std::cout << "line not correct" << std::endl;
+		}
+		else
+		{
+		}
 		out ("ici : ")
-		debug(SV, users[sd]->nickname,NOCR);
+			debug(SV, users[sd]->nickname,NOCR);
 		debug(SV, " - BUFF_MAX_SIZE = ", NOCR);
 		debug(SV, sizeof(buffer), NOCR);
 		debug(SV, " - BYTES = ",NOCR);
@@ -24,7 +74,6 @@ void Server::existing_connection( int sd )
 		debug(SV, " - MESSAGE = ", NOCR);
 		debug(SV, buffer);
 		out (users[sd]->presentation()); 
-		cmds.parse_cmd(users[sd], *this);
 	}
 	out ("end existing conn waiting")
 }

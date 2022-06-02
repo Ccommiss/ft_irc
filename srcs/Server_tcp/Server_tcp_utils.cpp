@@ -70,6 +70,9 @@ void	Server::delete_user( User *to_del )
 
 bool	Server::pass_check( std::string to_check)
 {
+	out("PASS_CHECK :");
+	out("ORIGINAL [" + _pass + "]");
+	out("TO_CHECK [" + to_check + "]");
 	if (!to_check.compare(_pass))
 		return (true);
 	else
