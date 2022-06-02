@@ -22,163 +22,162 @@
 #define MSG_002 ":Your host is localhost, version 1.0   8-)"
 #define MSG_003 ":This server was created not so long time ago."
 #define MSG_004 ":You are very welcome. Enjoy !"
-#define MSG_005 ":Try server <server_name>, port <port_number> Sent by the server to a user to suggest an alternative server, sometimes used " 																								 /* RPL_BOUNCE */
-#define MSG_200 "Link <version>[.<debug_level>] <destination> <next_server> [V<protocol_version> <link_uptime_in_seconds> <backstream_sendq> <upstream_sendq>] See RFC"																	  /* RPL_TRACELINK */
-#define MSG_201 "Try. <class> <server> See RFC"																																															  /* RPL_TRACECONNECTING */
-#define MSG_202 "H.S. <class> <server> See RFC"																																															  /* RPL_TRACEHANDSHAKE */
-#define MSG_203 "???? <class> [<connection_address>] See RFC"																																											  /* RPL_TRACEUNKNOWN */
-#define MSG_204 "Oper <class> <nick> See RFC"																																															  /* RPL_TRACEOPERATOR */
-#define MSG_205 "User <class> <nick> See RFC"																																															  /* RPL_TRACEUSER */
-#define MSG_206 "Serv <class> <int>S <int>C <server> <nick!user|*!*>@<host|server> [V<protocol_version>] See RFC"																														  /* RPL_TRACESERVER */
-#define MSG_207 "Service <class> <name> <type> <active_type> See RFC"																																									  /* RPL_TRACESERVICE */
-#define MSG_208 "<newtype> 0 <client_name> See RFC"																																														  /* RPL_TRACENEWTYPE */
-#define MSG_209 "Class <class> <count> See RFC"																																															  /* RPL_TRACECLASS */
-#define MSG_210 ""																																																						  /* RPL_TRACERECONNECT */
-#define MSG_211 "<linkname> <sendq> <sent_msgs> <sent_bytes> <recvd_msgs> <rcvd_bytes> <time_open> Reply to STATS (See RFC)"																											  /* RPL_STATSLINKINFO */
-#define MSG_212 "<command> <count> [<byte_count> <remote_count>] Reply to STATS (See RFC)"																																				  /* RPL_STATSCOMMANDS */
-#define MSG_213 "C <host> * <name> <port> <class> Reply to STATS (See RFC)"																																								  /* RPL_STATSCLINE */
-#define MSG_214 "N <host> * <name> <port> <class> Reply to STATS (See RFC), Also known as RPL_STATSOLDNLINE (ircu, Unreal)"																												  /* RPL_STATSNLINE */
-#define MSG_215 "I <host> * <host> <port> <class> Reply to STATS (See RFC)"																																								  /* RPL_STATSILINE */
-#define MSG_216 "K <host> * <username> <port> <class> Reply to STATS (See RFC)"																																							  /* RPL_STATSKLINE */
-#define MSG_217 ""																																																						  /* RPL_STATSQLINE */
-#define MSG_218 "Y <class> <ping_freq> <connect_freq> <max_sendq> Reply to STATS (See RFC)"																																				  /* RPL_STATSYLINE */
-#define MSG_219 "<query> :<info> End of RPL_STATS* list."																																												  /* RPL_ENDOFSTATS */
-#define MSG_221 "<user_modes> [<user_mode_params>] Information about a user's own modes."																																				  /* RPL_UMODEIS */
-#define MSG_231 ""																																																						  /* RPL_SERVICEINFO */
-#define MSG_232 ""																																																						  /* RPL_ENDOFSERVICES */
-#define MSG_233 ""																																																						  /* RPL_SERVICE */
-#define MSG_234 "<name> <server> <mask> <type> <hopcount> <info> A service entry in the service list"																																	  /* RPL_SERVLIST */
-#define MSG_235 "<mask> <type> :<info> Termination of an RPL_SERVLIST list"																																								  /* RPL_SERVLISTEND */
-#define MSG_240 ""																																																						  /* RPL_STATSVLINE */
-#define MSG_241 "L <hostmask> * <servername> <maxdepth> Reply to STATS (See RFC)"																																						  /* RPL_STATSLLINE */
-#define MSG_242 ":Server Up <days> days <hours>:<minutes>:<seconds> Reply to STATS (See RFC)"																																			  /* RPL_STATSUPTIME */
-#define MSG_243 "O <hostmask> * <nick> [:<info>] Reply to STATS (See RFC); The info field is an extension found in some IRC daemons, "																									  /* RPL_STATSOLINE */
-#define MSG_244 "H <hostmask> * <servername> Reply to STATS (See RFC)"																																									  /* RPL_STATSHLINE */
-#define MSG_246 ""																																																						  /* RPL_STATSPING */
-#define MSG_247 ""																																																						  /* RPL_STATSBLINE */
-#define MSG_249 "to RFC1459?"																																																			  /* RPL_STATSULINE */
-#define MSG_250 ""																																																						  /* RPL_STATSDLINE */
-#define MSG_251 ":There are <int> users and <int> invisible on <int> servers Reply to LUSERS command, other versions exist (eg. RFC2812); Text may vary."																				  /* RPL_LUSERCLIENT */
-#define MSG_252 "<int> :<info> Reply to LUSERS command - Number of IRC operators online"																																				  /* RPL_LUSEROP */
-#define MSG_253 "<int> :<info> Reply to LUSERS command - Number of unknown/unregistered connections"																																	  /* RPL_LUSERUNKNOWN */
-#define MSG_254 "<int> :<info> Reply to LUSERS command - Number of channels formed"																																						  /* RPL_LUSERCHANNELS */
-#define MSG_255 ":I have <int> clients and <int> servers Reply to LUSERS command - Information about local connections; Text may vary."																									  /* RPL_LUSERME */
-#define MSG_256 "<server> :<info> Start of an RPL_ADMIN* reply"																																											  /* RPL_ADMINME */
-#define MSG_257 ":<admin_location> Reply to ADMIN command (Location, first line)"																																						  /* RPL_ADMINLOC1 */
-#define MSG_258 ":<admin_location> Reply to ADMIN command (Location, second line)"																																						  /* RPL_ADMINLOC2 */
-#define MSG_259 ":<email_address> Reply to ADMIN command (E-mail address of administrator)"																																				  /* RPL_ADMINEMAIL */
-#define MSG_261 "File <logfile> <debug_level> See RFC"																																													  /* RPL_TRACELOG */
-#define MSG_262 "<server_name> <version>[.<debug_level>] :<info> Used to terminate a list of RPL_TRACE* replies"																														  /* RPL_TRACEEND */
-#define MSG_263 "<command> :<info> When a server drops a command without processing it, it MUST use this reply."																														  /* RPL_TRYAGAIN */
-#define MSG_300 "Dummy reply, supposedly only used for debugging/testing new features, however has appeared in production daemons."																										  /* RPL_NONE */
-#define MSG_301 arg1 + " :" + arg2 //Used in reply to a command directed at a user who is marked as away"																																	  /* RPL_AWAY */
-#define MSG_302 ":*1<reply> *( ' ' <reply> ) Reply used by USERHOST (see RFC)"																																							  /* RPL_USERHOST */
-#define MSG_303 ":*1<nick> *( ' ' <nick> ) Reply to the ISON command (see RFC)"																																							  /* RPL_ISON */
-#define MSG_305 ": You are no longer marked as AWAY :)" 																																								  /* RPL_UNAWAY */
-#define MSG_306 ": You are marked as AWAY zZzZ" 																																											  /* RPL_NOWAWAY */
-#define MSG_311 arg1 + " " + arg2 + " " + s.hostname + " * " + arg3// Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
-#define MSG_312 arg1 + " " + arg2																																				  /* RPL_WHOISSERVER */
-#define MSG_313 arg1 + " :is an IRC operator" //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
-#define MSG_314 arg1+ " " + "<user> <host> * :<real_name> Reply to WHOWAS - Information about the user"																																		  /* RPL_WHOWASUSER */
-#define MSG_315 "<name> :<info> Used to terminate a list of RPL_WHOREPLY replies"																																						  /* RPL_ENDOFWHO */
-#define MSG_316 ""																																																						  /* RPL_WHOISCHANOP */
-#define MSG_317 arg1 + " " + arg2 + " :seconds idle" //Reply to WHOIS - Idle information"																																						  /* RPL_WHOISIDLE */
-#define MSG_318 arg1 + " " + " :End of WHOIS list"																																										  /* RPL_ENDOFWHOIS */
-#define MSG_319 arg1 + " :" + arg2 // " :*( ( '@' / '+' ) <channel> ' ' ) Reply to WHOIS - Channel list for user (See RFC)"																																  /* RPL_WHOISCHANNELS */
-#define MSG_322 arg1 + " " + printModes(s.chans[arg1]) + " :" + arg3 // Channel list - A channel"																																								  /* RPL_LIST */
-#define MSG_323 ": End of channel list."																																													  /* RPL_LISTEND */
-#define MSG_324 arg1 + " " + arg2 + " " + arg3 																																														  /* RPL_CHANNELMODEIS */
-#define MSG_325 "<channel> <nickname>"																																																	  /* RPL_UNIQOPIS */
-#define MSG_331 arg1 + " :No topic is set."																																																  /* RPL_NOPIC */
-#define MSG_332 arg1 + " :" + arg2																																																		  /* RPL_TOPIC */
-#define MSG_341 arg1 + " " + arg2 // "<channel> <nick>" 																																														  /* RPL_INVITING */
-#define MSG_342 "<user> :<info> Returned by a server answering a SUMMON message to indicate that it is summoning that user"																												  /* RPL_SUMMONING */
-#define MSG_346 arg1 + " " + arg2 // <invitemask> An invite mask for the invite mask list"																																						  /* RPL_INVITELIST */
-#define MSG_347 arg1 + " :End of invite list ! :) "// Termination of an RPL_INVITELIST list"																																								  /* RPL_ENDOFINVITELIST */
-#define MSG_348 "<channel> <exceptionmask> An exception mask for the exception mask list. Also known as RPL_EXLIST (Unreal, Ultimate)"																									  /* RPL_EXCEPTLIST */
-#define MSG_349 "<channel> :<info> Termination of an RPL_EXCEPTLIST list. Also known as RPL_ENDOFEXLIST (Unreal, Ultimate)"																												  /* RPL_ENDOFEXCEPTLIST */
-#define MSG_351 "<version>[.<debuglevel>] <server> :<comments> Reply by the server showing its version details, however this format is not often adhered to"																			  /* RPL_VERSION */
-#define MSG_352 "<channel> <user> <host> <server> <nick> <H|G>[*][@|+] :<hopcount> <real_name> Reply to vanilla WHO (See RFC)."																											  /* RPL_WHOREPLY */
-#define MSG_353 "= " + arg1 + " :" + printNames(s.chans[arg1], user)																																											  // il faut le serveur ou le chan a minima                    //CHANGER EN FO Status"
-#define MSG_354 "Reply to WHO, however it is a 'special' reply because it is returned using a non-standard "																															  /* RPL_WHOSPCRPL */
-#define MSG_361 ""																																																						  /* RPL_KILLDONE */
-#define MSG_362 ""																																																						  /* RPL_CLOSING */
-#define MSG_363 ""																																																						  /* RPL_CLOSEEND */
-#define MSG_364 "<mask> <server> :<hopcount> <server_info> Reply to the LINKS command"																																					  /* RPL_LINKS */
-#define MSG_365 "<mask> :<info> Termination of an RPL_LINKS list"																																										  /* RPL_ENDOFLINKS */
-#define MSG_366 arg1 + " :End of NAMES list"																																															  /* RPL_ENDOFNAMES */
-#define MSG_367 arg1 + " " + arg2// [<time_left> :<reason>] A ban-list item (See RFC); <time left> and <reason> are additions used by KineIRCd"																							  /* RPL_BANLIST */
-#define MSG_368 arg1 + " :End of ban list (" + arg2 + " masks set)" //:<info> Termination of an RPL_BANLIST list"																																									  /* RPL_ENDOFBANLIST */
-#define MSG_369 "<nick> :<info> Reply to WHOWAS - End of list"																																											  /* RPL_ENDOFWHOWAS */
-#define MSG_371 ":<string> Reply to INFO"																																																  /* RPL_INFO */
-#define MSG_372 ":- <string> Reply to MOTD"																																																  /* RPL_MOTD */
-#define MSG_373 ""																																																						  /* RPL_INFOSTART */
-#define MSG_374 " :<info> Termination of an RPL_INFO list"																																												  /* RPL_ENDOFINFO */
-#define MSG_375 " :- <server> Message of the day - Start of an RPL_MOTD list"																																							  /* RPL_MOTDSTART */
-#define MSG_376 " :<info> Termination of an RPL_MOTD list"																																												  /* RPL_ENDOFMOTD */
-#define MSG_381 " :You are now an IRC operator"																																													  /* RPL_YOUREOPER */
-#define MSG_382 "<config_file> :<info> Successful reply from REHASH"																																									  /* RPL_REHASHING */
-#define MSG_383 ":You are service <service_name> Sent upon successful registration of a service"																																		  /* RPL_YOURESERVICE */
-#define MSG_384 ""																																																						  /* RPL_MYPORTIS */
-#define MSG_391 "<server> :<time string> Response to the TIME command. The string format may vary greatly. Also see #679."																												  /* RPL_TIME */
-#define MSG_392 ":UserID Terminal Host Start of an RPL_USERS list"																																										  /* RPL_USERSSTART */
-#define MSG_393 ":<username> <ttyline> <hostname> Response to the USERS command (See RFC)"																																				  /* RPL_USERS */
-#define MSG_394 ":<info> Termination of an RPL_USERS list"																																												  /* RPL_ENDOFUSERS */
-#define MSG_395 ":<info> Reply to USERS when nobody is logged in"																																										  /* RPL_NOUSERS */
-#define ERR_401 arg1 + " :No such nick/channel" 				  /* ERR_NOSUCHNICK */
-#define ERR_402 arg1 + " :Used to indicate the server name given currently doesn't exist"																																		  /* ERR_NOSUCHSERVER */
-#define ERR_403 arg1 + " :No such channel"																																																  /* ERR_NOSUCHCHANNEL */
-#define ERR_404 arg1 + " :Cannot send to channel"																																														  /* ERR_CANNOTSENDTOCHAN */
-#define ERR_405 "<channel> :<reason> Sent to a user when they have joined the maximum number of allowed channels and they tried to join another channel"																				  /* ERR_TOOMANYCHANNELS */
-#define ERR_406 "<nick> :<reason> Returned by WHOWAS to indicate there was no history information for a given nickname"																													  /* ERR_WASNOSUCHNICK */
-#define ERR_407 "<target> :<reason> The given target(s) for a command are ambiguous in that they relate to too many targets"																											  /* ERR_TOOMANYTARGETS */
-#define ERR_408 "<service_name> :<reason> Returned to a client which is attempting to send an SQUERY (or other message) to a service which does not exist"																				  /* ERR_NOSUCHSERVICE */
-#define ERR_409 ":PING or PONG message missing the originator parameter which is required since these commands must work without valid prefixes"																				  /* ERR_NOORIGIN */
-#define ERR_411 ":<reason> Returned when no recipient is given with a command"																																							  /* ERR_NORECIPIENT */
-#define ERR_412 ":<reason> Returned when NOTICE/PRIVMSG is used with no message given"																																					  /* ERR_NOTEXTTOSEND */
-#define ERR_413 "<mask> :<reason> Used when a message is being sent to a mask without being limited to a top-level domain (i.e. * instead of *.au)"																						  /* ERR_NOTOPLEVEL */
-#define ERR_414 "<mask> :<reason> Used when a message is being sent to a mask with a wild-card for a top level domain (i.e. *.*)"																										  /* ERR_WILDTOPLEVEL */
-#define ERR_415 "<mask> :<reason> Used when a message is being sent to a mask with an invalid syntax"																																	  /* ERR_BADMASK */
-#define ERR_421 "<command> :<reason> Returned when the given command is unknown to the server (or hidden because of lack of access rights)"																								  /* ERR_UNKNOWNCOMMAND */
-#define ERR_422 ":<reason> Sent when there is no MOTD to send the client"																																								  /* ERR_NOMOTD */
-#define ERR_423 "<server> :<reason> Returned by a server in response to an ADMIN request when no information is available. RFC1459 mentions this in the list of numerics. While it's not listed as a valid reply in section 4.3.7 [...]." /* ERR_NOADMININFO */
-#define ERR_424 ":<reason> Generic error message used to report a failed file operation during the processing of a command"																												  /* ERR_FILEERROR */
-#define ERR_431 ":<reason> Returned when a nickname parameter expected for a command isn't found"																																		  /* ERR_NONICKNAMEGIVEN */
-#define ERR_432 "<nick> :<reason> Returned after receiving a NICK message which contains a nickname which is considered invalid, s[...] "																								  /* ERR_ERRONEUSNICKNAME */
-#define ERR_433 arg1 + " :Nickname is already in use" //Returned by the NICK command when the given nickname is already in use"																																  /* ERR_NICKNAMEINUSE */
-#define ERR_436 "<nick> :<reason> Returned by a server to a client when it detects a nickname collision"																																  /* ERR_NICKCOLLISION */
-#define ERR_437 "<nick/channel/service> :<reason> Return when the target is unable to be reached temporarily, eg. a delay mechanism in play, or a service being offline"																  /* ERR_UNAVAILRESOURCE */
-#define ERR_441 arg1 + " " + arg2 + ": They aren't on that channel"																																										  /* ERR_USERNOTINCHANNEL */
-#define ERR_442 arg1 + " :You're not on that channel" 																		  /* ERR_NOTONCHANNEL */
-#define ERR_443 arg1 + " " + arg2 + " :User already on channel"																																											  /* ERR_USERONCHANNEL */
-#define ERR_444 "<user> :<reason> Returned by the SUMMON command if a given user was not logged in and could not be summoned"																											  /* ERR_NOLOGIN */
-#define ERR_445 ":<reason> Returned by SUMMON when it has been disabled or not implemented"																																				  /* ERR_SUMMONDISABLED */
-#define ERR_446 ":<reason> Returned by USERS when it has been disabled or not implemented"																																				  /* ERR_USERSDISABLED */
-#define ERR_451 ":<reason> Returned by the server to indicate that the client must be registered before the server will allow it to be parsed in detail"																				  /* ERR_NOTREGISTERED */
-#define ERR_461 arg1 + " :Not enough parameters"																																														  /* ERR_NEEDMOREPARAMS */
-#define ERR_462 ":Unauthorized command (already registered)"																																											  /* ERR_ALREADYREGISTERED */
-#define ERR_463 ":Your host isn't among the privileged"																																													  /* ERR_NOPERMFORHOST */
-#define ERR_464 arg1 + ":Password incorrect"																																																	  /* ERR_PASSWDMISMATCH */
-#define ERR_465 ":You are banned from this server"																																														  /* ERR_YOUREBANNEDCREEP */
-#define ERR_466 ""																																																						  /* ERR_YOUWILLBEBANNED  , no msg */
-#define ERR_467 arg1 + " :Channel key already set"																																														  /* ERR_KEYSET */
-#define ERR_471 arg1 + " :Cannot join channel (+l)"																																														  /* ERR_CHANNELISFULL */
-#define ERR_472 arg1 + " :is unknown mode char to me for " + arg2																																										  /* ERR_UNKNOWNMODE */
-#define ERR_473 arg1 + " :Cannot join channel (+i) (You must be invited)"																																								  /* ERR_INVITEONLYCHAN */
-#define ERR_474 arg1 + " :Cannot join channel (+b) (You're banned)"																																														  /* ERR_BANNEDFROMCHAN */
-#define ERR_475 arg1 + " :Cannot join channel (+k)"																																														  /* ERR_BADCHANNELKEY */
-#define ERR_476 arg1 + " :Bad Channel Mask"																																																  /* ERR_BADCHANMASK */
-#define ERR_477 arg1 + " :Channel doesn't support modes"																																												  /* ERR_NOCHANMODES */
-#define ERR_478 arg1 + " :Channel list is full"																																															  /* ERR_BANLISTFULL */
-#define ERR_481 ":<reason> Returned by any command requiring special privileges (eg. IRC operator) to indicate the operation was unsuccessful"																							  /* ERR_NOPRIVILEGES */
-#define ERR_482 arg1 + " :You're not channel operator"																																													  /* ERR_CHANOPRIVSNEEDED */
-#define ERR_483 ":<reason> Returned by KILL to anyone who tries to kill a server"																																						  /* ERR_CANTKILLSERVER */
-#define ERR_484 ":<reason> Sent by the server to a user upon connection to indicate the restricted nature of the connection (i.e. usermode +r)"																							  /* ERR_RESTRICTED */
-#define ERR_485 ":<reason> Any mode requiring 'channel creator' privileges returns this error if the client is attempting to use it while not a channel creator on the given channel"													  /* ERR_UNIQOPRIVSNEEDED */
-#define ERR_491 ":<reason> Returned by OPER to a client who cannot become an IRC operator because the server has been configured to disallow the client's host"																			  /* ERR_NOOPERHOST */
-#define ERR_492 ""																																																						  /* ERR_NOSERVICEHOST */
-#define ERR_501 ":<reason> Returned by the server to indicate that a MODE message was sent with a nickname parameter and that the mode flag sent was not recognised"																	  /* ERR_UMODEUNKNOWNFLAG */
-#define ERR_502 ":<reason> Error sent to any user trying to view or change the user mode for a user other than themselves"																												  /* ERR_USERSDONTMATCH */
+#define MSG_005 ":Try server <server_name>, port <port_number> Sent by the server to a user to suggest an alternative server, sometimes used "							 /* RPL_BOUNCE */
+#define MSG_200 "Link <version>[.<debug_level>] <destination> <next_server> [V<protocol_version> <link_uptime_in_seconds> <backstream_sendq> <upstream_sendq>] See RFC"	 /* RPL_TRACELINK */
+#define MSG_201 "Try. <class> <server> See RFC"																															 /* RPL_TRACECONNECTING */
+#define MSG_202 "H.S. <class> <server> See RFC"																															 /* RPL_TRACEHANDSHAKE */
+#define MSG_203 "???? <class> [<connection_address>] See RFC"																											 /* RPL_TRACEUNKNOWN */
+#define MSG_204 "Oper <class> <nick> See RFC"																															 /* RPL_TRACEOPERATOR */
+#define MSG_205 "User <class> <nick> See RFC"																															 /* RPL_TRACEUSER */
+#define MSG_206 "Serv <class> <int>S <int>C <server> <nick!user|*!*>@<host|server> [V<protocol_version>] See RFC"														 /* RPL_TRACESERVER */
+#define MSG_207 "Service <class> <name> <type> <active_type> See RFC"																									 /* RPL_TRACESERVICE */
+#define MSG_208 "<newtype> 0 <client_name> See RFC"																														 /* RPL_TRACENEWTYPE */
+#define MSG_209 "Class <class> <count> See RFC"																															 /* RPL_TRACECLASS */
+#define MSG_210 ""																																						 /* RPL_TRACERECONNECT */
+#define MSG_211 "<linkname> <sendq> <sent_msgs> <sent_bytes> <recvd_msgs> <rcvd_bytes> <time_open> Reply to STATS (See RFC)"											 /* RPL_STATSLINKINFO */
+#define MSG_212 "<command> <count> [<byte_count> <remote_count>] Reply to STATS (See RFC)"																				 /* RPL_STATSCOMMANDS */
+#define MSG_213 "C <host> * <name> <port> <class> Reply to STATS (See RFC)"																								 /* RPL_STATSCLINE */
+#define MSG_214 "N <host> * <name> <port> <class> Reply to STATS (See RFC), Also known as RPL_STATSOLDNLINE (ircu, Unreal)"												 /* RPL_STATSNLINE */
+#define MSG_215 "I <host> * <host> <port> <class> Reply to STATS (See RFC)"																								 /* RPL_STATSILINE */
+#define MSG_216 "K <host> * <username> <port> <class> Reply to STATS (See RFC)"																							 /* RPL_STATSKLINE */
+#define MSG_217 ""																																						 /* RPL_STATSQLINE */
+#define MSG_218 "Y <class> <ping_freq> <connect_freq> <max_sendq> Reply to STATS (See RFC)"																				 /* RPL_STATSYLINE */
+#define MSG_219 "<query> :<info> End of RPL_STATS* list."																												 /* RPL_ENDOFSTATS */
+#define MSG_221 "<user_modes> [<user_mode_params>] Information about a user's own modes."																				 /* RPL_UMODEIS */
+#define MSG_231 ""																																						 /* RPL_SERVICEINFO */
+#define MSG_232 ""																																						 /* RPL_ENDOFSERVICES */
+#define MSG_233 ""																																						 /* RPL_SERVICE */
+#define MSG_234 "<name> <server> <mask> <type> <hopcount> <info> A service entry in the service list"																	 /* RPL_SERVLIST */
+#define MSG_235 "<mask> <type> :<info> Termination of an RPL_SERVLIST list"																								 /* RPL_SERVLISTEND */
+#define MSG_240 ""																																						 /* RPL_STATSVLINE */
+#define MSG_241 "L <hostmask> * <servername> <maxdepth> Reply to STATS (See RFC)"																						 /* RPL_STATSLLINE */
+#define MSG_242 ":Server Up <days> days <hours>:<minutes>:<seconds> Reply to STATS (See RFC)"																			 /* RPL_STATSUPTIME */
+#define MSG_243 "O <hostmask> * <nick> [:<info>] Reply to STATS (See RFC); The info field is an extension found in some IRC daemons, "									 /* RPL_STATSOLINE */
+#define MSG_244 "H <hostmask> * <servername> Reply to STATS (See RFC)"																									 /* RPL_STATSHLINE */
+#define MSG_246 ""																																						 /* RPL_STATSPING */
+#define MSG_247 ""																																						 /* RPL_STATSBLINE */
+#define MSG_249 "to RFC1459?"																																			 /* RPL_STATSULINE */
+#define MSG_250 ""																																						 /* RPL_STATSDLINE */
+#define MSG_251 ":There are <int> users and <int> invisible on <int> servers Reply to LUSERS command, other versions exist (eg. RFC2812); Text may vary."				 /* RPL_LUSERCLIENT */
+#define MSG_252 "<int> :<info> Reply to LUSERS command - Number of IRC operators online"																				 /* RPL_LUSEROP */
+#define MSG_253 "<int> :<info> Reply to LUSERS command - Number of unknown/unregistered connections"																	 /* RPL_LUSERUNKNOWN */
+#define MSG_254 "<int> :<info> Reply to LUSERS command - Number of channels formed"																						 /* RPL_LUSERCHANNELS */
+#define MSG_255 ":I have <int> clients and <int> servers Reply to LUSERS command - Information about local connections; Text may vary."									 /* RPL_LUSERME */
+#define MSG_256 "<server> :<info> Start of an RPL_ADMIN* reply"																											 /* RPL_ADMINME */
+#define MSG_257 ":<admin_location> Reply to ADMIN command (Location, first line)"																						 /* RPL_ADMINLOC1 */
+#define MSG_258 ":<admin_location> Reply to ADMIN command (Location, second line)"																						 /* RPL_ADMINLOC2 */
+#define MSG_259 ":<email_address> Reply to ADMIN command (E-mail address of administrator)"																				 /* RPL_ADMINEMAIL */
+#define MSG_261 "File <logfile> <debug_level> See RFC"																													 /* RPL_TRACELOG */
+#define MSG_262 "<server_name> <version>[.<debug_level>] :<info> Used to terminate a list of RPL_TRACE* replies"														 /* RPL_TRACEEND */
+#define MSG_263 "<command> :<info> When a server drops a command without processing it, it MUST use this reply."														 /* RPL_TRYAGAIN */
+#define MSG_300 "Dummy reply, supposedly only used for debugging/testing new features, however has appeared in production daemons."										 /* RPL_NONE */
+#define MSG_301 arg1 + " :" + arg2																																		 /* RPL_AWAY */
+#define MSG_302 ":*1<reply> *( ' ' <reply> ) Reply used by USERHOST (see RFC)"																							 /* RPL_USERHOST */
+#define MSG_303 ":*1<nick> *( ' ' <nick> ) Reply to the ISON command (see RFC)"																							 /* RPL_ISON */
+#define MSG_305 ": You are no longer marked as AWAY :)"																													 /* RPL_UNAWAY */
+#define MSG_306 ": You are marked as AWAY zZzZ"																															 /* RPL_NOWAWAY */
+#define MSG_311 arg1 + " " + arg2 + " " + s.hostname + " * " + arg3																										 /* RPL_WHOISUSER */
+#define MSG_312 arg1 + " " + arg2																																		 /* RPL_WHOISSERVER */
+#define MSG_313 arg1 + " :is an IRC operator"																															 /* RPL_WHOISOPERATOR */
+#define MSG_314 arg1 + " " + "<user> <host> * :<real_name> Reply to WHOWAS - Information about the user"																 /* RPL_WHOWASUSER */
+#define MSG_315 "<name> :<info> Used to terminate a list of RPL_WHOREPLY replies"																						 /* RPL_ENDOFWHO */
+#define MSG_316 ""																																						 /* RPL_WHOISCHANOP */
+#define MSG_317 arg1 + " " + arg2 + " :seconds idle"																													 /* RPL_WHOISIDLE */
+#define MSG_318 arg1 + " " + " :End of WHOIS list"																														 /* RPL_ENDOFWHOIS */
+#define MSG_319 arg1 + " :" + arg2																																		 /* RPL_WHOISCHANNELS */
+#define MSG_322 arg1 + " " + printModes(s.chans[arg1]) + " :" + arg3																									 /* RPL_LIST */
+#define MSG_323 ": End of channel list."																																 /* RPL_LISTEND */
+#define MSG_324 arg1 + " " + arg2 + " " + arg3																															 /* RPL_CHANNELMODEIS */
+#define MSG_325 "<channel> <nickname>"																																	 /* RPL_UNIQOPIS */
+#define MSG_331 arg1 + " :No topic is set."																																 /* RPL_NOPIC */
+#define MSG_332 arg1 + " :" + arg2																																		 /* RPL_TOPIC */
+#define MSG_341 arg1 + " " + arg2																																		 /* RPL_INVITING */
+#define MSG_342 "<user> :<info> Returned by a server answering a SUMMON message to indicate that it is summoning that user"												 /* RPL_SUMMONING */
+#define MSG_346 arg1 + " " + arg2																																		 /* RPL_INVITELIST */
+#define MSG_347 arg1 + " :End of invite list ! :) "																														 /* RPL_ENDOFINVITELIST */
+#define MSG_348 "<channel> <exceptionmask> An exception mask for the exception mask list. Also known as RPL_EXLIST (Unreal, Ultimate)"									 /* RPL_EXCEPTLIST */
+#define MSG_349 "<channel> :<info> Termination of an RPL_EXCEPTLIST list. Also known as RPL_ENDOFEXLIST (Unreal, Ultimate)"												 /* RPL_ENDOFEXCEPTLIST */
+#define MSG_351 "<version>[.<debuglevel>] <server> :<comments> Reply by the server showing its version details, however this format is not often adhered to"			 /* RPL_VERSION */
+#define MSG_352 "<channel> <user> <host> <server> <nick> <H|G>[*][@|+] :<hopcount> <real_name> Reply to vanilla WHO (See RFC)."											 /* RPL_WHOREPLY */
+#define MSG_353 "= " + arg1 + " :" + printNames(s.chans[arg1], user)																									 /* RPL_NAMREPLY */
+#define MSG_354 "Reply to WHO, however it is a 'special' reply because it is returned using a non-standard "															 /* RPL_WHOSPCRPL */
+#define MSG_361 ""																																						 /* RPL_KILLDONE */
+#define MSG_362 ""																																						 /* RPL_CLOSING */
+#define MSG_363 ""																																						 /* RPL_CLOSEEND */
+#define MSG_364 "<mask> <server> :<hopcount> <server_info> Reply to the LINKS command"																					 /* RPL_LINKS */
+#define MSG_365 "<mask> :<info> Termination of an RPL_LINKS list"																										 /* RPL_ENDOFLINKS */
+#define MSG_366 arg1 + " :End of NAMES list"																															 /* RPL_ENDOFNAMES */
+#define MSG_367 arg1 + " " + arg2																																		 /* RPL_BANLIST */
+#define MSG_368 arg1 + " :End of ban list (" + arg2 + " masks set)"																										 /* RPL_ENDOFBANLIST */
+#define MSG_369 "<nick> :<info> Reply to WHOWAS - End of list"																											 /* RPL_ENDOFWHOWAS */
+#define MSG_371 ":<string> Reply to INFO"																																 /* RPL_INFO */
+#define MSG_372 ":- <string> Reply to MOTD"																																 /* RPL_MOTD */
+#define MSG_373 ""																																						 /* RPL_INFOSTART */
+#define MSG_374 " :<info> Termination of an RPL_INFO list"																												 /* RPL_ENDOFINFO */
+#define MSG_375 " :- <server> Message of the day - Start of an RPL_MOTD list"																							 /* RPL_MOTDSTART */
+#define MSG_376 " :<info> Termination of an RPL_MOTD list"																												 /* RPL_ENDOFMOTD */
+#define MSG_381 " :You are now an IRC operator"																															 /* RPL_YOUREOPER */
+#define MSG_382 "<config_file> :<info> Successful reply from REHASH"																									 /* RPL_REHASHING */
+#define MSG_383 ":You are service <service_name> Sent upon successful registration of a service"																		 /* RPL_YOURESERVICE */
+#define MSG_384 ""																																						 /* RPL_MYPORTIS */
+#define MSG_391 "<server> :<time string> Response to the TIME command. The string format may vary greatly. Also see #679."												 /* RPL_TIME */
+#define MSG_392 ":UserID Terminal Host Start of an RPL_USERS list"																										 /* RPL_USERSSTART */
+#define MSG_393 ":<username> <ttyline> <hostname> Response to the USERS command (See RFC)"																				 /* RPL_USERS */
+#define MSG_394 ":<info> Termination of an RPL_USERS list"																												 /* RPL_ENDOFUSERS */
+#define MSG_395 ":<info> Reply to USERS when nobody is logged in"																										 /* RPL_NOUSERS */
+#define ERR_401 arg1 + " :No such nick/channel"																															 /* ERR_NOSUCHNICK */
+#define ERR_402 arg1 + " :Used to indicate the server name given currently doesn't exist"																				 /* ERR_NOSUCHSERVER */
+#define ERR_403 arg1 + " :No such channel"																																 /* ERR_NOSUCHCHANNEL */
+#define ERR_404 arg1 + " :Cannot send to channel"																														 /* ERR_CANNOTSENDTOCHAN */
+#define ERR_405 arg1 + " :You have joined too many channels"																											 /* ERR_TOOMANYCHANNELS */
+#define ERR_406 "<nick> :<reason> Returned by WHOWAS to indicate there was no history information for a given nickname"													 /* ERR_WASNOSUCHNICK */
+#define ERR_407 "<target> :<reason> The given target(s) for a command are ambiguous in that they relate to too many targets"											 /* ERR_TOOMANYTARGETS */
+#define ERR_408 "<service_name> :<reason> Returned to a client which is attempting to send an SQUERY (or other message) to a service which does not exist"				 /* ERR_NOSUCHSERVICE */
+#define ERR_409 ":PING or PONG message missing the originator parameter which is required since these commands must work without valid prefixes"						 /* ERR_NOORIGIN */
+#define ERR_411 ":<reason> Returned when no recipient is given with a command"																							 /* ERR_NORECIPIENT */
+#define ERR_412 ":<reason> Returned when NOTICE/PRIVMSG is used with no message given"																					 /* ERR_NOTEXTTOSEND */
+#define ERR_413 "<mask> :<reason> Used when a message is being sent to a mask without being limited to a top-level domain (i.e. * instead of *.au)"						 /* ERR_NOTOPLEVEL */
+#define ERR_414 "<mask> :<reason> Used when a message is being sent to a mask with a wild-card for a top level domain (i.e. *.*)"										 /* ERR_WILDTOPLEVEL */
+#define ERR_415 "<mask> :<reason> Used when a message is being sent to a mask with an invalid syntax"																	 /* ERR_BADMASK */
+#define ERR_421 "<command> :<reason> Returned when the given command is unknown to the server (or hidden because of lack of access rights)"								 /* ERR_UNKNOWNCOMMAND */
+#define ERR_422 ":<reason> Sent when there is no MOTD to send the client"																								 /* ERR_NOMOTD */
+#define ERR_424 ":<reason> Generic error message used to report a failed file operation during the processing of a command"												 /* ERR_FILEERROR */
+#define ERR_431 ":<reason> Returned when a nickname parameter expected for a command isn't found"																		 /* ERR_NONICKNAMEGIVEN */
+#define ERR_432 "<nick> :<reason> Returned after receiving a NICK message which contains a nickname which is considered invalid, s[...] "								 /* ERR_ERRONEUSNICKNAME */
+#define ERR_433 arg1 + " :Nickname is already in use"																													 /* ERR_NICKNAMEINUSE */
+#define ERR_436 "<nick> :<reason> Returned by a server to a client when it detects a nickname collision"																 /* ERR_NICKCOLLISION */
+#define ERR_437 "<nick/channel/service> :<reason> Return when the target is unable to be reached temporarily, eg. a delay mechanism in play, or a service being offline" /* ERR_UNAVAILRESOURCE */
+#define ERR_441 arg1 + " " + arg2 + ": They aren't on that channel"																										 /* ERR_USERNOTINCHANNEL */
+#define ERR_442 arg1 + " :You're not on that channel"																													 /* ERR_NOTONCHANNEL */
+#define ERR_443 arg1 + " " + arg2 + " :User already on channel"																											 /* ERR_USERONCHANNEL */
+#define ERR_444 "<user> :<reason> Returned by the SUMMON command if a given user was not logged in and could not be summoned"											 /* ERR_NOLOGIN */
+#define ERR_445 ":<reason> Returned by SUMMON when it has been disabled or not implemented"																				 /* ERR_SUMMONDISABLED */
+#define ERR_446 ":<reason> Returned by USERS when it has been disabled or not implemented"																				 /* ERR_USERSDISABLED */
+#define ERR_451 ":<reason> Returned by the server to indicate that the client must be registered before the server will allow it to be parsed in detail"				 /* ERR_NOTREGISTERED */
+#define ERR_461 arg1 + " :Not enough parameters"																														 /* ERR_NEEDMOREPARAMS */
+#define ERR_462 ":Unauthorized command (already registered)"																											 /* ERR_ALREADYREGISTERED */
+#define ERR_463 ":Your host isn't among the privileged"																													 /* ERR_NOPERMFORHOST */
+#define ERR_464 arg1 + ":Password incorrect"																															 /* ERR_PASSWDMISMATCH */
+#define ERR_465 ":You are banned from this server"																														 /* ERR_YOUREBANNEDCREEP */
+#define ERR_466 ""																																						 /* ERR_YOUWILLBEBANNED  , no msg */
+#define ERR_467 arg1 + " :Channel key already set"																														 /* ERR_KEYSET */
+#define ERR_471 arg1 + " :Cannot join channel (+l)"																														 /* ERR_CHANNELISFULL */
+#define ERR_472 arg1 + " :is unknown mode char to me for " + arg2																										 /* ERR_UNKNOWNMODE */
+#define ERR_473 arg1 + " :Cannot join channel (+i) (You must be invited)"																								 /* ERR_INVITEONLYCHAN */
+#define ERR_474 arg1 + " :Cannot join channel (+b) (You're banned)"																										 /* ERR_BANNEDFROMCHAN */
+#define ERR_475 arg1 + " :Cannot join channel (+k)"																														 /* ERR_BADCHANNELKEY */
+#define ERR_476 arg1 + " :Bad Channel Mask"																																 /* ERR_BADCHANMASK */
+#define ERR_477 arg1 + " :Channel doesn't support modes"																												 /* ERR_NOCHANMODES */
+#define ERR_478 arg1 + " :Channel list is full"																															 /* ERR_BANLISTFULL */
+#define ERR_481 ":<reason> Returned by any command requiring special privileges (eg. IRC operator) to indicate the operation was unsuccessful"							 /* ERR_NOPRIVILEGES */
+#define ERR_482 arg1 + " :You're not channel operator"																													 /* ERR_CHANOPRIVSNEEDED */
+#define ERR_483 ":<reason> Returned by KILL to anyone who tries to kill a server"																						 /* ERR_CANTKILLSERVER */
+#define ERR_484 ":<reason> Sent by the server to a user upon connection to indicate the restricted nature of the connection (i.e. usermode +r)"							 /* ERR_RESTRICTED */
+#define ERR_485 ":You're not the original channel operator"																												 /* ERR_UNIQOPRIVSNEEDED */
+#define ERR_491 ":<reason> Returned by OPER to a client who cannot become an IRC operator because the server has been configured to disallow the client's host"			 /* ERR_NOOPERHOST */
+#define ERR_492 ""																																						 /* ERR_NOSERVICEHOST */
+#define ERR_501 ":Unknown MODE flag"																																	 /* ERR_UMODEUNKNOWNFLAG */
+#define ERR_502 ":Cannot change mode for other users"																													 /* ERR_USERSDONTMATCH */
 
 /*
 **      Numeric Replies :

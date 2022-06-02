@@ -256,7 +256,6 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 	msg += " " + workingparams;
 	if (workingparams.length() != 0) // meme si vide y a des espaces 
 		server_relay(u, tokenize(msg, ' '), chan->getUsers()); // si il est ban faut l'enlever apres... comment faire sans alourdir ?
-	chan->removeBannedFromUsers(); // trouver plus opti que le faire a chaque fois
 	chan->displayModes();
 }
 
