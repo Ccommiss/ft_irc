@@ -21,12 +21,7 @@ void Server::existing_connection( int sd )
 		//	i = buffer[a];
 		//	std::cout << "char ="<<buffer[a]<<"[" << i << "]" << std::endl;
 		//}
-		debug(SV, "ASCII - CODE");
-		for (size_t i = 0; i < st.size(); i++)
-		{
-			int a = st[i];
-			std::cout << st[i] << "[" << a << "]" << std::endl;
-		}
+
 		if (strlen(buffer) >= 2)
 		{
 			size_t old_pos;
@@ -37,16 +32,14 @@ void Server::existing_connection( int sd )
 				if (pos == std::string::npos)
 				{
 	start;
-					out("no \r\n");
 					users[sd]->buffer.append(st.substr(old_pos));
 					break;
 				}
 				else
 				{
 	start;
-					out("old_pos - pos : " << old_pos << " " << pos);
+
 					users[sd]->buffer.append(st.substr(old_pos, pos));
-					out("LOOP SEND TO PARS : " + users[sd]->buffer);
 					cmds.parse_cmd(users[sd], *this);
 					if (users.count(sd))
 						users[sd]->buffer.clear();
@@ -55,18 +48,10 @@ void Server::existing_connection( int sd )
 			}
 			if (users.count(sd) && users[sd]->buffer.find("\r\n") != std::string::npos)
 			{
-					out("OUT LOOP SEND TO PARS : " + users[sd]->buffer);
 					cmds.parse_cmd(users[sd], *this);
 					if (users.count(sd))
 						users[sd]->buffer.clear();
 			}
-
-
-
-			if (buffer[numbytes -1] == '\n' && buffer[numbytes -2] == '\r')
-				std::cout << "line correct" << std::endl;
-			else
-				std::cout << "line not correct" << std::endl;
 		}
 		//debug(SV, users[sd]->nickname,NOCR);
 		//debug(SV, " - BUFF_MAX_SIZE = ", NOCR);

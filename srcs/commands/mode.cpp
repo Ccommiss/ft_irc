@@ -178,7 +178,6 @@ bool	takeArg(char mode)
 		case 'O':
 			return true;
 	}
-	out ("NOT TAKE ARG");
 	return false;
 }
 
@@ -208,12 +207,13 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 	out ("Before loop")
 
 	int paramLocation = 0;
+	bool already_set;
 	std::string msg = "MODE " + chan_name + " "; /*Le msg n'affiche que ce qui a fonctionne */ 
 	msg += modes[0]; //
 	std::string workingparams = "";
+	std::string res;
 	for (size_t i = a; i < modes.length(); i++)
 	{
-		
 		out ("in loop")
 		std::string currParam = "";
 		if (takeArg(modes[i]) && i <= mode_params.size() + 1) // i commence a 1; donc arg 1 va avec param 0 etc.
@@ -228,26 +228,28 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 				currParam = "";
 			}
 		}
-		std::string res = chan->setMode(u, modes[i], value, currParam);
+		out ("SENDING PARAMS << " << currParam << "TO MIDE " << modes[i] << "value " << value);
+		value == chan->hasMode(modes[i]) ? already_set = true: already_set = false;
+		if (!already_set)
+			res = chan->setMode(u, modes[i], value, currParam);
+		out ("IS ALREADY SET ?" << already_set)
 
 		/* FOR RPL_BAN LIST, one answer per ban mask */
-		if (res == RPL_BANLIST || res == RPL_INVITELIST)// || res == RPL_EXCEPTLIST)
+		if (!already_set && (res == RPL_BANLIST || res == RPL_INVITELIST))// || res == RPL_EXCEPTLIST)
 		{
 			if (res == RPL_BANLIST)
 				rpl_lists(s, u, chan_name, chan->getBannedMasks(), RPL_BANLIST, RPL_ENDOFBANLIST);
 			else if (res == RPL_INVITELIST)
 				rpl_lists(s, u, chan_name, chan->getInvitedMasks(), RPL_INVITELIST, RPL_ENDOFINVITELIST);
 		}
-		else if (res == ERR_NOSUCHNICK)
+		else if (!already_set && res == ERR_NOSUCHNICK)
 			s.numeric_reply(u, res, currParam, NONE, NONE);
-		else if (res.length() != 0) /* Erreur */
+		else if (!already_set && res.length() != 0) /* Erreur */
 			s.numeric_reply(u, res, chan->_name, NONE, NONE);
-		else /* ca a marche */ 
+		else if (!already_set) /* ca a marche */ 
 		{
 			workingparams += currParam + " ";
 			msg += modes[i]; // on rajoute la lettre
-			std::string params = trim(mode_params[0]).length() > 0 ? vecToString(mode_params) : "";
-			s.numeric_reply(u, RPL_CHANNELMODEIS, chan->_name, to_str(modes[i]), params); //
 		}
 	}
 	/* Si une erreur, ne pas envoyer ? */
