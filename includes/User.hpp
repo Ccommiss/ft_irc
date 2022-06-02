@@ -15,6 +15,7 @@ class User
 		std::string name;
 		std::string nickname;
 		std::string 			ip;
+		std::string	buffer;
 		struct epoll_event *event;
 
 		// User();
