@@ -14,6 +14,7 @@ class User
 		bool registered[4]; // trois booleens
 		std::string name;
 		std::string nickname;
+		std::string real_name;
 		std::string 			ip;
 		std::string	buffer;
 		struct epoll_event *event;
@@ -33,6 +34,8 @@ class User
 		void setName(std::string newName);
 		std::string const &getName() const;
 		std::string const &getNickName() const;
+		std::string const &getRealname() const;
+
 
 		void joinChan(Channel *chan);
 		void leaveChan(Channel *chan);
@@ -49,6 +52,7 @@ class User
 		void displayModes();
 		bool hasMode(char mode);
 		std::vector<Channel *> const &getJoinedChannels();
+
 
 		std::vector<Channel *> joined_chans;
 

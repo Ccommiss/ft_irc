@@ -76,9 +76,9 @@
 #define MSG_303 ":*1<nick> *( ' ' <nick> ) Reply to the ISON command (see RFC)"																																							  /* RPL_ISON */
 #define MSG_305 ": You are no longer marked as AWAY :)" 																																								  /* RPL_UNAWAY */
 #define MSG_306 ": You are marked as AWAY zZzZ" 																																											  /* RPL_NOWAWAY */
-#define MSG_311 arg1+ " " + arg2 + "localhost" + "* :" + arg3 + "<real_name>" // Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
-#define MSG_312 arg1+ " " + "<server> :<server_info> Reply to WHOIS - What server they're on"																																				  /* RPL_WHOISSERVER */
-#define MSG_313 arg1+ " :is an IRC operator" //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
+#define MSG_311 arg1 + " " + arg2 + " " + s.hostname + " * " + arg3// Reply to WHOIS - Information about the user"																																		  /* RPL_WHOISUSER */
+#define MSG_312 arg1 + " " + arg2																																				  /* RPL_WHOISSERVER */
+#define MSG_313 arg1 + " :is an IRC operator" //Reply to WHOIS - User has IRC Operator privileges"																																				  /* RPL_WHOISOPERATOR */
 #define MSG_314 arg1+ " " + "<user> <host> * :<real_name> Reply to WHOWAS - Information about the user"																																		  /* RPL_WHOWASUSER */
 #define MSG_315 "<name> :<info> Used to terminate a list of RPL_WHOREPLY replies"																																						  /* RPL_ENDOFWHO */
 #define MSG_316 ""																																																						  /* RPL_WHOISCHANOP */

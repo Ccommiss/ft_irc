@@ -42,6 +42,7 @@ void Commands::setUser(Server &s, User *u, std::vector<std::string> cmd)
 		return(s.numeric_reply(u, ERR_NEEDMOREPARAMS, NONE, NONE, NONE));
 	out("Setting name to : " << *(cmd.begin() + 1));
 	u->setName(*(cmd.begin() + 1));
+	u->real_name = (*(cmd.begin() + 4));
 	if (u->registered[User::USER] == false)
 	{
 		if (!u->registered[User::PASS])

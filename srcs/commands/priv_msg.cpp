@@ -91,7 +91,6 @@ void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string>
 
 void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std::string> cmd)
 {
-	// regarder se passe quioi si channel non existant
 
 	if (!s.chanExists(dest_channel))
 		return (s.numeric_reply(u, ERR_NOSUCHNICK, dest_channel, NONE, NONE));

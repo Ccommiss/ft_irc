@@ -149,6 +149,11 @@ std::string &User::getAwayMsg()
 	return _away_msg;
 }
 
+std::string const &User::getRealname() const
+{
+	return real_name;
+}
+
 
 bool User::HasCompletedRegistration()
 {
@@ -194,7 +199,7 @@ std::string User::whoIsChannels(User *u)
 	std::string answer;
 	for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
 	{
-		if (!( (*it)->hasMode('s') || (*it)->hasMode('p')) && !(*it)->isInChan(u)) // a tester
+		if (!(*it)->isPrivateForUser(u)) // a tester
 		{
 			if ((*it)->isOperator(this))
 				answer.append("@");
@@ -207,11 +212,15 @@ std::string User::whoIsChannels(User *u)
 
 bool User::hasMode(char mode)
 {
+	if (_modes.count(mode) == 0)
+		return false;
 	return (_modes[mode]);
 }
 
 void User::setOneKeyMode(char mode, bool value)
 {
+	if (_modes.count(mode) == 0)
+		return ;
 	_modes[mode] = value;
 }
 
