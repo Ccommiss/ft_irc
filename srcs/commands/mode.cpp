@@ -164,6 +164,10 @@ bool	takeArg(char mode)
 		case 'l':
 			return true;
 		case 'k':
+			return true;
+		case 'b':
+			return true;
+		case 'I':
 			return true; 
 	}
 	out ("NOT TAKE ARG");
