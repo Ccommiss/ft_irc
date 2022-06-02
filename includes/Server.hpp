@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 12:50:03 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/31 15:39:21 by csejault         ###   ########.fr       */
+/*   Updated: 2022/06/02 14:48:21 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */ //Class_Name = Server //define{
 #ifndef SERVER_TCP_HPP
@@ -87,6 +87,7 @@ class	Server {
 		void	shutdown(bool does_throw);
 		void	run( void );
 		bool	pass_check( std::string to_check);
+		bool	oper_pass_check( std::string to_check);
 
 		void	printChans();
 		void	printUsers();
@@ -143,6 +144,7 @@ class	Server {
 		//priv_var{
 		int							_port;
 		std::string					_pass;
+		std::string					_oper_pass;
 		struct addrinfo			*	_addrs;
 		int 						_listener;
 		int							_efd;

@@ -68,6 +68,17 @@ void	Server::delete_user( User *to_del )
 	
 }
 
+bool	Server::oper_pass_check( std::string to_check)
+{
+	out("PASS_CHECK :");
+	out("ORIGINAL [" + _oper_pass + "]");
+	out("TO_CHECK [" + to_check + "]");
+	if (!to_check.compare(_oper_pass))
+		return (true);
+	else
+		return (false);
+}
+
 bool	Server::pass_check( std::string to_check)
 {
 	out("PASS_CHECK :");

@@ -6,7 +6,7 @@
 /*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 16:31:45 by csejault          #+#    #+#             */
-/*   Updated: 2022/05/31 17:34:32 by csejault         ###   ########.fr       */
+/*   Updated: 2022/06/02 14:46:42 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 
 //Buffer size for HOSTNAME
 #define HOSTNAME_SIZE 256
+
+//OPER_PASSWORD
+#define OPER_PASSWORD "OPER"
 
 //Buffer size for RECV message
 #define RECV_BUFF_SIZE 512
