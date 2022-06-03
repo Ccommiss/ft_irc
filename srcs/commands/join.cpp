@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   join.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:47:34 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 18:09:04 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
 
@@ -41,42 +53,38 @@
 **            RPL_TOPIC OK
 */
 
-// a penser : remove User ... + irc root me does not work with this
-
-void Commands::leaveAllChans(User *u) // comment faire ca sur irssi ???????
+void Commands::leaveAllChans(User *u)
 {
 	for (std::vector<Channel *>::const_iterator chans = u->getJoinedChannels().begin(); chans != u->getJoinedChannels().end(); chans++)
 	{
-		u->leaveChan(*chans); // il leave le chan, il eprforme le delete user aussi via channel
+		u->leaveChan(*chans);
 		std::string msg[] = {"PART", (*chans)->_name};
 		std::vector<std::string> part_msg(msg, msg + 2);
 		server_relay(u, part_msg, u);
 	}
 }
 
-void createChan(Server &s, std::string chan_name, User *u, bool *joined)
+void Commands::createChan(Server &s, std::string chan_name, User *u, bool *joined)
 {
 	Channel *chan = new Channel(chan_name, u);
 	if (chan_name[0] == '+')
 		chan->setMode(u, 't', true, ""); /* + channel are unmoderated, only t is toggled see 2.3 rfc 2811 */
 	u->joinChan(chan);
-	s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan)); // a mettre dans serveur
+	s.chans.insert(std::pair<std::string, Channel *>(chan_name, chan));
 	*joined = true;
 }
 
-void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i)
+void Commands::simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i)
 {
-	start;
-	out (i);
 	if (chan->isInChan(u))
-		return;																			  // do nothing but maybe a specific error ?
-	else if (chan->hasKey() && ( (pass->size() <= i) || (!chan->isCorrectPass(pass->at(i))) ) ) // throw une ex
+		return;
+	else if (chan->hasKey() && ((pass->size() <= i) || (!chan->isCorrectPass(pass->at(i)))))
 		s.numeric_reply(u, ERR_BADCHANNELKEY, chan->_name, NONE, NONE);
-	else if (chan->isBanned(u))
+	else if (chan->isBanned(u) || chan->matchBannedMask(u))
 		s.numeric_reply(u, ERR_BANNEDFROMCHAN, chan->_name, NONE, NONE);
-	else if(chan->hasMode('l') && chan->getUsers().size() + 1 > chan->getLimit())
+	else if (chan->hasMode('l') && chan->getUsers().size() + 1 > chan->getLimit())
 		s.numeric_reply(u, ERR_CHANNELISFULL, chan->_name, NONE, NONE);
-	else if (u->joined_chans.size() >= MAX_CHANNEL)
+	else if (u->getJoinedChannels().size() >= MAX_CHANNEL)
 		s.numeric_reply(u, ERR_TOOMANYCHANNELS, chan->_name, NONE, NONE);
 	else
 	{
@@ -86,10 +94,9 @@ void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std:
 	}
 }
 
-void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou quit
+void Commands::join(Server &s, User *u, std::vector<std::string> cmd) 
 {
-	start;
-	if (cmd.size() == 1) // un seul mot dans le vec donc juste la cmd sans cmd
+	if (cmd.size() == 1) 
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
 	size_t i = 0;
@@ -106,16 +113,16 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		joined = false;
 
 		/* Case 0 : Channel name is not well fomatted */
-		if (chan_name[0] != '#' && chan_name[0] != '+') // + stands for unmoderated chan
+		if (chan_name[0] != '#' && chan_name[0] != '+') /* # and + chans are the only supported */ 
 			s.numeric_reply(u, ERR_BADCHANMASK, chan_name, NONE, NONE);
 		/* Case 1 : JOIN 0 -> leaving all chans */
 		else if (*nb_chans_it == "0")
-			return (leaveAllChans(u)); // return ou non  ?
+			return (leaveAllChans(u));
 		/* Case 2 : Channel does not exist */
 		else if (!s.chanExists(chan_name))
 			createChan(s, chan_name, u, &joined);
 		/* Case 4 : Channel does exist but invite only */
-		else if (s.chans[chan_name]->hasMode('i') && (!s.chans[chan_name]->isInvited(u) && !s.chans[chan_name]->matchInviteMask(u))) // invite only
+		else if (s.chans[chan_name]->hasMode('i') && (!s.chans[chan_name]->isInvited(u) && !s.chans[chan_name]->matchInviteMask(u)))
 			s.numeric_reply(u, ERR_INVITEONLYCHAN, chan_name, NONE, NONE);
 		/* Case 5 : Channel does exist and ok !! */
 		else
@@ -124,7 +131,6 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		/* Server informing all chan users */
 		if (joined == true)
 		{
-			out ("JOINED TRUE");
 			std::map<std::string *, User *> chan_users = s.chans[chan_name]->getUsers();
 			std::string msg[] = {*(cmd.begin()), chan_name};
 			std::vector<std::string> join_chan_msg(msg, msg + 2);

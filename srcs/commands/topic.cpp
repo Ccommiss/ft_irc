@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   topic.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:55:41 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:57:49 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
-
 
 /*
 **  Command: TOPIC
@@ -35,21 +46,22 @@
 **                                    #test.
 **
 */
+
 void Commands::topic(Server &s, User *u, std::vector<std::string> cmd)
 {
-	start;
 	if (cmd.size() == 1)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
+
 	std::string chan_name = *(cmd.begin() + 1);
-	out ("topic" << *(cmd.begin() + 2));
-	if (!s.chanExists(chan_name)) // une erreur
+	if (!s.chanExists(chan_name)) 
 		return;
-	Channel *chan = (s.chans[chan_name]); // on recp l'instance
-	if ((chan->hasMode('s') || chan->hasMode('p')) && !chan->isInChan(u))
+
+	Channel *chan = (s.chans[chan_name]); 
+	if (chan->isPrivateForUser(u))
 		return;
 	if (!chan->isInChan(u))
 		return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, "", ""));
-	if ((cmd.begin() + 2) != cmd.end()) // si on demande a changer le sujet
+	if ((cmd.begin() + 2) != cmd.end()) /* Asking for a change */
 	{
 		if (chan->hasMode('t') && !chan->isOperator(u))
 			return (s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan_name, NONE, NONE));
@@ -57,7 +69,9 @@ void Commands::topic(Server &s, User *u, std::vector<std::string> cmd)
 		server_relay(u, cmd, chan_users);
 		chan->setTopic(implodeMessage((cmd.begin() + 2), cmd.end()).erase(0,1));
 	}
-	if (chan->isTopicSet() == false) // si ni topic set renvoyer ca
+	
+	/* In all cases, just topic or after a topic change request : */
+	if (chan->isTopicSet() == false) 
 		s.numeric_reply(u, RPL_NOTOPIC, chan->_name, NONE, NONE);
 	else
 		s.numeric_reply(u, RPL_TOPIC, chan->_name, chan->_topic, NONE);

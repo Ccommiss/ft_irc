@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mode.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:48:24 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 18:17:38 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Answers.hpp"
@@ -66,38 +77,36 @@
 **
 */
 
-void handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector<std::string> cmd)
+
+
+void Commands::handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector<std::string> cmd)
 {
-	start;
+	std::string modes;
+	std::vector<std::string> mode_params;
+
+	/* Cannot ask for another username */
+	if (nickname_asked != u->nickname)
+		return s.numeric_reply(u, ERR_USERSDONTMATCH, u->nickname, NONE, NONE);
+
 	/* No argument supplied, e.g. "MODE Wiz" : information is sent back */
 	if (cmd.size() == 2)
-		return (s.numeric_reply(u, RPL_UMODEIS, nickname_asked, NONE, NONE));
+		return (s.numeric_reply(u, RPL_UMODEIS, nickname_asked, u->makeModeString(), NONE));
 
-	std::string modes = trim(*(cmd.begin() + 2));		   // +=letters....
-	std::vector<std::string> mode_params; // vaut peut etre le coup d'envoyer juste une string car pas sure que puisse y avoir plusieurs args
-
+	/* Mode is changing */
+	modes = trim(*(cmd.begin() + 2));
 	(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back(""));
-
-	/* Cannot ask modification for another username */
-	if (nickname_asked != u->nickname)
-		return s.numeric_reply(u, ERR_USERSDONTMATCH, u->nickname, NONE, NONE); // pas le droit de demander mode pour les autres
 
 	/* Setting the value. + is true, - is false */
 	bool value = modes[0] == '+' ? true : false;
 	for (size_t i = 1; i < modes.length(); i++)
 	{
 		std::string res = u->setMode(modes[i], value, mode_params);
-		if (res.length() != 0)
+		if (res.length() != 0 && res != IGNORE)
 			s.numeric_reply(u, res, u->nickname, NONE, NONE);
 		else
-		{
-			s.numeric_reply(u, RPL_CHANNELMODEIS, u->nickname, modes, vecToString(mode_params)); //
 			server_relay(u, cmd, u);
-		}
 	}
 }
-
-
 
 /*
 **    Command: MODE (channel)
@@ -146,79 +155,84 @@ void handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector
 **             the invite-only flag;
 */
 
-
-
-
-void	rpl_lists(Server &s, User *u, std::string chan_name, std::vector<std::string> list, std::string rpl_name, std::string rpl_end_name)
+void Commands::rpl_lists(Server &s, User *u, std::string chan_name, std::vector<std::string> list, std::string rpl_name, std::string rpl_end_name)
 {
 	for (size_t i = 0; i < list.size(); i++)
 		s.numeric_reply(u, rpl_name, chan_name, list.at(i), NONE);
 	s.numeric_reply(u, rpl_end_name, chan_name, to_str(list.size()), NONE);
 }
 
-
-bool	takeArg(char mode)
+bool Commands::takeArg(char mode)
 {
 	switch (mode)
 	{
-		case 'l':
-			return true;
-		case 'e':
-			return true;
-		case 'I':
-			return true;
-		case 'k':
-			return true;
-		case 'b':
-			return true;
-		case 'v':
-			return true;
-		case 'o':
-			return true;
-		case 'O':
-			return true;
+	case 'l':
+	case 'e':
+	case 'I':
+	case 'k':
+	case 'b':
+	case 'v':
+	case 'o':
+	case 'O':
+		return true;
 	}
 	return false;
 }
 
-void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd)
+bool Commands::isSet(Channel *chan, char mode)
 {
-	start;
-	if (!s.chanExists(chan_name))
+	switch (mode)
 	{
-		out("Chan does not exist")
-		return; // NO SUCH NICK ? mais pas specifie
+	case 't':
+	case 'i':
+	case 'p':
+	case 's':
+	case 'r':
+	case 'm':
+		return (chan->hasMode(mode)); /* if key already set, or topic only, or invite only must unset before */
+	case 'l':
+	case 'b':
+	case 'e':
+	case 'I':
+	case 'o':
+	case 'v':		  /* we can still set more of these */
+		return false; /* can do +2 then +3 to add limits */
 	}
-	if (cmd.size() == 2) // just MODE #chan
-		return (s.numeric_reply(u, RPL_CHANNELMODEIS, chan_name, printModes(s.chans[chan_name]), NONE)); //
+	/* case k : has to return the key already set error */
+	return false;
+}
 
-	std::string modes 					= *(cmd.begin() + 2);
-	std::vector<std::string> 			mode_params;
-	(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back("")); // tout le reste n fait
-
-
-	/* Note : to list info, one can ask for e.g. /mode #chan +b or /mode #chan I, so +/- is not
-	alway set. This is not taken into account yet */
-
-	Channel *chan = s.chans[chan_name];
-	int a = (modes[0] == '-' || modes[0] == '+') ? 1 : 0;
-	bool value = modes[0] == '-' ? false : true; /* Making true even if no + before mode option. */
-	/* if we have MODE something, starting at 0; else, starting at 1 to skip the +/- */
-	out ("Before loop")
-
+void Commands::handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd)
+{
 	int paramLocation = 0;
 	bool already_set;
-	std::string msg = "MODE " + chan_name + " "; /*Le msg n'affiche que ce qui a fonctionne */ 
-	msg += modes[0]; //
+	bool value;
+	std::string modes;
+	std::vector<std::string> mode_params;
+	Channel *chan;
+	std::string msg;
 	std::string workingparams = "";
 	std::string res;
-	for (size_t i = a; i < modes.length(); i++)
+
+	if (!s.chanExists(chan_name))
+		return (s.numeric_reply(u, ERR_NOSUCHNICK, chan_name, NONE, NONE));
+
+	if (cmd.size() == 2)
+		return (s.numeric_reply(u, RPL_CHANNELMODEIS, chan_name, printModes(s.chans[chan_name]), NONE));
+
+	modes = *(cmd.begin() + 2);
+	(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back(""));
+	chan = s.chans[chan_name];
+
+	value = modes[0] == '-' ? false : true; /* Making true even if no + before mode option. */
+
+	msg = "MODE " + chan_name + " " + modes[0]; 
+	for (size_t i = (modes[0] == '-' || modes[0] == '+') ? 1 : 0; i < modes.length(); i++)
 	{
-		out ("in loop")
 		std::string currParam = "";
-		if (takeArg(modes[i]) && i <= mode_params.size() + 1) // i commence a 1; donc arg 1 va avec param 0 etc.
+		if (takeArg(modes[i]) && i <= mode_params.size() + 1)
 		{
-			try 
+			try
 			{
 				currParam = mode_params.at(paramLocation);
 				paramLocation++;
@@ -228,37 +242,36 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 				currParam = "";
 			}
 		}
-		out ("SENDING PARAMS << " << currParam << "TO MIDE " << modes[i] << "value " << value);
-		value == chan->hasMode(modes[i]) ? already_set = true: already_set = false;
-		if (!already_set)
+		if (!(already_set = isSet(chan, modes[i])))
 			res = chan->setMode(u, modes[i], value, currParam);
-		out ("IS ALREADY SET ?" << already_set)
-		/* FOR RPL_BAN LIST, one answer per ban mask */
-		if (!already_set && (res == RPL_BANLIST || res == RPL_INVITELIST))// || res == RPL_EXCEPTLIST)
+		if (res == RPL_BANLIST || res == RPL_INVITELIST || res == RPL_EXCEPTLIST)
 		{
 			if (res == RPL_BANLIST)
 				rpl_lists(s, u, chan_name, chan->getBannedMasks(), RPL_BANLIST, RPL_ENDOFBANLIST);
 			else if (res == RPL_INVITELIST)
 				rpl_lists(s, u, chan_name, chan->getInvitedMasks(), RPL_INVITELIST, RPL_ENDOFINVITELIST);
+			else if (res == RPL_EXCEPTLIST)
+				rpl_lists(s, u, chan_name, chan->getExceptMasks(), RPL_EXCEPTLIST, RPL_ENDOFEXCEPTLIST);
 		}
 		else if (!already_set && res == ERR_NOSUCHNICK)
 			s.numeric_reply(u, res, currParam, NONE, NONE);
 		else if (!already_set && res.length() != 0) /* Erreur */
 			s.numeric_reply(u, res, chan->_name, NONE, NONE);
-		else if (!already_set) /* ca a marche */ 
+		else if (!already_set && res != IGNORE) /* We just add the letter to the final msg */
 		{
 			workingparams += currParam + " ";
-			msg += modes[i]; // on rajoute la lettre
+			msg += modes[i];
 		}
 	}
-	/* Si une erreur, ne pas envoyer ? */
 	msg += " " + workingparams;
-	if (workingparams.length() != 0) // meme si vide y a des espaces 
-		server_relay(u, tokenize(msg, ' '), chan->getUsers()); // si il est ban faut l'enlever apres... comment faire sans alourdir ?
-	chan->displayModes();
+	if (workingparams.length() != 0) /*  Meaning at least one change worked */
+		server_relay(u, tokenize(msg, ' '), chan->getUsers());
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ccommiss
 void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
 	if (cmd.size() == 1)

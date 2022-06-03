@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Commands.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:36:11 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 18:14:12 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Commands.hpp"
 #include "Debug.hpp"
@@ -30,8 +41,6 @@ Commands::Commands()
 	cmd_map.insert(std::make_pair("NOTICE", &Commands::notice));
 	cmd_map.insert(std::make_pair("AWAY", &Commands::away));
 
-
-	// Now storing replies ; idee, ptr sur func genre Answer::&RPL_001   avec RPL 001 qui prendra un user
 	server_replies.insert(std::make_pair(001, &RPL_001));
 	server_replies.insert(std::make_pair(002, &RPL_002));
 	server_replies.insert(std::make_pair(003, &RPL_003));

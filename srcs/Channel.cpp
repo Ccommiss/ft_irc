@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 12:07:31 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:15:55 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Channel::Channel() : _owner(0)
-{
-}
 
 Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _password(""), _limit(0)
 {
@@ -45,31 +42,19 @@ Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _pa
 
 	_owner = creator;
 	_creator = creator;
-	out("Creator :" << _owner->nickname)
-		add_user(creator);
-	if (name[0] != '+')
+	add_user(creator);
+	if (name[0] != '+') /* in + aka unmoderated channels, no operators are allowed */ 
 		_operators.push_back(_owner);
 	out("A new chan " << *this << " has been created");
 }
 
-Channel::Channel(const Channel &src) : _name(src._name), _owner(src._owner)
-{
-	(void)src;
-	// if ( this != &src )
-	//{
-	// this->_value = src.getValue();
-	//}
-	// return (*this);
-}
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
 */
 
-Channel::~Channel()
-{
-	out ("deleting channel")
-}
+Channel::~Channel(){
+	out("deleting channel")}
 
 /*
 ** --------------------------------- OVERLOAD ---------------------------------
@@ -91,16 +76,13 @@ std::ostream &operator<<(std::ostream &o, Channel &i)
 ** --------------------------------- ACCESSOR ---------------------------------
 */
 
-std::string &Channel::getName() // const
+std::string &Channel::getName()
 {
 	return _name;
 }
 
-std::map<std::string *, User *> &Channel::getUsers() // const
+std::map<std::string *, User *> &Channel::getUsers()
 {
-	start;
-	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out("USERS : " << *it->first);
 	return _users;
 }
 
@@ -124,7 +106,10 @@ std::vector<std::string> &Channel::getInvitedMasks()
 	return _invitedMasks;
 }
 
-
+std::vector<std::string> &Channel::getExceptMasks()
+{
+	return _exceptMasks;
+}
 
 void Channel::setTopic(std::string topic)
 {
@@ -134,10 +119,6 @@ void Channel::setTopic(std::string topic)
 
 bool Channel::isTopicSet()
 {
-	out(" TOPIC IS " << _topic << "-->" << _topic.length()) if (_topic.length() != 0)
-	{
-		out("TOPIC IS SET") return true;
-	}
 	return false;
 }
 
@@ -157,7 +138,6 @@ bool Channel::isInvited(User *user)
 
 bool Channel::findByName(std::string nick, User **u)
 {
-	start;
 	std::map<std::string *, User *>::iterator it;
 	for (it = _users.begin(); it != _users.end(); it++)
 	{
@@ -170,10 +150,10 @@ bool Channel::findByName(std::string nick, User **u)
 	return false;
 }
 
-bool	Channel::isPrivateForUser(User *u)
+bool Channel::isPrivateForUser(User *u)
 {
 	if ((hasMode('s') || hasMode('p')) && !isInChan(u))
-			return true;
+		return true;
 	return false;
 }
 
@@ -194,7 +174,6 @@ bool Channel::isBanned(User *u)
 	std::list<User *>::iterator it = std::find(_banned.begin(), _banned.end(), u);
 	if (it != _banned.end())
 		return true;
-	out ("not banned")
 	return false;
 }
 
@@ -237,7 +216,7 @@ bool Channel::matchInviteMask(User *u)
 
 bool Channel::matchBannedMask(User *u)
 {
-	if (_bannedMasks.size() == 0)
+	if (_bannedMasks.size() == 0 || matchExceptMask(u))
 		return false;
 	for (std::vector<std::string>::iterator it = _bannedMasks.begin(); it != _bannedMasks.end(); it++)
 	{
@@ -247,7 +226,19 @@ bool Channel::matchBannedMask(User *u)
 	return false;
 }
 
-size_t	Channel::getLimit()
+bool Channel::matchExceptMask(User *u)
+{
+	if (_exceptMasks.size() == 0)
+		return false;
+	for (std::vector<std::string>::iterator it = _exceptMasks.begin(); it != _exceptMasks.end(); it++)
+	{
+		if (pattern_match(u->fullID(), *it) || pattern_match(u->nickname, *it))
+			return true;
+	}
+	return false;
+}
+
+size_t Channel::getLimit()
 {
 	return _limit;
 }
@@ -256,81 +247,111 @@ size_t	Channel::getLimit()
 ** --------------------------------- METHODS ----------------------------------
 */
 
+/*
+**	@brief add user to the channel
+**	@param User* user to be added
+*/
 void Channel::add_user(User *new_user)
 {
-	start;
 	if (!isInChan(new_user))
 		_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
-	out("[" << _name << "] "
-			<< "New user added :" << new_user->getNickName());
 }
 
-void Channel::remove_user(User *new_user)
+/*
+**	@brief remove user to the channel
+**	@param user* user to be removed
+*/
+void Channel::remove_user(User *toDel)
 {
-	start;
-	if (isInChan(new_user))
-	{
-		std::cout << "Deleted users : "  << new_user->nickname << std::endl;
-		_users.erase(&new_user->nickname);
-
-	}
-	else
-		out("Unfound user : cannot remove from " << this->_name);
+	if (isInChan(toDel))
+		_users.erase(&toDel->nickname);
+	if (isOperator(toDel))
+		removeOperator(toDel);
 }
 
+/*
+**	@brief add user to inviteList
+**	@param User* user to be added
+*/
 void Channel::addToInviteList(User *to_add)
 {
 	if (!isInvited(to_add))
 		_invited.push_back(to_add);
 }
 
+/*
+**	@brief remove user from inviteList
+**	@param user* user to be removed
+*/
 void Channel::removeFromInviteList(User *to_del)
 {
 	if (isInvited(to_del))
 		_invited.erase(std::find(_invited.begin(), _invited.end(), to_del));
 }
 
+/*
+**	@brief add user to operators
+**	@param User* user to be added
+*/
 void Channel::addOperator(User *to_add)
 {
 	if (!isOperator(to_add))
 		_operators.push_back(to_add);
 }
 
+/*
+**	@brief remove user from operators
+**	@param user* user to be removed
+*/
 void Channel::removeOperator(User *to_del)
 {
 	if (isOperator(to_del))
 		_operators.erase(std::find(_operators.begin(), _operators.end(), to_del));
 }
 
+/*
+**	@brief add user to voiced
+**	@param User* user to be added
+*/
 void Channel::addVoiced(User *to_add)
 {
 	if (!isVoiced(to_add))
 		_voiced.push_back(to_add);
 }
 
+/*
+**	@brief remove user from voiced
+**	@param user* user to be removed
+*/
 void Channel::removeVoiced(User *to_del)
 {
 	if (isVoiced(to_del))
 		_voiced.erase(std::find(_voiced.begin(), _voiced.end(), to_del));
 }
 
+/*
+**	@brief add user to banned
+**	@param User* user to be added
+*/
 void Channel::addBanned(User *to_add)
 {
 	if (!isBanned(to_add))
 		_banned.push_back(to_add);
 }
 
+/*
+**	@brief remove user from banned
+**	@param user* user to be removed
+*/
 void Channel::removeBanned(User *to_del)
 {
-	start;
 	if (isBanned(to_del))
-	{
-			out ("removing from banned list :" << to_del->nickname)
 		_banned.erase(std::find(_banned.begin(), _banned.end(), to_del));
-	}
 }
 
-
+/*
+**	@brief debug function to display modes
+*/
 void Channel::displayModes()
 {
 	out("Channel " << _name << " has modes : ") for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
@@ -341,42 +362,10 @@ void Channel::displayModes()
 	out("Password is : " << _password);
 }
 
-std::string printNames(Channel *chan, User *u)
-{
-	std::string names;
-	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin(); it != chan->getUsers().end(); it++)
-	{
-		// if is op... @, sinon +
-		if (!(it->second->hasMode('i') && !chan->isInChan(u))) // invisible 
-		{
-			if (chan->isOperator(it->second))
-				names.append("@");
-			else
-				names.append("");
-			names.append(*it->first);
-			names.append(" ");
-		}
-	}
-	return names;
-}
-
-void	Channel::removeBannedFromUsers()
-{
-	for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
-	{
-		if (isInChan(*it))
-		{
-			_users.erase(&(*it)->nickname);
-			(*it)->joined_chans.erase(std::find((*it)->joined_chans.begin(), (*it)->joined_chans.end(), this)); //on retire les joined chans
-		}
-	}
-}
-
-
 std::string printModes(Channel *chan)
 {
 	std::string modes("[+");
-	for (std::map<char, bool >::iterator it = chan->getModes().begin(); it != chan->getModes().end(); it++)
+	for (std::map<char, bool>::iterator it = chan->getModes().begin(); it != chan->getModes().end(); it++)
 	{
 		if (it->second == true)
 			modes.push_back(it->first);
@@ -385,82 +374,60 @@ std::string printModes(Channel *chan)
 	return modes;
 }
 
-
-void	Channel::seeBannedmasks()
+void Channel::seeBannedmasks()
 {
-	out ("Banned masks are :")
-	for (size_t i = 0; i < _bannedMasks.size(); i++)
-		out (" - " <<  _bannedMasks[i]);
-	out ("");
+	out("Banned masks are :") for (size_t i = 0; i < _bannedMasks.size(); i++)
+		out(" - " << _bannedMasks[i]);
+	out("");
 }
 
-
-void Channel::printUsers() // const
+void Channel::printUsers()
 {
-	start;
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out("USERS : " << *it->first); // show the nick name
+		out("USERS : " << *it->first);
 }
 
-void Channel::printBanned() // const
+void Channel::printBanned()
 {
-	start;
-	out ("Banned :")
+	out("Banned :");
 	for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
-		out("- : " << (*it)->fullID()); // show the nick name
-	out ("");
+		out("- : " << (*it)->fullID());
+	out("");
 }
-
-// void Channel::printUsers() // const
-// {
-// 	start;
-// 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-// 		out("USERS : " << *it->first); // show the nick name
-// }
 
 /*
 ** --------------------------------- MODES METHODS ----------------------------------
 */
 
-std::string Channel::setMode(User *u, char mode, bool value, std::string param) // on va renvoyer le code erreur ou bien  0
+std::string Channel::setMode(User *u, char mode, bool value, std::string param)
 {
-	start;
 	(void)u;
 	if (_modes.count(mode) == 0) /* Checking if mode exists */
-	{
 		return ERR_UNKNOWNMODE;
-	}
-	else
-	{
-		out("FOUND " << (_modes.find(mode)->first))
-		out("FOUND " << (_modes.find(mode)->second))
-
-	}
 	/* Future target user for O, o and v options*/
 	User *user = NULL;
 	switch (mode)
 	{
-	case 'a': // aninymous mode que sur les channels & et ! RFC 4.2.1 2811
+	case 'a': /* Only for & et ! RFC 4.2.1 2811 */
 	{
 		if (_name[0] != '!' && _name[0] != '&')
 			return (ERR_NOCHANMODES);
 		break;
 	}
-	case 'b': /* Bannir un user/un masque */
+	case 'b': /* Ban a mask */
 	{
 		if (value == true && trim(param).length() == 0)
 			return RPL_BANLIST;
 		if (value == false && trim(param).length() == 0)
-			return ERR_NEEDMOREPARAMS; //  a verifier
-		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
+			return ERR_NEEDMOREPARAMS;
+		if (!isOperator(u))
 			return ERR_CHANOPRIVSNEEDED;
 		if (value == true)
 		{
 			_bannedMasks.push_back(trim(param));
-
-			for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it ++)
+			for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
 			{
-				if (matchBannedMask(it->second))
+				if (matchBannedMask(it->second) && !matchExceptMask(it->second))
 					addBanned(it->second);
 			}
 		}
@@ -468,7 +435,7 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 		{
 			if (std::find(_bannedMasks.begin(), _bannedMasks.end(), trim(param)) != _bannedMasks.end())
 				_bannedMasks.erase(std::find(_bannedMasks.begin(), _bannedMasks.end(), trim(param)));
-			for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); )
+			for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end();)
 			{
 				std::list<User *>::iterator tmp = it;
 				it++;
@@ -476,58 +443,83 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 					removeBanned(*tmp);
 			}
 		}
-		seeBannedmasks();
-		printBanned();
 		break;
 	}
-	case 'e' :
+	case 'e': /* Overwrite ban mask */ 
 	{
-		//Last to do : exception list
-	}
-	case 'k':
-	{
-		if (trim(param).length() == 0)
-			return ERR_NEEDMOREPARAMS;			  // faudra renvoyer erreur
-		if (value == true && _modes['k'] == true) // on veut changer alors que deja existant
-			return ERR_KEYSET;
-		else if (value == true)
-			_password = trim(param);
-		else if (value == false && trim(param) != _password) // on essaie d'enever le pass mais mavais
-			return ERR_KEYSET;									 // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
+		if (value == true && trim(param).length() == 0)
+			return RPL_EXCEPTLIST;
+		if (value == false && trim(param).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		if (!isOperator(u))
+			return ERR_CHANOPRIVSNEEDED;
+		if (value == true) /* Adding an exception ; thus ppl who have a nickname are now unbanned */
+		{
+			_exceptMasks.push_back(trim(param));
+			for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end();)
+			{
+				std::list<User *>::iterator tmp = it;
+				it++;
+				if (matchExceptMask(*tmp))
+					removeBanned(*tmp);
+			}
+		}
+		else if (value == false) /* Removing an exception ; thus ppl who fall through bann are now banned */
+		{
+			if (std::find(_exceptMasks.begin(), _exceptMasks.end(), trim(param)) != _exceptMasks.end())
+				_exceptMasks.erase(std::find(_exceptMasks.begin(), _exceptMasks.end(), trim(param)));
+			for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+			{
+				if (!matchExceptMask(it->second) && matchBannedMask(it->second))
+					addBanned(it->second);
+			}
+		}
 		break;
 	}
-	case 'o': // give channel op status
+	case 'k': /* Add a key pass */ 
 	{
 		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
-		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
+		if (value == true && _modes['k'] == true)
+			return ERR_KEYSET;
+		else if (value == true)
+			_password = trim(param);
+		else if (value == false && trim(param) != _password)
+			return ERR_KEYSET;
+		break;
+	}
+	case 'o': /* Channel operator */
+	{
+		if (trim(param).length() == 0)
+			return ERR_NEEDMOREPARAMS;
+		if (!isOperator(u))
 			return ERR_CHANOPRIVSNEEDED;
 		if (findByName(trim(param), &user) == true)
-			value == true ? addOperator(user) : removeOperator(user); // faut il erreur si ajoute deux fois ?
+			value == true ? addOperator(user) : removeOperator(user);
 		else
-			return ERR_NOSUCHNICK; // surement un erreur ? laquelle ?
+			return ERR_NOSUCHNICK;
 		break;
 	}
 	case 'O': /* give "channel creator" status; see Safe Channels with ! */
 	{
 		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
-		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
+		if (!isOperator(u))
 			return ERR_CHANOPRIVSNEEDED;
 		if (findByName(trim(param), &user) == true)
-			value == true ? _creator = user : _creator = NULL; // je sais pas trop
+			value == true ? _creator = user : _creator = NULL;
 		break;
 	}
 	case 'v': /* Voice privilege */
 	{
 		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
-		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
+		if (!isOperator(u))
 			return ERR_CHANOPRIVSNEEDED;
 		if (findByName(trim(param), &user) == true)
-			value == true ? addVoiced(user) : removeVoiced(user); // faut il erreur si ajoute deux fois ?
+			value == true ? addVoiced(user) : removeVoiced(user);
 		else
-			return ERR_NOSUCHNICK; // surement un erreur ? laquelle ?
+			return ERR_NOSUCHNICK;
 		break;
 	}
 	case 'i': /* Making invite only */
@@ -537,13 +529,13 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 	case 'I': /* Overrides invite only by setting masks ; can be form MODE +b *.*@fsjkf.com OR MODE +b username */
 	{
 		if (value == true && trim(param).length() == 0)
-			return RPL_INVITELIST; // list invite
-		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
+			return RPL_INVITELIST;
+		if (!isOperator(u))
 			return ERR_CHANOPRIVSNEEDED;
 		/* Just push back invite masks ; then, join has to do the check */
 		if (value == true)
 			_invitedMasks.push_back(trim(param));
-		else if (value == false) // enlever le pattern de la list invite
+		else if (value == false)
 		{
 			if (std::find(_invitedMasks.begin(), _invitedMasks.end(), trim(param)) != _invitedMasks.end())
 				_invitedMasks.erase(std::find(_invitedMasks.begin(), _invitedMasks.end(), trim(param)));
@@ -564,18 +556,43 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 	}
 	case 'l': /* User limits to channel. ex +l 10 to 10 as limit or -l to remove */
 	{
-		// que se pass t il si set limite inferieure au nb deja en cours ?
 		if (value == true && trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
-		/* peut etre des checks a faire genre si ca commence par - etc. */
 		if (param[0] == '-')
-			break ; // Pas d'erreurs specifiques pour ce cas, limite -10 par ex
+			return IGNORE;
 		value == true ? _limit = strtol(trim(param).c_str(), NULL, 10) : _limit = 0;
-		value == true ? printf(" added _limit : %lu\n", _limit) : printf(" removed _limit : %lu\n", _limit);
-		break; // to do
+		break;
 	}
 	}
 	if (mode != 'b' && mode != 'I' && mode != 'e')
 		_modes[mode] = value;
 	return "";
+}
+
+/*
+** --------------------------------- NON MEMBER FUNCTIONS ----------------------------------
+*/
+
+/*
+**	@brief function used for RPL_NAMREPLY. Displays current visible users of a channel
+**	@param Channel *chan
+**	@param
+*/
+std::string printNames(Channel *chan, User *u)
+{
+	std::string names;
+	for (std::map<std::string *, User *>::iterator it = chan->getUsers().begin(); it != chan->getUsers().end(); it++)
+	{
+		/* if User is invisble, cannot be displayed for requesting user if not in chan */ 
+		if (!(it->second->hasMode('i') && !chan->isInChan(u)))
+		{
+			if (chan->isOperator(it->second))
+				names.append("@");
+			else
+				names.append("");
+			names.append(*it->first);
+			names.append(" ");
+		}
+	}
+	return names;
 }

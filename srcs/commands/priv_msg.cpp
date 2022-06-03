@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   priv_msg.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:55:00 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:55:02 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
 
@@ -81,7 +93,6 @@ void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string>
 		return (s.numeric_reply(u, ERR_NOSUCHNICK, dest_nick, NONE, NONE));
 }
 
-
 /* Can i send msg without joining chan ?
 ** In principle yes but most servers forbid (channel are + n mode )
 **   n - toggle the no messages to channel from clients on the
@@ -91,25 +102,19 @@ void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string>
 
 void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std::string> cmd)
 {
-
 	if (!s.chanExists(dest_channel))
 		return (s.numeric_reply(u, ERR_NOSUCHNICK, dest_channel, NONE, NONE));
 	Channel *chan = s.chans[dest_channel];
-	if (chan->isBanned(u))
+	if (chan->isBanned(u) || chan->matchBannedMask(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
 	if (chan->hasMode('n') && !chan->isInChan(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
 	/* On moderated channel ('m' flag), only operators and voiced ppl can talk */
 	if (chan->hasMode('m') && !chan->isOperator(u) && !chan->isVoiced(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
-	{
-		out("Sending to channel >>> " << dest_channel)
-			s.chans[dest_channel]
-				->printUsers();
-		std::map<std::string *, User *> chan_users(s.chans[dest_channel]->getUsers());
-		chan_users.erase(&u->nickname);
-		server_relay(u, cmd, chan_users);
-	}
+	std::map<std::string *, User *> chan_users(s.chans[dest_channel]->getUsers());
+	chan_users.erase(&u->nickname);
+	server_relay(u, cmd, chan_users);
 }
 
 /*
@@ -121,11 +126,11 @@ void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std:
 
 void Commands::priv_msg(Server &s, User *u, std::vector<std::string> cmd)
 {
-	start;
 	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NOTEXTTOSEND, NONE, NONE, NONE));
+
 	std::string dest = *(cmd.begin() + 1);
-	if (dest.compare(0, 1, "#", 0, 1) == 0 || dest.compare(0, 1, "+", 0, 1) == 0 )
+	if (dest.compare(0, 1, "#", 0, 1) == 0 || dest.compare(0, 1, "+", 0, 1) == 0)
 		send_channel(s, u, dest, cmd);
 	else
 		send_pm(s, u, dest, cmd);
