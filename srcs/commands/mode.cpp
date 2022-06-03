@@ -66,33 +66,23 @@
 **
 */
 
-std::string makeModeString(User *u)
-{
-	std::map<char, bool> modes = u->getModes();
-	std::string msg = "+";
-	for (size_t i = 0; i < modes.size(); i++)
-	{
-		if (modes[i] == true)
-			msg += modes[i];
-	}
-	return msg.length() > 1 ? msg : "";
-}
 
-void handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector<std::string> cmd)
+
+void Commands::handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector<std::string> cmd)
 {
 	std::string modes;
 	std::vector<std::string> mode_params;
-	User *target;
+
 	/* Cannot ask for another username */
 	if (nickname_asked != u->nickname)
 		return s.numeric_reply(u, ERR_USERSDONTMATCH, u->nickname, NONE, NONE);
 
 	/* No argument supplied, e.g. "MODE Wiz" : information is sent back */
-	if (cmd.size() == 2 )
-		return (s.numeric_reply(u, RPL_UMODEIS, nickname_asked, makeModeString(u), NONE));
+	if (cmd.size() == 2)
+		return (s.numeric_reply(u, RPL_UMODEIS, nickname_asked, u->makeModeString(), NONE));
 
-	/* Mode is changing */ 
-	modes = trim(*(cmd.begin() + 2));		  
+	/* Mode is changing */
+	modes = trim(*(cmd.begin() + 2));
 	(cmd.size() > 3) ? (mode_params.insert(mode_params.begin(), cmd.begin() + 3, cmd.end())) : (mode_params.push_back(""));
 
 	/* Setting the value. + is true, - is false */
@@ -100,17 +90,12 @@ void handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector
 	for (size_t i = 1; i < modes.length(); i++)
 	{
 		std::string res = u->setMode(modes[i], value, mode_params);
-		if (res.length() != 0)
+		if (res.length() != 0 && res != IGNORE)
 			s.numeric_reply(u, res, u->nickname, NONE, NONE);
 		else
-		{
-			s.numeric_reply(u, RPL_UMODEIS, u->nickname, makeModeString(u), vecToString(mode_params));
 			server_relay(u, cmd, u);
-		}
 	}
 }
-
-
 
 /*
 **    Command: MODE (channel)
@@ -159,52 +144,64 @@ void handleUserModes(Server &s, User *u, std::string nickname_asked, std::vector
 **             the invite-only flag;
 */
 
-
-
-
-void	rpl_lists(Server &s, User *u, std::string chan_name, std::vector<std::string> list, std::string rpl_name, std::string rpl_end_name)
+void Commands::rpl_lists(Server &s, User *u, std::string chan_name, std::vector<std::string> list, std::string rpl_name, std::string rpl_end_name)
 {
 	for (size_t i = 0; i < list.size(); i++)
 		s.numeric_reply(u, rpl_name, chan_name, list.at(i), NONE);
 	s.numeric_reply(u, rpl_end_name, chan_name, to_str(list.size()), NONE);
 }
 
-
-bool	takeArg(char mode)
+bool Commands::takeArg(char mode)
 {
 	switch (mode)
 	{
-		case 'l': case 'e': case 'I': case 'k': case 'b': case 'v': case 'o': case 'O':
-			return true;
+	case 'l':
+	case 'e':
+	case 'I':
+	case 'k':
+	case 'b':
+	case 'v':
+	case 'o':
+	case 'O':
+		return true;
 	}
 	return false;
 }
 
-
-bool isSet(Channel *chan, char mode)
+bool Commands::isSet(Channel *chan, char mode)
 {
 	switch (mode)
 	{
-		case 't': case 'i': case 'p': case 's': case 'r': case 'm':
-			return (chan->hasMode('k')); /* if key already set, or topic only, or invite only must unset before */
-		case 'l': case 'b': case 'e': case 'I': case 'o': case 'v': /* we can still set more of these */ 
-			return false; /* can do +2 then +3 to add limits */ 
+	case 't':
+	case 'i':
+	case 'p':
+	case 's':
+	case 'r':
+	case 'm':
+		return (chan->hasMode(mode)); /* if key already set, or topic only, or invite only must unset before */
+	case 'l':
+	case 'b':
+	case 'e':
+	case 'I':
+	case 'o':
+	case 'v':		  /* we can still set more of these */
+		return false; /* can do +2 then +3 to add limits */
 	}
-	/* case k : has to return the key already set error */ 
+	/* case k : has to return the key already set error */
 	return false;
 }
 
-void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd)
+void Commands::handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd)
 {
-	int 								paramLocation = 0;
-	bool 								already_set;
-	bool								value;
-	std::string 						modes;
-	std::vector<std::string> 			mode_params;
-	Channel 							*chan;
-	std::string							msg;
-	std::string							workingparams = "";
-	std::string							res;
+	int paramLocation = 0;
+	bool already_set;
+	bool value;
+	std::string modes;
+	std::vector<std::string> mode_params;
+	Channel *chan;
+	std::string msg;
+	std::string workingparams = "";
+	std::string res;
 
 	if (!s.chanExists(chan_name))
 		return (s.numeric_reply(u, ERR_NOSUCHNICK, chan_name, NONE, NONE));
@@ -223,7 +220,7 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 		std::string currParam = "";
 		if (takeArg(modes[i]) && i <= mode_params.size() + 1)
 		{
-			try 
+			try
 			{
 				currParam = mode_params.at(paramLocation);
 				paramLocation++;
@@ -248,17 +245,16 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 			s.numeric_reply(u, res, currParam, NONE, NONE);
 		else if (!already_set && res.length() != 0) /* Erreur */
 			s.numeric_reply(u, res, chan->_name, NONE, NONE);
-		else if (!already_set && res != IGNORE) /* We just add the letter to the final msg */ 
+		else if (!already_set && res != IGNORE) /* We just add the letter to the final msg */
 		{
 			workingparams += currParam + " ";
 			msg += modes[i];
 		}
 	}
 	msg = "MODE " + chan_name + " " + modes[0] + " " + workingparams;
-	if (workingparams.length() != 0) /*  Meaning at least one change worked */ 
+	if (workingparams.length() != 0) /*  Meaning at least one change worked */
 		server_relay(u, tokenize(msg, ' '), chan->getUsers());
 }
-
 
 void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {

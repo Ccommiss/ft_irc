@@ -374,19 +374,6 @@ void Channel::displayModes()
 	out("Password is : " << _password);
 }
 
-
-void Channel::removeBannedFromUsers()
-{
-	for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
-	{
-		if (isInChan(*it))
-		{
-			_users.erase(&(*it)->nickname);
-			(*it)->joined_chans.erase(std::find((*it)->joined_chans.begin(), (*it)->joined_chans.end(), this)); // on retire les joined chans
-		}
-	}
-}
-
 std::string printModes(Channel *chan)
 {
 	std::string modes("[+");

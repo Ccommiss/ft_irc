@@ -128,7 +128,7 @@ std::string const &User::getNickName() const
 	return (this->nickname);
 }
 
-std::vector<Channel *> const &User::getJoinedChannels()
+std::vector<Channel *> const &User::getJoinedChannels() const
 {
 	return (this->joined_chans);
 }
@@ -188,6 +188,17 @@ std::string		User::fullID()
 	return txt;
 }
 
+std::string User::makeModeString()
+{
+	std::string msg = "+";
+	for (size_t i = 0; i < _modes.size(); i++)
+	{
+		if (_modes[i] == true)
+			msg += _modes[i];
+	}
+	return msg.length() > 1 ? msg : "";
+}
+
 /*
 **	whoIsChannel : displays list of channels a user belongs to.
 **	@param u - the user asking the whois command. It is used not to
@@ -234,15 +245,12 @@ std::string User::setMode(char mode, bool value, std::vector<std::string> params
 		return ERR_UMODEUNKNOWNFLAG;
 
 	/* Future target user for O, o and v options*/
-	// User *user = NULL;
 	(void)params;
 	switch (mode)
 	{
 	case 'a': /* Away */
 	{
-		// NOT TOGGLED BY MODE BUT BY AWAY MSG SO RESTRICTION IN MODE MSG FOR a TODO
 		return ERR_UMODEUNKNOWNFLAG;
-		//break;
 	}
 	case 'i': /* Invisible */
 	{
@@ -254,7 +262,7 @@ std::string User::setMode(char mode, bool value, std::vector<std::string> params
 		if (value == false) /* An user cannot op himself but through OPER command */
 			_modes['o'] = false;
 		else
-			return "  ";
+			return IGNORE;
 		break;
 	}
 	case ('O'):
@@ -262,7 +270,7 @@ std::string User::setMode(char mode, bool value, std::vector<std::string> params
 		if (value == false) /* Same as above */
 			_modes['O'] = false;
 		else
-			return "  ";
+			return IGNORE;
 		break;
 	}
 	case ('w'): /* Wall ops */
@@ -275,7 +283,7 @@ std::string User::setMode(char mode, bool value, std::vector<std::string> params
 		if (value == true)		/* Same as above */
 			_modes['r'] = true; /* on peut se restricted mais pas se unrestricted */
 		else
-			return "  ";
+			return IGNORE;
 		break;
 	}
 	}

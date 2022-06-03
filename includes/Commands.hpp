@@ -13,8 +13,6 @@ class Commands
 
 	public:
 		Commands();
-		// Commands(std::string name, User & creator);
-		// Commands( Commands const & src );
 		~Commands();
 
 		void parse_cmd		(User *user, Server &s);
@@ -49,13 +47,24 @@ class Commands
 
 		typedef std::string (*Rep)(Server &s, User *user, std::string arg1, std::string arg2, std::string arg3);
 		std::map<int, Rep> 	server_replies;
+
+		void			rpl_lists			(Server &s, User *u, std::string chan_name, std::vector<std::string> list, std::string rpl_name, std::string rpl_end_name);
+		bool			takeArg				(char mode);
+		bool 			isSet				(Channel *chan, char mode);
+		void			handleChannelModes	(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd);
+		void			handleUserModes		(Server &s, User *u, std::string nickname_asked, std::vector<std::string> cmd);
+		std::string		makeModeString		(User *u);
+
+		void 			simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i);
+		void 			createChan(Server &s, std::string chan_name, User *u, bool *joined);
+
 };
 
 
 /*
 **  Utils
 */
-bool					pattern_match (std::string str, std::string pattern);
+bool						pattern_match (std::string str, std::string pattern);
 std::string					trim(const std::string &s);
 std::string					ltrim(const std::string &s);
 std::vector<std::string> 	tokenize(std::string const &str, const char delim);

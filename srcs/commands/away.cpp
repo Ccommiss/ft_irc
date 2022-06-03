@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   away.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:36:00 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:36:05 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
 
 /*
-** Command: AWAY
+**     Command: AWAY
 **    Parameters: [ <text> ]
 ** 
 **    With the AWAY command, clients can set an automatic reply string for
@@ -30,6 +42,7 @@
 **                                    "Gone to lunch.  Back in 5".
 ** 
 */
+
 void Commands::away(Server &s, User *u, std::vector<std::string> cmd) 
 {
     std::string msg;
