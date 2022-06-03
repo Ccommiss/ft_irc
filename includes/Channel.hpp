@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:04 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 12:05:51 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:05:29 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ class Channel
 {
 
 public:
-	Channel();
 	Channel(std::string name, User *creator);
-	Channel(Channel const &src);
 	~Channel();
 	Channel &operator=(Channel const &src);
 

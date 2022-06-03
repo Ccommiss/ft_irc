@@ -6,7 +6,7 @@
 #include <algorithm>
 
 /*
-**			a - user is flagged as away;
+**				a - user is flagged as away;
 **            i - marks a users as invisible;
 **            w - user receives wallops;
 **            r - restricted user connection;

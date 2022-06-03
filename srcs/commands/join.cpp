@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:47:34 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 14:47:36 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:09:04 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void Commands::simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::v
 	}
 }
 
-void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou quit
+void Commands::join(Server &s, User *u, std::vector<std::string> cmd) 
 {
-	if (cmd.size() == 1) // un seul mot dans le vec donc juste la cmd sans cmd
+	if (cmd.size() == 1) 
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
 	size_t i = 0;
@@ -113,7 +113,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		joined = false;
 
 		/* Case 0 : Channel name is not well fomatted */
-		if (chan_name[0] != '#' && chan_name[0] != '+') // + stands for unmoderated chan
+		if (chan_name[0] != '#' && chan_name[0] != '+') /* # and + chans are the only supported */ 
 			s.numeric_reply(u, ERR_BADCHANMASK, chan_name, NONE, NONE);
 		/* Case 1 : JOIN 0 -> leaving all chans */
 		else if (*nb_chans_it == "0")
@@ -122,7 +122,7 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd) // exit ou
 		else if (!s.chanExists(chan_name))
 			createChan(s, chan_name, u, &joined);
 		/* Case 4 : Channel does exist but invite only */
-		else if (s.chans[chan_name]->hasMode('i') && (!s.chans[chan_name]->isInvited(u) && !s.chans[chan_name]->matchInviteMask(u))) // invite only
+		else if (s.chans[chan_name]->hasMode('i') && (!s.chans[chan_name]->isInvited(u) && !s.chans[chan_name]->matchInviteMask(u)))
 			s.numeric_reply(u, ERR_INVITEONLYCHAN, chan_name, NONE, NONE);
 		/* Case 5 : Channel does exist and ok !! */
 		else

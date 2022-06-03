@@ -6,7 +6,7 @@
 **      File dedicated to funciton that display/debug things it contains (if chan exists or users for example)
 */
 
-bool Server::chanExists(std::string chan_name) // a mettre ailleurs
+bool Server::chanExists(std::string chan_name)
 {
 	if (chans.count(chan_name) == 1)
 		return (true);
@@ -29,7 +29,7 @@ bool Server::findByName(std::string nick, User **u)
 	{
 		if (*(it->first) == nick)
 		{
-			*u = (it->second); // on fait pointer User recu sur l'instance
+			*u = (it->second);
 			return true;
 		}
 	}
@@ -47,7 +47,3 @@ bool Server::nicknameExists(std::string nick)
 	}
 	return false;
 }
-
-
-
-//void Server::printUsers();

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:47:26 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 14:47:28 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:14:26 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,35 +50,36 @@
 **
 **
 */
+
 void Commands::invite(Server &s, User *u, std::vector<std::string> cmd)
 {
 	start;
-	if (cmd.size() < 3) 
+	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
-	
-	std::string target 		= *(cmd.begin() + 1);
-	std::string chan_name 	= *(cmd.begin() + 2);
-	User 		*to_invite 	= NULL;
-	Channel		*chan		= NULL;
 
-	if (s.findByName(target, &to_invite) == false)  /* Cannot invite a non existing user */ 
+	std::string target = *(cmd.begin() + 1);
+	std::string chan_name = *(cmd.begin() + 2);
+	User *to_invite = NULL;
+	Channel *chan = NULL;
+
+	if (s.findByName(target, &to_invite) == false) /* Cannot invite a non existing user */
 		return (s.numeric_reply(u, ERR_NOSUCHNICK, target, NONE, NONE));
-	if (!s.chanExists(chan_name)) /* Cannot invite to an unexisting chan */ 
-	 	return (s.numeric_reply(u, ERR_NOSUCHNICK, chan_name, NONE, NONE));
+	if (!s.chanExists(chan_name)) /* Cannot invite to an unexisting chan */
+		return (s.numeric_reply(u, ERR_NOSUCHNICK, chan_name, NONE, NONE));
 
 	chan = s.chans[chan_name];
-	if (!chan->isInChan(u)) /* User inviting is not currently on channel */ 
+	if (!chan->isInChan(u)) /* User inviting is not currently on channel */
 		return (s.numeric_reply(u, ERR_NOTONCHANNEL, chan_name, NONE, NONE));
 	if (chan->isInChan(to_invite)) /* User invited has already joined channel */
 		return (s.numeric_reply(u, ERR_USERONCHANNEL, chan_name, to_invite->nickname, NONE));
-	
+
 	if (!chan->hasMode('i') || (chan->hasMode('i') && chan->isOperator(u)))
-			s.chans[chan_name]->addToInviteList(to_invite);
+		s.chans[chan_name]->addToInviteList(to_invite);
 	else if (chan->hasMode('i') && !chan->isOperator(u)) /* In invite only chans, only ope can invite */
 		return (s.numeric_reply(u, ERR_CHANOPRIVSNEEDED, chan_name, NONE, NONE));
 
 	server_relay(u, cmd, to_invite);
 	s.numeric_reply(u, RPL_INVITING, to_invite->nickname, chan_name, NONE);
-	if (to_invite->hasMode('a')) /* Away Mode */ 
+	if (to_invite->hasMode('a')) /* Away Mode */
 		s.numeric_reply(u, RPL_AWAY, to_invite->nickname, to_invite->getAwayMsg(), NONE);
 }
