@@ -233,7 +233,6 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 		if (!already_set)
 			res = chan->setMode(u, modes[i], value, currParam);
 		out ("IS ALREADY SET ?" << already_set)
-
 		/* FOR RPL_BAN LIST, one answer per ban mask */
 		if (!already_set && (res == RPL_BANLIST || res == RPL_INVITELIST))// || res == RPL_EXCEPTLIST)
 		{
