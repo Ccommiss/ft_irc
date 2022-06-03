@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:48:24 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 14:48:26 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:28:32 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,6 +226,7 @@ void Commands::handleChannelModes(Server &s, User *u, std::string chan_name, std
 
 	value = modes[0] == '-' ? false : true; /* Making true even if no + before mode option. */
 
+	msg = "MODE " + chan_name + " " + modes[0]; 
 	for (size_t i = (modes[0] == '-' || modes[0] == '+') ? 1 : 0; i < modes.length(); i++)
 	{
 		std::string currParam = "";
@@ -262,7 +263,7 @@ void Commands::handleChannelModes(Server &s, User *u, std::string chan_name, std
 			msg += modes[i];
 		}
 	}
-	msg = "MODE " + chan_name + " " + modes[0] + " " + workingparams;
+	msg += " " + workingparams;
 	if (workingparams.length() != 0) /*  Meaning at least one change worked */
 		server_relay(u, tokenize(msg, ' '), chan->getUsers());
 }

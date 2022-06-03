@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/06/03 14:37:14 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:30:34 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -505,15 +505,15 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param)
 			return ERR_KEYSET;
 		else if (value == true)
 			_password = trim(param);
-		else if (value == false && trim(param) != _password) // on essaie d'enever le pass mais mavais
-			return ERR_KEYSET;								 // mauvais password enleve PAS ECRIT SUR LADOC QUELLE ERREUR ?
+		else if (value == false && trim(param) != _password) 
+			return ERR_KEYSET;	
 		break;
 	}
 	case 'o': // give channel op status
 	{
 		if (trim(param).length() == 0)
 			return ERR_NEEDMOREPARAMS;
-		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
+		if (!isOperator(u))
 			return ERR_CHANOPRIVSNEEDED;
 		if (findByName(trim(param), &user) == true)
 			value == true ? addOperator(user) : removeOperator(user); // faut il erreur si ajoute deux fois ?

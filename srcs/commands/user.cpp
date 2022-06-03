@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 17:15:54 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 17:16:06 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
-
-
 
 /*
 **    Command: USER
@@ -60,6 +70,5 @@ void Commands::setUser(Server &s, User *u, std::vector<std::string> cmd)
 		s.numeric_reply(u, "003", NONE, NONE, NONE);
 		s.numeric_reply(u, "004", NONE, NONE, NONE);
 		u->registered[User::WELCOMED] = true;
-		out("Answer sent to " << u->socket_descriptor);
 	}
 }
