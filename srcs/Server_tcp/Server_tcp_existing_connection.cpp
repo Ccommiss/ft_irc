@@ -4,7 +4,6 @@
 
 void Server::existing_connection( int sd )
 {
-	start;
 	memset (&buffer, '\0', sizeof (buffer));
 	ssize_t numbytes = recv (sd, &buffer, sizeof (buffer), 0);
 
@@ -28,17 +27,12 @@ void Server::existing_connection( int sd )
 			pos = st.find("\r\n", old_pos);
 			if (pos == std::string::npos)
 			{
-				start;
-				out("no \r\n");
 				users[sd]->buffer.append(st.substr(old_pos));
 				break;
 			}
 			else
 			{
-				start;
-				//out("old_pos - pos : " << old_pos << " " << pos);
 				users[sd]->buffer.append(st.substr(old_pos, pos - old_pos));
-				out("LOOP SEND TO PARS : " + users[sd]->buffer);
 				cmds.parse_cmd(users[sd], *this);
 				if (users.count(sd))
 					users[sd]->buffer.clear();
@@ -47,7 +41,6 @@ void Server::existing_connection( int sd )
 		}
 		if (users.count(sd) && users[sd]->buffer.find("\r\n") != std::string::npos)
 		{
-			out("OUT LOOP SEND TO PARS : " + users[sd]->buffer);
 			cmds.parse_cmd(users[sd], *this);
 			if (users.count(sd))
 				users[sd]->buffer.clear();

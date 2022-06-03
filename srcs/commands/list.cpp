@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:48:11 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 14:48:13 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:23:29 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void Commands::list			(Server &s, User *u, std::vector<std::string> cmd)
 	{
 		for (std::map<std::string, Channel *>::iterator it = chans.begin(); it != chans.end(); it++)
 		{
-			if (!it->second->isPrivateForUser(u)) // a tester
+			if (!it->second->isPrivateForUser(u))
 				s.numeric_reply(u, RPL_LIST, it->second->_name, it->second->_name, it->second->getTopic());
 		}
 		s.numeric_reply(u, RPL_LISTEND, NONE, NONE, NONE);

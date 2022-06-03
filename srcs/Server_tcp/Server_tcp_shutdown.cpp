@@ -3,7 +3,6 @@
 
 void	Server::shutdown(bool does_it_throw)
 {
-	start;
 	if (this->_addrs)
 	{
 		freeaddrinfo (_addrs);
@@ -15,6 +14,4 @@ void	Server::shutdown(bool does_it_throw)
 	users.clear();
 	server_users.clear();
 	chans.clear();
-
-	//clear??
 }

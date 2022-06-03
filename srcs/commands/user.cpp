@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 17:15:54 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 17:16:06 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:22:38 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,8 @@
 
 void Commands::setUser(Server &s, User *u, std::vector<std::string> cmd)
 {
-	start;
 	if (cmd.size() < 5)
 		return(s.numeric_reply(u, ERR_NEEDMOREPARAMS, NONE, NONE, NONE));
-	out("Setting name to : " << *(cmd.begin() + 1));
 	u->setName(*(cmd.begin() + 1));
 	u->real_name = (*(cmd.begin() + 4));
 	if (u->registered[User::USER] == false)

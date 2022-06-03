@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/06/03 18:15:55 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:22:02 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _pa
 	add_user(creator);
 	if (name[0] != '+') /* in + aka unmoderated channels, no operators are allowed */ 
 		_operators.push_back(_owner);
-	out("A new chan " << *this << " has been created");
 }
 
 
@@ -53,8 +52,7 @@ Channel::Channel(std::string name, User *creator) : _name(name), _topic(""), _pa
 ** -------------------------------- DESTRUCTOR --------------------------------
 */
 
-Channel::~Channel(){
-	out("deleting channel")}
+Channel::~Channel(){}
 
 /*
 ** --------------------------------- OVERLOAD ---------------------------------
@@ -202,7 +200,8 @@ bool Channel::isOwner(User *u)
 
 bool Channel::isCorrectPass(std::string candidate)
 {
-	out("candidate pass : " << candidate) if (candidate == _password) return true;
+	if (candidate == _password) 
+		return true;
 	return false;
 }
 

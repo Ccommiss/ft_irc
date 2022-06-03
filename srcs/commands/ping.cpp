@@ -4,7 +4,6 @@
 
 void Commands::ping(Server &s, User *u, std::vector<std::string> cmd)
 {
-		out("PING RECEVED");
 	if (cmd.size() <= 1)
 		return (s.numeric_reply(u, ERR_NOORIGIN, NONE, NONE, NONE));
 	else if (cmd.size() <= 2)

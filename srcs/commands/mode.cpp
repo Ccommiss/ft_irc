@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:48:24 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:17:38 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:23:40 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,10 +268,6 @@ void Commands::handleChannelModes(Server &s, User *u, std::string chan_name, std
 		server_relay(u, tokenize(msg, ' '), chan->getUsers());
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ccommiss
 void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
 	if (cmd.size() == 1)
@@ -279,7 +275,7 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 	std::string target = *(cmd.begin() + 1);
 	if (target[0] == '+') /* + (unmoderated) chans do not support modes or operators */
 		return (s.numeric_reply(u, ERR_NOCHANMODES, target, NONE, NONE));
-	if (target[0] == '#') // ou & ....
+	if (target[0] == '#') 
 		handleChannelModes(s, u, target, cmd);
 	else
 		handleUserModes(s, u, target, cmd);

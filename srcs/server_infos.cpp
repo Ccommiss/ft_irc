@@ -23,7 +23,6 @@ void Server::printChans()
 
 bool Server::findByName(std::string nick, User **u)
 {
-	start;
 	std::map<const std::string *, User *>::iterator it;
 	for (it = server_users.begin(); it != server_users.end(); it++)
 	{
@@ -38,7 +37,6 @@ bool Server::findByName(std::string nick, User **u)
 
 bool Server::nicknameExists(std::string nick)
 {
-	start;
 	std::map<const std::string *, User *>::iterator it;
 	for (it = server_users.begin(); it != server_users.end(); it++)
 	{

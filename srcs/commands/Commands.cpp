@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:36:11 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:14:12 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:20:05 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 
 Commands::Commands()
 {
-	start;
 	cmd_map.insert(std::make_pair("NICK", &Commands::nick));
 	cmd_map.insert(std::make_pair("USER", &Commands::setUser));
 	cmd_map.insert(std::make_pair("JOIN", &Commands::join));

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:04 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/06/03 18:05:29 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:23:57 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ public:
 	std::string setMode(User *u, char mode, bool value, std::string param);
 	void displayModes();
 
-	std::string _name; // nom du chan
+	std::string _name;
 	std::string _topic;
 
 private:

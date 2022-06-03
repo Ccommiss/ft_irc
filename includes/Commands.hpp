@@ -15,21 +15,20 @@ class Commands
 		Commands();
 		~Commands();
 
-		void parse_cmd		(User *user, Server &s);
-		void leaveAllChans(User *u);
+
 
 /*
 ** in map
 */
 
-		void quit_s			(Server &s, User *u, std::vector<std::string> nick); // exit ou quit
+		void quit_s			(Server &s, User *u, std::vector<std::string> nick); 
 		void setUser		(Server &s, User *u, std::vector<std::string> cmd);
 		void join			(Server &s, User *u, std::vector<std::string> cmd);
 		void priv_msg		(Server &s, User *u, std::vector<std::string> cmd);
 		void nick			(Server &s, User *u, std::vector<std::string> cmd);
 		void invite			(Server &s, User *u, std::vector<std::string> cmd);
-		void part			(Server &s, User *u, std::vector<std::string> cmd) ; // par d'un chan
-		void pass			(Server &s, User *u, std::vector<std::string> cmd) ;
+		void part			(Server &s, User *u, std::vector<std::string> cmd); 
+		void pass			(Server &s, User *u, std::vector<std::string> cmd);
 		void topic			(Server &s, User *u, std::vector<std::string> cmd);
 		void mode			(Server &s, User *u, std::vector<std::string> cmd);
 		void kick			(Server &s, User *u, std::vector<std::string> cmd);
@@ -55,8 +54,10 @@ class Commands
 		void			handleUserModes		(Server &s, User *u, std::string nickname_asked, std::vector<std::string> cmd);
 		std::string		makeModeString		(User *u);
 
-		void 			simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i);
-		void 			createChan(Server &s, std::string chan_name, User *u, bool *joined);
+		void 			simpleAdd			(Server &s, Channel *chan, User *u, bool *joined, std::vector<std::string> *pass, size_t i);
+		void 			createChan			(Server &s, std::string chan_name, User *u, bool *joined);
+		void			parse_cmd			(User *user, Server &s);
+		void			leaveAllChans		(User *u);
 
 };
 

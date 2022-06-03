@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:55:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 14:55:02 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:23:47 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void send_pm(Server &s, User *u, std::string dest_nick, std::vector<std::string>
 /* Can i send msg without joining chan ?
 ** In principle yes but most servers forbid (channel are + n mode )
 **   n - toggle the no messages to channel from clients on the
-**            outside; // le faire par defaut ?
+**            outside; 
 ** source : https://stackoverflow.com/questions/21528058/can-i-send-a-message-to-an-irc-channel-without-joining-it
 */
 

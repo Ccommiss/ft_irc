@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:47:26 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:14:26 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:20:08 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@
 
 void Commands::invite(Server &s, User *u, std::vector<std::string> cmd)
 {
-	start;
 	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
