@@ -181,6 +181,19 @@ bool	takeArg(char mode)
 	return false;
 }
 
+
+bool isSet(Channel *chan, char mode)
+{
+	switch (mode)
+	{
+		case 'k': case 't': case 'i': case 'p': case 's': case 'r': case 'm':
+			return (chan->hasMode('k')); /* if key already set, or topic only, or invite only must unset before */
+		case 'l': case 'b': case 'e': case 'I': case 'o': case 'v': /* we can still set more of these */ 
+			return false; /* can do +2 then +3 to add limits */ 
+	}
+	return false;
+}
+
 void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<std::string> cmd)
 {
 	start;
@@ -204,7 +217,7 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 	int a = (modes[0] == '-' || modes[0] == '+') ? 1 : 0;
 	bool value = modes[0] == '-' ? false : true; /* Making true even if no + before mode option. */
 	/* if we have MODE something, starting at 0; else, starting at 1 to skip the +/- */
-	out ("Before loop")
+
 
 	int paramLocation = 0;
 	bool already_set;
@@ -229,8 +242,7 @@ void handleChannelModes(Server &s, User *u, std::string chan_name, std::vector<s
 			}
 		}
 		out ("SENDING PARAMS << " << currParam << "TO MIDE " << modes[i] << "value " << value);
-		value == chan->hasMode(modes[i]) ? already_set = true: already_set = false;
-		if (!already_set)
+		if (!(already_set = isSet(chan, modes[i])))
 			res = chan->setMode(u, modes[i], value, currParam);
 		out ("IS ALREADY SET ?" << already_set)
 

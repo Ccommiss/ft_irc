@@ -46,6 +46,7 @@ public:
 	bool findByName(std::string nick, User **u);
 	bool matchInviteMask(User *u); //  a mettre dans isInvited ? separe pour l'instant dans join.
 	bool matchBannedMask(User *u);
+	bool matchExceptMask(User *u);
 	bool isTopicSet();
 	bool hasKey(); // si le flag K est actif pour rentrer
 	bool hasMode(char mode);
@@ -99,6 +100,7 @@ private:
 	std::vector<User *> 				_voiced;
 	std::vector<std::string> 			_bannedMasks; // faire une list de masks
 	std::vector<std::string> 			_invitedMasks; // faire une list de masks
+	std::vector<std::string> 			_exceptMasks; // faire une list de masks
 	size_t								_limit;
 };
 

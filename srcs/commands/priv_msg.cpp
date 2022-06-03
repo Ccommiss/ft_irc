@@ -95,7 +95,7 @@ void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std:
 	if (!s.chanExists(dest_channel))
 		return (s.numeric_reply(u, ERR_NOSUCHNICK, dest_channel, NONE, NONE));
 	Channel *chan = s.chans[dest_channel];
-	if (chan->isBanned(u))
+	if (chan->isBanned(u) || chan->matchBannedMask(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
 	if (chan->hasMode('n') && !chan->isInChan(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));

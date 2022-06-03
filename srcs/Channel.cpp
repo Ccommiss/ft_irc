@@ -237,9 +237,21 @@ bool Channel::matchInviteMask(User *u)
 
 bool Channel::matchBannedMask(User *u)
 {
-	if (_bannedMasks.size() == 0)
+	if (_bannedMasks.size() == 0 || matchExceptMask(u))
 		return false;
 	for (std::vector<std::string>::iterator it = _bannedMasks.begin(); it != _bannedMasks.end(); it++)
+	{
+		if (pattern_match(u->fullID(), *it) || pattern_match(u->nickname, *it))
+			return true;
+	}
+	return false;
+}
+
+bool Channel::matchExceptMask(User *u)
+{
+	if (_exceptMasks.size() == 0)
+		return false;
+	for (std::vector<std::string>::iterator it = _exceptMasks.begin(); it != _exceptMasks.end(); it++)
 	{
 		if (pattern_match(u->fullID(), *it) || pattern_match(u->nickname, *it))
 			return true;
@@ -457,7 +469,6 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 		if (value == true)
 		{
 			_bannedMasks.push_back(trim(param));
-
 			for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it ++)
 			{
 				if (matchBannedMask(it->second))
@@ -482,7 +493,36 @@ std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 	}
 	case 'e' :
 	{
-		//Last to do : exception list
+		if (value == true && trim(param).length() == 0)
+			return RPL_EXCEPTLIST;
+		if (value == false && trim(param).length() == 0)
+			return ERR_NEEDMOREPARAMS; //  a verifier
+		if (!isOperator(u)) // Only privileged (eg op and creator) can change modes
+			return ERR_CHANOPRIVSNEEDED;
+		if (value == true) /* Adding an exception ; thus ppl who have a nickname are now unbanned */
+		{
+			_exceptMasks.push_back(trim(param));
+			for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); )
+			{
+				std::list<User *>::iterator tmp = it;
+				it ++;
+				if (matchExceptMask(*tmp))
+					removeBanned(*tmp);
+			}
+		}
+		else if (value == false) /* Removing an exception ; thus ppl who fall through bann are now banned */ 
+		{
+			if (std::find(_exceptMasks.begin(), _exceptMasks.end(), trim(param)) != _exceptMasks.end())
+				_exceptMasks.erase(std::find(_exceptMasks.begin(), _exceptMasks.end(), trim(param)));
+			for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+			{
+				if (!matchExceptMask(it->second) && matchBannedMask(it->second))
+					addBanned(it->second);
+			}
+		}
+		seeBannedmasks();
+		printBanned();
+		break;
 	}
 	case 'k':
 	{

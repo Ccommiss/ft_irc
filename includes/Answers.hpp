@@ -140,6 +140,7 @@
 #define ERR_414 "<mask> :<reason> Used when a message is being sent to a mask with a wild-card for a top level domain (i.e. *.*)"										 /* ERR_WILDTOPLEVEL */
 #define ERR_415 "<mask> :<reason> Used when a message is being sent to a mask with an invalid syntax"																	 /* ERR_BADMASK */
 #define ERR_421 "<command> :<reason> Returned when the given command is unknown to the server (or hidden because of lack of access rights)"								 /* ERR_UNKNOWNCOMMAND */
+#define ERR_423 ""								 
 #define ERR_422 ":<reason> Sent when there is no MOTD to send the client"																								 /* ERR_NOMOTD */
 #define ERR_424 ":<reason> Generic error message used to report a failed file operation during the processing of a command"												 /* ERR_FILEERROR */
 #define ERR_431 ":<reason> Returned when a nickname parameter expected for a command isn't found"																		 /* ERR_NONICKNAMEGIVEN */

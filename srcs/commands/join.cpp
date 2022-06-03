@@ -72,7 +72,7 @@ void simpleAdd(Server &s, Channel *chan, User *u, bool *joined, std::vector<std:
 		return;																			  // do nothing but maybe a specific error ?
 	else if (chan->hasKey() && ( (pass->size() <= i) || (!chan->isCorrectPass(pass->at(i))) ) ) // throw une ex
 		s.numeric_reply(u, ERR_BADCHANNELKEY, chan->_name, NONE, NONE);
-	else if (chan->isBanned(u))
+	else if (chan->isBanned(u) || chan->matchBannedMask(u))
 		s.numeric_reply(u, ERR_BANNEDFROMCHAN, chan->_name, NONE, NONE);
 	else if(chan->hasMode('l') && chan->getUsers().size() + 1 > chan->getLimit())
 		s.numeric_reply(u, ERR_CHANNELISFULL, chan->_name, NONE, NONE);
