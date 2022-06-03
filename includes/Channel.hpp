@@ -17,7 +17,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
-# include <list>
+#include <list>
 
 /*
 **         INVITE  - Invite a client to an invite-only channel (mode +i) //
@@ -44,25 +44,26 @@ public:
 	bool isCorrectPass(std::string candidate);
 	bool isInChan(User *u);
 	bool findByName(std::string nick, User **u);
-	bool matchInviteMask(User *u); //  a mettre dans isInvited ? separe pour l'instant dans join.
+	bool matchInviteMask(User *u);
 	bool matchBannedMask(User *u);
 	bool matchExceptMask(User *u);
 	bool isTopicSet();
-	bool hasKey(); // si le flag K est actif pour rentrer
+	bool hasKey();
 	bool hasMode(char mode);
 	bool isBanned(User *u);
 	bool isOperator(User *u);
 	bool isVoiced(User *u);
 	bool isOwner(User *u);
-	bool	isPrivateForUser(User *u);
+	bool isPrivateForUser(User *u);
 	void setTopic(std::string topic);
 	size_t getLimit();
-	void	removeBannedFromUsers();
+	void removeBannedFromUsers();
 	std::map<char, bool> &getModes();
 	std::string &getTopic();
 	std::string &getName();
-	std::vector<std::string> &getBannedMasks(); // for banned
-	std::vector<std::string> &getInvitedMasks(); // for banned
+	std::vector<std::string> &getBannedMasks();
+	std::vector<std::string> &getInvitedMasks();
+	std::vector<std::string> &getExceptMasks();
 	std::map<std::string *, User *> &getUsers();
 
 	/* Methods */
@@ -89,24 +90,24 @@ public:
 	std::string _topic;
 
 private:
-	std::map<std::string *, User *> 	_users;
-	std::vector<User *> 				_operators;
-	std::list<User *> 					_banned;
-	User 								*_owner;
-	User 								*_creator; // quelle est la diff ??
-	std::map<char, bool>				 _modes;
-	std::string 						_password;
-	std::vector<User *> 				_invited;
-	std::vector<User *> 				_voiced;
-	std::vector<std::string> 			_bannedMasks; // faire une list de masks
-	std::vector<std::string> 			_invitedMasks; // faire une list de masks
-	std::vector<std::string> 			_exceptMasks; // faire une list de masks
-	size_t								_limit;
+	std::map<std::string *, User *> _users;
+	std::vector<User *> _operators;
+	std::list<User *> _banned;
+	User *_owner;
+	User *_creator;
+	std::map<char, bool> _modes;
+	std::string _password;
+	std::vector<User *> _invited;
+	std::vector<User *> _voiced;
+	std::vector<std::string> _bannedMasks;
+	std::vector<std::string> _invitedMasks;
+	std::vector<std::string> _exceptMasks;
+	size_t _limit;
 };
 
 std::ostream &operator<<(std::ostream &o, Channel &i);
 
-std::string printNames(Channel *chan, User *u); // formatte, pour command names etc;
-std::string printModes(Channel *chan); // formatte, pour command list etc;
+std::string printNames(Channel *chan, User *u);
+std::string printModes(Channel *chan);
 
 #endif /* ********************************************************* CHANNEL_H */

@@ -18,6 +18,7 @@
 */
 
 #define NONE ""
+#define IGNORE 	"Unspecified behavior"
 #define MSG_001 ":Welcome to the Internet Relay Network of Clement and Claire " + user->nickname + "!" + user->name + "@" + s.hostname
 #define MSG_002 ":Your host is localhost, version 1.0   8-)"
 #define MSG_003 ":This server was created not so long time ago."
@@ -43,7 +44,7 @@
 #define MSG_217 ""																																						 /* RPL_STATSQLINE */
 #define MSG_218 "Y <class> <ping_freq> <connect_freq> <max_sendq> Reply to STATS (See RFC)"																				 /* RPL_STATSYLINE */
 #define MSG_219 "<query> :<info> End of RPL_STATS* list."																												 /* RPL_ENDOFSTATS */
-#define MSG_221 "<user_modes> [<user_mode_params>] Information about a user's own modes."																				 /* RPL_UMODEIS */
+#define MSG_221 arg1 + " " + arg2 + " " + arg3														 																			/* RPL_UMODEIS */
 #define MSG_231 ""																																						 /* RPL_SERVICEINFO */
 #define MSG_232 ""																																						 /* RPL_ENDOFSERVICES */
 #define MSG_233 ""																																						 /* RPL_SERVICE */

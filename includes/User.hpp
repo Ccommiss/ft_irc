@@ -11,7 +11,7 @@ class User
 {
 	public:
 		int socket_descriptor;
-		bool registered[4]; // trois booleens
+		bool registered[4];
 		std::string name;
 		std::string nickname;
 		std::string real_name;
@@ -27,8 +27,8 @@ class User
 
 		void setSocket(int sd);
 		std::string						presentation( void );
-		std::string whoIsChannels(User *u);   // print channels for whoiscmd
-		std::string whoIsPrivileges(); // print privileges of user for whois
+		std::string whoIsChannels(User *u); 
+		std::string whoIsPrivileges();
 		void setNickName(std::string newNickName);
 		bool HasCompletedRegistration();
 		void setName(std::string newName);
