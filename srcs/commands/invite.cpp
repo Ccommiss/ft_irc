@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   invite.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:47:26 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:47:28 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Answers.hpp"
@@ -68,6 +79,6 @@ void Commands::invite(Server &s, User *u, std::vector<std::string> cmd)
 
 	server_relay(u, cmd, to_invite);
 	s.numeric_reply(u, RPL_INVITING, to_invite->nickname, chan_name, NONE);
-	if (to_invite->hasMode('a')) // il est away
+	if (to_invite->hasMode('a')) /* Away Mode */ 
 		s.numeric_reply(u, RPL_AWAY, to_invite->nickname, to_invite->getAwayMsg(), NONE);
 }

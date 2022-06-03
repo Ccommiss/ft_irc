@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   oper.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:51:42 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:51:59 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
 
@@ -24,16 +36,15 @@
 
 void Commands::oper			(Server &s, User *u, std::vector<std::string> cmd)
 {
-	if (cmd.size() < 3) // un seul mot dans le vec donc juste la cmd sans cmd
+	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
 	std::string name = *(cmd.begin() + 1);
 	std::string pass = *(cmd.begin() + 2);
 
-	// si password avec le serveur est pas bon ? what is password ?
 	if (!s.oper_pass_check(pass))
 		return (s.numeric_reply(u, ERR_PASSWDMISMATCH, pass, NONE, NONE));
 
-	u->setOneKeyMode('O', true); // grand O ou petit o ?
+	u->setOneKeyMode('O', true);
 	return (s.numeric_reply(u, RPL_YOUREOPER, NONE, NONE, NONE));
 }

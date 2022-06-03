@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldes-cou <ldes-cou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/05/18 12:07:31 by ldes-cou         ###   ########.fr       */
+/*   Updated: 2022/06/03 14:37:14 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ bool Channel::isInvited(User *user)
 
 bool Channel::findByName(std::string nick, User **u)
 {
-	start;
 	std::map<std::string *, User *>::iterator it;
 	for (it = _users.begin(); it != _users.end(); it++)
 	{
@@ -393,35 +392,27 @@ void Channel::seeBannedmasks()
 	out("");
 }
 
-void Channel::printUsers() // const
+void Channel::printUsers() 
 {
-	start;
 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-		out("USERS : " << *it->first); // show the nick name
+		out("USERS : " << *it->first);
 }
 
-void Channel::printBanned() // const
+void Channel::printBanned() 
 {
-	start;
-	out("Banned :") for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
-		out("- : " << (*it)->fullID()); // show the nick name
+	out("Banned :");
+	for (std::list<User *>::iterator it = _banned.begin(); it != _banned.end(); it++)
+		out("- : " << (*it)->fullID()); 
 	out("");
 }
 
-// void Channel::printUsers() // const
-// {
-// 	start;
-// 	for (std::map<std::string *, User *>::iterator it = _users.begin(); it != _users.end(); it++)
-// 		out("USERS : " << *it->first); // show the nick name
-// }
 
 /*
 ** --------------------------------- MODES METHODS ----------------------------------
 */
 
-std::string Channel::setMode(User *u, char mode, bool value, std::string param) // on va renvoyer le code erreur ou bien  0
+std::string Channel::setMode(User *u, char mode, bool value, std::string param) 
 {
-	start;
 	(void)u;
 	if (_modes.count(mode) == 0) /* Checking if mode exists */
 	{

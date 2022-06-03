@@ -29,10 +29,6 @@ User::User(int sd, std::string ip) : socket_descriptor(sd), name("Guest"), nickn
 	debug(US, "CONNECTED");
 }
 
-User::User(const User &src)
-{
-	(void)src;
-}
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
@@ -45,23 +41,6 @@ User::~User()
 	joined_chans.clear();
 }
 
-/*
-** --------------------------------- OVERLOAD ---------------------------------
-*/
-
-User &User::operator=(User const &rhs)
-{
-
-	(void)rhs;
-	return *this;
-}
-
-std::ostream &operator<<(std::ostream &o, User const &i)
-{
-	(void)i;
-	// o << "Value = " << i.getValue();
-	return o;
-}
 
 /*
 ** --------------------------------- METHODS ----------------------------------
@@ -80,7 +59,7 @@ void User::initModes()
 	_modes.insert(std::make_pair('q', false));
 }
 
-std::string	User::presentation( void )
+std::string User::presentation(void)
 {
 	std::string to_ret(nickname);
 	to_ret = to_ret + "[" + ip + ":" + to_str(socket_descriptor) + "] - ";
@@ -133,13 +112,13 @@ std::vector<Channel *> const &User::getJoinedChannels() const
 	return (this->joined_chans);
 }
 
-void    User::setAway(std::string msg)
+void User::setAway(std::string msg)
 {
 	_modes['a'] = true;
 	_away_msg = msg;
 }
 
-bool 	User::isAway()
+bool User::isAway()
 {
 	return _modes['a'];
 }
@@ -154,7 +133,6 @@ std::string const &User::getRealname() const
 	return real_name;
 }
 
-
 bool User::HasCompletedRegistration()
 {
 	if (!registered[USER] || !registered[NICK] || !registered[PASS])
@@ -162,26 +140,16 @@ bool User::HasCompletedRegistration()
 	return true;
 }
 
-std::string User::whoIsPrivileges()
-{
-	std::string privileges("privileges :");
-	for (std::map<char, bool>::iterator it = _modes.begin(); it != _modes.end(); it++)
-	{
-		if (it->second == true)
-		{
-			privileges.append("+"); // je crois c une seule fois le +, a verifier
-			privileges.push_back(it->first);
-		}
-	}
-	return privileges;
-} // print channels for whoiscmd
-
-std::string		User::fullID()
+/*
+**	@brief displays a full id in for of <nick>!<name>@<host>
+**	@details this form is used in comparisons with channel masks (banned, invite, etc)
+*/
+std::string User::fullID()
 {
 	std::string txt;
 	txt.append(nickname);
 	txt.append("!");
-	txt.append(name); // username
+	txt.append(name);
 	txt.append("@");
 	txt.append(ip);
 
@@ -210,7 +178,7 @@ std::string User::whoIsChannels(User *u)
 	std::string answer;
 	for (std::vector<Channel *>::iterator it = joined_chans.begin(); it != joined_chans.end(); it++)
 	{
-		if (!(*it)->isPrivateForUser(u)) // a tester
+		if (!(*it)->isPrivateForUser(u))
 		{
 			if ((*it)->isOperator(this))
 				answer.append("@");
@@ -218,7 +186,7 @@ std::string User::whoIsChannels(User *u)
 			answer.append(" ");
 		}
 	}
-	out("CHANNES JOIND =" << answer << " SIZE " << joined_chans.size()) return answer;
+	return answer;
 }
 
 bool User::hasMode(char mode)
@@ -231,19 +199,20 @@ bool User::hasMode(char mode)
 void User::setOneKeyMode(char mode, bool value)
 {
 	if (_modes.count(mode) == 0)
-		return ;
+		return;
 	_modes[mode] = value;
 }
 
-
-/* Mode <nickname> valeur  */
+/*
+**	@brief changing mode of user
+**	@param mode the mode to be set
+**	@param value the +/- value
+**	@param params the facultative args
+*/
 std::string User::setMode(char mode, bool value, std::vector<std::string> params)
 {
-	start;
-	out (" mode  " << mode << " value " << value)
 	if (!_modes.count(mode)) /* Checking if mode exists */
 		return ERR_UMODEUNKNOWNFLAG;
-
 	/* Future target user for O, o and v options*/
 	(void)params;
 	switch (mode)

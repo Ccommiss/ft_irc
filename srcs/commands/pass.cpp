@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pass.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:53:57 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:54:02 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Commands.hpp"
 #include "Answers.hpp"
@@ -15,5 +26,4 @@ void Commands::pass(Server &s, User *u, std::vector<std::string> cmd)
 	}
 	else
 		s.numeric_reply(u, ERR_PASSWDMISMATCH, NONE, NONE, NONE);
-
 }

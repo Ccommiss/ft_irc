@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   kick.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:48:03 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:48:04 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Answers.hpp"
@@ -51,12 +62,6 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 	std::string msg = implodeMessage(cmd.begin() + 3, cmd.end());
 	User *to_kick = NULL;
 
-	/* Two option to be syntaxically correct : or one channel and multiple user, or as much ppl as channel */
-	//if (chan_names.size() != 1 && user_names.size() != chan_names.size())
-	//	return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
-	/* Ignored to be compliant with Irssi way of doing */ 
-
-
 	for (std::list<std::string>::iterator chanToKick = chan_names.begin(); chanToKick != chan_names.end(); chanToKick++)
 	{
 		std::vector<std::string> txt;
@@ -73,7 +78,6 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 				return (s.numeric_reply(u, ERR_USERNOTINCHANNEL, chan_name, NONE, NONE));
 			else if (s.chans[chan_name]->findByName(*user_name, &to_kick) == true)
 			{
-				out("KICKING" << to_kick->getNickName());
 				txt.push_back(to_kick->getNickName());
 				txt.push_back(msg);
 				server_relay(u, txt, s.chans[chan_name]->getUsers());

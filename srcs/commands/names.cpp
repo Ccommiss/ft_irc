@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   names.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:49:45 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:49:48 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
-
 
 /*
 **  Command: NAMES
@@ -39,7 +50,8 @@
 
 void Commands::names			(Server &s, User *u, std::vector<std::string> cmd)
 {
-	if (cmd.size() == 1) // tous les channel et tous users
+	/* Display all users of all channels */
+	if (cmd.size() == 1)
 	{
 		for (std::map<std::string, Channel*>::iterator it = s.chans.begin(); it != s.chans.end(); it++)
 		{

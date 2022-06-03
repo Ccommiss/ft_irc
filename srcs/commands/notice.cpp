@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   notice.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 14:51:36 by ccommiss          #+#    #+#             */
+/*   Updated: 2022/06/03 14:51:38 by ccommiss         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 #include "Answers.hpp"
 
@@ -24,16 +36,7 @@
 
 void Commands::notice			(Server &s, User *u, std::vector<std::string> cmd)
 {
-	(void)s;
-	(void)u;
 	if (cmd.size() < 3)
 		return ;
-	// std::string target = *(cmd.begin() + 1); // peut etre un chan
-	// //std::string msg = implodeMessage(cmd.begin() + 2, cmd.end());
-
-	// User *dest = NULL;
-	// if (s.findByName(target, &dest) == true)
-	// 	server_relay(u, cmd, dest);
 	priv_msg(s, u, cmd);
-
 }

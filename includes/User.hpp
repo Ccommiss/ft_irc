@@ -21,9 +21,7 @@ public:
 
 	/* Constructor, destructor & co */
 	User(int sd, std::string ip);
-	User(User const &src);
 	~User();
-	User &operator=(User const &rhs);
 
 	/* Accessors */
 	void setSocket(int sd);
@@ -43,13 +41,11 @@ public:
 	
 	std::string presentation(void);
 	std::string whoIsChannels(User *u);
-	std::string whoIsPrivileges();
 	void joinChan(Channel *chan);
 	void leaveChan(Channel *chan);
 	
 
 	/* Modes */
-
 	void initModes();
 	std::map<char, bool> &getModes();
 	std::string setMode(char mode, bool value, std::vector<std::string> params);
