@@ -13,14 +13,6 @@ bool Server::chanExists(std::string chan_name)
 	return (false);
 }
 
-void Server::printChans()
-{
-	out ("Printing chans in Server :")
-	for (std::map<std::string, Channel *>::iterator it = chans.begin(); it != chans.end(); it++)
-		out ("Chan : "<< it->first)
-}
-
-
 bool Server::findByName(std::string nick, User **u)
 {
 	std::map<const std::string *, User *>::iterator it;

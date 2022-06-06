@@ -8,8 +8,8 @@ SOURCES		+=             		\
 		srcs/close_fd.cpp\
 		srcs/main.cpp         	\
 		srcs/User.cpp         	\
-		srcs/server_infos.cpp         	\
 		srcs/Server_tcp/Server_tcp.cpp \
+		srcs/Server_tcp/Server_tcp_infos.cpp \
 		srcs/Server_tcp/Server_tcp_get_infos.cpp \
 		srcs/Server_tcp/Server_tcp_utils.cpp \
 		srcs/Server_tcp/Server_tcp_set_monitoring.cpp \
