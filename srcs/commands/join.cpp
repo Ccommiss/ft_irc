@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:47:34 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/06 11:47:51 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 12:52:58 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,15 @@
 **            RPL_TOPIC OK
 */
 
-void Commands::leaveAllChans(User *u)
+void Commands::leaveAllChans(Server &s, User *u, std::vector<std::string> cmd)
 {
-	for (std::vector<Channel *>::const_iterator chans = u->getJoinedChannels().begin(); chans != u->getJoinedChannels().end(); chans++)
+	(void)cmd;
+	while (u->getJoinedChannels().size() > 0)
 	{
-		u->leaveChan(*chans);
-		std::string msg[] = {"PART", (*chans)->_name};
+		Channel *chan = *(u->getJoinedChannels().begin());
+		std::string msg[] = {"PART", chan->_name};
 		std::vector<std::string> part_msg(msg, msg + 2);
-		server_relay(u, part_msg, u);
+		part(s, u, part_msg);
 	}
 }
 
@@ -112,12 +113,12 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd)
 		std::string chan_name = chans[i];
 		joined = false;
 
-		/* Case 0 : Channel name is not well fomatted */
-		if (chan_name[0] != '#' && chan_name[0] != '+') /* # and + chans are the only supported */ 
-			s.numeric_reply(u, ERR_BADCHANMASK, chan_name, NONE, NONE);
-		/* Case 1 : JOIN 0 -> leaving all chans */
-		else if (*nb_chans_it == "0")
-			return (leaveAllChans(u));
+		/* Case 0 : JOIN 0 -> leaving all chans   */
+		if (*nb_chans_it == "0")
+			return (leaveAllChans(s, u, cmd));
+		/* Case 1 : Channel name is not well fomatted */
+		else if (chan_name[0] != '#' && chan_name[0] != '+') /* # and + chans are the only supported */ 
+			s.numeric_reply(u, ERR_BADCHANMASK, chan_name, NONE, NONE);	
 		/* Case 2 : Channel does not exist */
 		else if (!s.chanExists(chan_name))
 			createChan(s, chan_name, u, &joined);

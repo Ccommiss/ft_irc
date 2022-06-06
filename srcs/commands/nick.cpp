@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:50:11 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/06 11:49:49 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 12:57:29 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void Commands::nick(Server &s, User *u, std::vector<std::string> cmd)
 		}
 		server_relay(u, cmd, s.server_users);
 	}
+	u->setNickName(nickname);
 	if (u->HasCompletedRegistration() == true && u->registered[User::WELCOMED] == false)
 	{
 		s.numeric_reply(u, "001", NONE, NONE, NONE);
@@ -75,5 +76,4 @@ void Commands::nick(Server &s, User *u, std::vector<std::string> cmd)
 		s.numeric_reply(u, "004", NONE, NONE, NONE);
 		u->registered[User::WELCOMED] = true;
 	}
-	u->setNickName(nickname);
 }

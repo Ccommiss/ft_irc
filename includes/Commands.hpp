@@ -16,7 +16,7 @@ class Commands
 		~Commands();
 
 		void parse_cmd		(User *user, Server &s);
-		void leaveAllChans(User *u);
+		void leaveAllChans(Server &s, User *u, std::vector<std::string> cmd);
 
 /*
 ** in map

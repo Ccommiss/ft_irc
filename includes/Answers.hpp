@@ -171,7 +171,7 @@
 #define ERR_476 arg1 + " :Bad Channel Mask"																																 /* ERR_BADCHANMASK */
 #define ERR_477 arg1 + " :Channel doesn't support modes"																												 /* ERR_NOCHANMODES */
 #define ERR_478 arg1 + " :Channel list is full"																															 /* ERR_BANLISTFULL */
-#define ERR_481 ":<reason> Returned by any command requiring special privileges (eg. IRC operator) to indicate the operation was unsuccessful"							 /* ERR_NOPRIVILEGES */
+#define ERR_481 ": You are not IRC Operator."							 /* ERR_NOPRIVILEGES */
 #define ERR_482 arg1 + " :You're not channel operator"																													 /* ERR_CHANOPRIVSNEEDED */
 #define ERR_483 ":<reason> Returned by KILL to anyone who tries to kill a server"																						 /* ERR_CANTKILLSERVER */
 #define ERR_484 ":<reason> Sent by the server to a user upon connection to indicate the restricted nature of the connection (i.e. usermode +r)"							 /* ERR_RESTRICTED */
