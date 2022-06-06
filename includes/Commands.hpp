@@ -22,14 +22,14 @@ class Commands
 ** in map
 */
 
-		void quit_s			(Server &s, User *u, std::vector<std::string> nick); // exit ou quit
+		void quit_s			(Server &s, User *u, std::vector<std::string> nick);
 		void setUser		(Server &s, User *u, std::vector<std::string> cmd);
 		void join			(Server &s, User *u, std::vector<std::string> cmd);
 		void priv_msg		(Server &s, User *u, std::vector<std::string> cmd);
 		void nick			(Server &s, User *u, std::vector<std::string> cmd);
 		void invite			(Server &s, User *u, std::vector<std::string> cmd);
-		void part			(Server &s, User *u, std::vector<std::string> cmd) ; // par d'un chan
-		void pass			(Server &s, User *u, std::vector<std::string> cmd) ;
+		void part			(Server &s, User *u, std::vector<std::string> cmd);
+		void pass			(Server &s, User *u, std::vector<std::string> cmd);
 		void topic			(Server &s, User *u, std::vector<std::string> cmd);
 		void mode			(Server &s, User *u, std::vector<std::string> cmd);
 		void kick			(Server &s, User *u, std::vector<std::string> cmd);
@@ -40,6 +40,8 @@ class Commands
 		void notice			(Server &s, User *u, std::vector<std::string> cmd);
 		void ping			(Server &s, User *u, std::vector<std::string> cmd);
 		void away			(Server &s, User *u, std::vector<std::string> cmd);
+		void kill			(Server &s, User *u, std::vector<std::string> cmd);
+
 
 
 		typedef void (Commands::*Cmd)(Server &s, User *user, std::vector<std::string> cmd);
@@ -64,6 +66,7 @@ class Commands
 /*
 **  Utils
 */
+
 bool						pattern_match (std::string str, std::string pattern);
 std::string					trim(const std::string &s);
 std::string					ltrim(const std::string &s);
@@ -72,13 +75,5 @@ std::list<std::string> 		tokenize_list(std::string const &str, const char delim)
 std::string					vecToString(std::vector<std::string> input);
 std::string					implodeMessage(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end);
 std::string					toLower(std::string str);
-
-
-
-
-
-
-
-
 
 #endif
