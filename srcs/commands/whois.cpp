@@ -56,7 +56,7 @@
 void Commands::whois(Server &s, User *u, std::vector<std::string> cmd)
 {
     if (cmd.size() < 2)
-        return ;
+        return s.numeric_reply(u, ERR_NONICKNAMEGIVEN, NONE, NONE, NONE);
     std::string target = cmd[1];
 
     User *info = NULL;
@@ -67,12 +67,13 @@ void Commands::whois(Server &s, User *u, std::vector<std::string> cmd)
         s.numeric_reply(u, RPL_WHOISSERVER, s.hostname, s.hostname, "A custom server");
         if (u->hasMode('k'))
             s.numeric_reply(u, RPL_WHOISOPERATOR, info->getNickName(), NONE, NONE);
-        s.numeric_reply(u, RPL_WHOISIDLE, info->getNickName(), "8 seconds", NONE); // faire un compteur de second de connexion
+        s.numeric_reply(u, RPL_WHOISIDLE, info->getNickName(), "8 seconds", NONE);
         s.numeric_reply(u, RPL_WHOISCHANNELS, info->getNickName(), info->whoIsChannels(u), NONE);
         if (info->hasMode('a'))
             s.numeric_reply(u, RPL_AWAY, info->nickname, info->getAwayMsg(), NONE);
-        s.numeric_reply(u, RPL_ENDOFWHOIS, info->getNickName(), NONE, NONE);
-       
+        s.numeric_reply(u, RPL_ENDOFWHOIS, info->getNickName(), NONE, NONE);     
     }
+    else
+        s.numeric_reply(u, ERR_NOSUCHNICK, target, NONE, NONE);    
 
 }

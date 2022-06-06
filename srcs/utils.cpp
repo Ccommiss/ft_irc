@@ -45,7 +45,7 @@ std::vector<std::string> tokenize(std::string const &str, const char delim)
     while ((start = str.find_first_not_of(delim, end)) != std::string::npos)
     {
         end = str.find(delim, start);
-        out.push_back(trim(str.substr(start, end - start))); // test addinng trim there
+        out.push_back(trim(str.substr(start, end - start)));
     }
     return out;
 }
@@ -61,7 +61,7 @@ std::list<std::string> tokenize_list(std::string const &str, const char delim)
     while ((start = str.find_first_not_of(delim, end)) != std::string::npos)
     {
         end = str.find(delim, start);
-        out.push_back(trim(str.substr(start, end - start))); // test addinng trim there
+        out.push_back(trim(str.substr(start, end - start)));
     }
     return out;
 }

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:52:28 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/06 12:14:50 by csejault         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:20:23 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 **  @returns none
 */
 
-void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
+void Commands::parse_cmd(User *user, Server &s)
 {
 	std::string buff(user->buffer);
 	std::vector<std::string> res = tokenize(buff, '\n');

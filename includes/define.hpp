@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   define.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csejault <csejault@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 16:31:45 by csejault          #+#    #+#             */
-/*   Updated: 2022/06/02 14:46:42 by csejault         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:29:47 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 
 //timeout for epoll wait in ms
 //-1 for infinity
-# define TIMEOUT                -1 //10000
+# define TIMEOUT                    -1
 
 //socket's queue size after what ECONNREFUSED ist return
 # define BACKLOG                   10

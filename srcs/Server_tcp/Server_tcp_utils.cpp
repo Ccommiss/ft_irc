@@ -8,20 +8,20 @@ char *	Server::get_ip( void ) const
 
 User*	Server::create_user( void )
 {
-	//create socket
+	/* Create socket */
 	socklen_t addrlen = sizeof (struct sockaddr_storage);
 	int new_sd;
 	if (0 > (new_sd = accept (_listener, (struct sockaddr *) &_client_saddr, &addrlen)))
 		throw std::runtime_error("accept error");
 
-	//add to mintoring
+	/* Add to monitoring */ 
 	struct epoll_event ev;
 	ev.events = EPOLLIN;
 	ev.data.fd = new_sd;
 	if (0 > epoll_ctl (_efd, EPOLL_CTL_ADD, new_sd, &ev))
 		throw std::runtime_error("epoll_ctl socket add failed");
 
-	//create obj
+	/* create obj */
 	User *new_user = new User(new_sd, get_ip());
 	users.insert(std::pair<int, User*>(new_sd, new_user));
 	server_users.insert(std::pair<std::string *, User *>(&new_user->getNickName(), new_user));
@@ -42,20 +42,16 @@ void	Server::delete_user( User *to_del )
 		arg[1] = (*it)->_name;
 	 	cmds.part(*this, to_del, arg);
 	}
-	 //remove from server_users
-	 server_users.erase(&to_del->getNickName());
-
-	 //remove from users
-	 users.erase(to_del->socket_descriptor);
-
-	 //unset from monitoring
-	 if (epoll_ctl (_efd, EPOLL_CTL_DEL, to_del->socket_descriptor, NULL) == -1)
-		 throw std::runtime_error("epoll_ctl socket del failed");
-
-	 //close socket
-	 close_fd(to_del->socket_descriptor, THROW);
-
-	 delete to_del;
+	/* remove from server_users */
+	server_users.erase(&to_del->getNickName());	
+	/* remove from users */
+	users.erase(to_del->socket_descriptor);
+	/* unset from monitoring */
+	if (epoll_ctl (_efd, EPOLL_CTL_DEL, to_del->socket_descriptor, NULL) == -1)		 
+		throw std::runtime_error("epoll_ctl socket del failed");
+	/* close socket */ 
+	close_fd(to_del->socket_descriptor, THROW);
+	delete to_del;
 	
 }
 
