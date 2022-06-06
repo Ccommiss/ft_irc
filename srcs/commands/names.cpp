@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:49:45 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:14:01 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 11:49:33 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void Commands::names(Server &s, User *u, std::vector<std::string> cmd)
 	}
 	else
 	{
-		std::vector<std::string> chans = tokenize(*(cmd.begin() + 1), ',');
+		std::vector<std::string> chans = tokenize(cmd[1], ',');
 		for (size_t i = 0; i < chans.size(); i++)
 		{
 			if (s.chanExists(chans[i]) && !s.chans[chans[i]]->isPrivateForUser(u))

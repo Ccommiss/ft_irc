@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:48:24 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:23:40 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:08:57 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,7 +272,7 @@ void Commands::mode(Server &s, User *u, std::vector<std::string> cmd)
 {
 	if (cmd.size() == 1)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
-	std::string target = *(cmd.begin() + 1);
+	std::string target = cmd[1];
 	if (target[0] == '+') /* + (unmoderated) chans do not support modes or operators */
 		return (s.numeric_reply(u, ERR_NOCHANMODES, target, NONE, NONE));
 	if (target[0] == '#') 

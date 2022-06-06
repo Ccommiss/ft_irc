@@ -55,7 +55,9 @@
 
 void Commands::whois(Server &s, User *u, std::vector<std::string> cmd)
 {
-    std::string target = *(cmd.begin() + 1);
+    if (cmd.size() < 2)
+        return ;
+    std::string target = cmd[1];
 
     User *info = NULL;
     if (s.findByName(target, &info) == true)
@@ -63,7 +65,8 @@ void Commands::whois(Server &s, User *u, std::vector<std::string> cmd)
         s.numeric_reply(u, RPL_WHOISUSER, info->getNickName(), info->getName(), info->getRealname());
         out (info->getRealname())
         s.numeric_reply(u, RPL_WHOISSERVER, s.hostname, s.hostname, "A custom server");
-        //s.numeric_reply(u, RPL_WHOISOPERATOR, info->getNickName(), NONE, NONE);
+        if (u->hasMode('k'))
+            s.numeric_reply(u, RPL_WHOISOPERATOR, info->getNickName(), NONE, NONE);
         s.numeric_reply(u, RPL_WHOISIDLE, info->getNickName(), "8 seconds", NONE); // faire un compteur de second de connexion
         s.numeric_reply(u, RPL_WHOISCHANNELS, info->getNickName(), info->whoIsChannels(u), NONE);
         if (info->hasMode('a'))

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:48:03 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:20:11 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:09:03 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void Commands::kick(Server &s, User *u, std::vector<std::string> cmd)
 	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
-	std::list<std::string> chan_names = tokenize_list(*(cmd.begin() + 1), ',');
-	std::list<std::string> user_names = tokenize_list(*(cmd.begin() + 2), ',');
+	std::list<std::string> chan_names = tokenize_list((cmd[1]), ',');
+	std::list<std::string> user_names = tokenize_list((cmd[2]), ',');
 	std::string msg = implodeMessage(cmd.begin() + 3, cmd.end());
 	User *to_kick = NULL;
 

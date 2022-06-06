@@ -19,7 +19,7 @@
 
 #define NONE ""
 #define IGNORE 	"Unspecified behavior"
-#define MSG_001 ":Welcome to the Internet Relay Network of Clement and Claire " + user->nickname + "!" + user->name + "@" + s.hostname
+#define MSG_001 ":Welcome to the Internet Relay Network of Clement and Claire " + user->getNickName() + "!" + user->getName() + "@" + s.hostname
 #define MSG_002 ":Your host is localhost, version 1.0   8-)"
 #define MSG_003 ":This server was created not so long time ago."
 #define MSG_004 ":You are very welcome. Enjoy !"
@@ -144,7 +144,7 @@
 #define ERR_423 ""								 
 #define ERR_422 ":<reason> Sent when there is no MOTD to send the client"																								 /* ERR_NOMOTD */
 #define ERR_424 ":<reason> Generic error message used to report a failed file operation during the processing of a command"												 /* ERR_FILEERROR */
-#define ERR_431 ":<reason> Returned when a nickname parameter expected for a command isn't found"																		 /* ERR_NONICKNAMEGIVEN */
+#define ERR_431 ":Nickname unfound or invalid"																															/* ERR_NONICKNAMEGIVEN */
 #define ERR_432 "<nick> :<reason> Returned after receiving a NICK message which contains a nickname which is considered invalid, s[...] "								 /* ERR_ERRONEUSNICKNAME */
 #define ERR_433 arg1 + " :Nickname is already in use"																													 /* ERR_NICKNAMEINUSE */
 #define ERR_436 "<nick> :<reason> Returned by a server to a client when it detects a nickname collision"																 /* ERR_NICKCOLLISION */
@@ -171,7 +171,7 @@
 #define ERR_476 arg1 + " :Bad Channel Mask"																																 /* ERR_BADCHANMASK */
 #define ERR_477 arg1 + " :Channel doesn't support modes"																												 /* ERR_NOCHANMODES */
 #define ERR_478 arg1 + " :Channel list is full"																															 /* ERR_BANLISTFULL */
-#define ERR_481 ":<reason> Returned by any command requiring special privileges (eg. IRC operator) to indicate the operation was unsuccessful"							 /* ERR_NOPRIVILEGES */
+#define ERR_481 ": You are not IRC Operator."							 /* ERR_NOPRIVILEGES */
 #define ERR_482 arg1 + " :You're not channel operator"																													 /* ERR_CHANOPRIVSNEEDED */
 #define ERR_483 ":<reason> Returned by KILL to anyone who tries to kill a server"																						 /* ERR_CANTKILLSERVER */
 #define ERR_484 ":<reason> Sent by the server to a user upon connection to indicate the restricted nature of the connection (i.e. usermode +r)"							 /* ERR_RESTRICTED */
@@ -362,11 +362,11 @@ inline std::string server_relay(const User *u, std::vector<std::string> cmd, T u
 {
 	std::string txt;
 	txt.append(":");
-	txt.append(u->nickname);
+	txt.append(u->getNickName());
 	txt.append("!");
-	txt.append(u->name);
+	txt.append(u->getName());
 	txt.append("@");
-	txt.append(u->ip);
+	txt.append(u->getIP());
 	txt.append(" ");
 	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
 		txt.append(*it + " "); 
@@ -384,14 +384,14 @@ inline std::string server_relay(const User *u, std::vector<std::string> cmd, Use
 {
 	std::string txt;
 	txt.append(":");
-	txt.append(u->nickname);
+	txt.append(u->getNickName());
 	txt.append("!");
-	txt.append(u->name); 
+	txt.append(u->getName()); 
 	txt.append("@");
-	txt.append(u->ip);
+	txt.append(u->getIP());
 	txt.append(" ");
 	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
-		txt.append(*it + " ");
+		txt.append(*it + " "); 
 	txt = trim(txt);
 	txt.append("\r\n");
 	out(FG2("Server Reply to be sent: (server relay)"));
@@ -414,10 +414,10 @@ inline std::string Server::choose_msg(int code, User *u, std::string arg1, std::
 		out("==> Unfound server_replies");
 		return ("(no reply found)");
 	}
-	return (*(cmds.server_replies.find(code)->second))(*this, u, arg1, arg2, arg3); 
+	return (*(cmds.server_replies.find(code)->second))(*this, u, arg1, arg2, arg3);
 }
 
-inline void Server::numeric_reply(User *u, std::string code, std::string arg1, std::string arg2, std::string arg3)
+inline void Server::numeric_reply(User *u, std::string code, std::string arg1, std::string arg2, std::string arg3) 
 {
 	std::string txt;
 	char *ptr;
@@ -426,7 +426,7 @@ inline void Server::numeric_reply(User *u, std::string code, std::string arg1, s
 	txt.append(" ");
 	txt.append(code);
 	txt.append(" ");
-	txt.append(u->nickname);
+	txt.append(u->getNickName()); 
 	txt.append(" ");
 	txt.append(choose_msg(std::strtol(code.c_str(), &ptr, 10), u, arg1, arg2, arg3));
 	txt.append("\r\n");

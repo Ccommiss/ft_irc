@@ -37,5 +37,6 @@ SOURCES		+=             		\
 		srcs/commands/list.cpp      	\
 		srcs/commands/oper.cpp      	\
 		srcs/commands/away.cpp      	\
+		srcs/commands/kill.cpp      	\
 
 

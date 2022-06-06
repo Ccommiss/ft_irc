@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:55:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:23:47 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:08:50 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void send_channel(Server &s, User *u, std::string dest_channel, std::vector<std:
 	if (chan->hasMode('m') && !chan->isOperator(u) && !chan->isVoiced(u))
 		return (s.numeric_reply(u, ERR_CANNOTSENDTOCHAN, dest_channel, NONE, NONE));
 	std::map<std::string *, User *> chan_users(s.chans[dest_channel]->getUsers());
-	chan_users.erase(&u->nickname);
+	chan_users.erase(&u->getNickName());
 	server_relay(u, cmd, chan_users);
 }
 
@@ -129,7 +129,7 @@ void Commands::priv_msg(Server &s, User *u, std::vector<std::string> cmd)
 	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NOTEXTTOSEND, NONE, NONE, NONE));
 
-	std::string dest = *(cmd.begin() + 1);
+	std::string dest = cmd[1];
 	if (dest.compare(0, 1, "#", 0, 1) == 0 || dest.compare(0, 1, "+", 0, 1) == 0)
 		send_channel(s, u, dest, cmd);
 	else

@@ -39,6 +39,7 @@ Commands::Commands()
 	cmd_map.insert(std::make_pair("OPER", &Commands::oper));
 	cmd_map.insert(std::make_pair("NOTICE", &Commands::notice));
 	cmd_map.insert(std::make_pair("AWAY", &Commands::away));
+	cmd_map.insert(std::make_pair("KILL", &Commands::kill));
 
 	server_replies.insert(std::make_pair(001, &RPL_001));
 	server_replies.insert(std::make_pair(002, &RPL_002));

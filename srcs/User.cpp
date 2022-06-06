@@ -102,7 +102,17 @@ std::string const &User::getName() const
 	return (this->name);
 }
 
+std::string &User::getName()
+{
+	return (this->name);
+}
+
 std::string const &User::getNickName() const
+{
+	return (this->nickname);
+}
+
+std::string &User::getNickName()
 {
 	return (this->nickname);
 }
@@ -132,6 +142,18 @@ std::string const &User::getRealname() const
 {
 	return real_name;
 }
+
+
+std::string const &User::getIP() const
+{
+	return ip;
+}
+
+std::string const &User::getBuffer() const
+{
+	return buffer;
+}
+
 
 bool User::HasCompletedRegistration()
 {
