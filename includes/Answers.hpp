@@ -364,33 +364,33 @@ inline std::string server_relay(const User *u, std::vector<std::string> cmd, T u
 	txt.append(":");
 	txt.append(u->getNickName());
 	txt.append("!");
-	txt.append(u->getName()); // username
+	txt.append(u->getName());
 	txt.append("@");
 	txt.append(u->getIP());
 	txt.append(" ");
 	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
-		txt.append(*it + " "); // on met touts les commandes dans le prefixe
+		txt.append(*it + " ");
 	txt = trim(txt);
 	txt.append("\r\n");
 	out(FG2("Server Reply to be sent: (server relay)"));
 	out(txt) for (typename T::iterator ite = user_list.begin(); ite != user_list.end(); ite++)
-		send(ite->second->socket_descriptor, txt.c_str(), txt.length(), 0); // send to all
+		send(ite->second->socket_descriptor, txt.c_str(), txt.length(), 0); 
 	return ((txt));
 }
 
-template <> // specialisation si un seul envoi a effectuer
+template <> 
 inline std::string server_relay(const User *u, std::vector<std::string> cmd, User *receiver)
 {
 	std::string txt;
 	txt.append(":");
 	txt.append(u->getNickName());
 	txt.append("!");
-	txt.append(u->getName()); // username
+	txt.append(u->getName()); 
 	txt.append("@");
 	txt.append(u->getIP());
 	txt.append(" ");
 	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end() && *it != "\n"; it++)
-		txt.append(*it + " "); // on met touts les commandes dans le prefixe
+		txt.append(*it + " "); 
 	txt = trim(txt);
 	txt.append("\r\n");
 	out(FG2("Server Reply to be sent: (server relay)"));
@@ -414,21 +414,20 @@ inline std::string Server::choose_msg(int code, User *u, std::string arg1, std::
 		out("==> Unfound server_replies");
 		return ("(no reply found)");
 	}
-	return (*(cmds.server_replies.find(code)->second))(*this, u, arg1, arg2, arg3); // second = la function
+	return (*(cmds.server_replies.find(code)->second))(*this, u, arg1, arg2, arg3);
 }
 
-inline void Server::numeric_reply(User *u, std::string code, std::string arg1, std::string arg2, std::string arg3) // rajouter autre chose pour le channel par ex ? //numeric reply
+inline void Server::numeric_reply(User *u, std::string code, std::string arg1, std::string arg2, std::string arg3) 
 {
 	start;
 	std::string txt;
 	char *ptr;
 	txt.append(":");
-//	txt.append("localhost "); // remplacer par le define
 	txt.append(hostname);
 	txt.append(" ");
 	txt.append(code);
 	txt.append(" ");
-	txt.append(u->getNickName()); // lui qui va servir commenickname
+	txt.append(u->getNickName()); 
 	txt.append(" ");
 	txt.append(choose_msg(std::strtol(code.c_str(), &ptr, 10), u, arg1, arg2, arg3));
 	txt.append("\r\n");
