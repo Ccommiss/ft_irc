@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:53:47 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 14:54:06 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 11:50:10 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Commands::part(Server &s, User *u, std::vector<std::string> cmd)
 	if (cmd.size() == 1)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
-	std::vector<std::string> out = tokenize(*(cmd.begin() + 1), ','); /* Channel names */
+	std::vector<std::string> out = tokenize(cmd[1], ','); /* Channel names */
 	std::string bye_msg = implodeMessage(cmd.begin() + 2, cmd.end()); /* Leave message */
 
 	for (std::vector<std::string>::iterator nb_chans_it = out.begin(); nb_chans_it != out.end(); nb_chans_it++)

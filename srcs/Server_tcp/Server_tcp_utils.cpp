@@ -24,7 +24,7 @@ User*	Server::create_user( void )
 	//create obj
 	User *new_user = new User(new_sd, get_ip());
 	users.insert(std::pair<int, User*>(new_sd, new_user));
-	server_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
+	server_users.insert(std::pair<std::string *, User *>(&new_user->getNickName(), new_user));
 	return(new_user);
 }
 
@@ -45,7 +45,7 @@ void	Server::delete_user( User *to_del )
 	}
 	 //remove from server_users
 	 debug(SV,to_del->presentation(), NOCR);
-	 if (server_users.erase(&to_del->nickname))
+	 if (server_users.erase(&to_del->getNickName()))
 		 debug(SV,"removed from server_users");
 	 else
 		 debug(SV,"NOT removed from server_users");

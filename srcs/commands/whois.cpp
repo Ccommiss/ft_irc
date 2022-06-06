@@ -55,7 +55,9 @@
 
 void Commands::whois(Server &s, User *u, std::vector<std::string> cmd)
 {
-    std::string target = *(cmd.begin() + 1);
+    if (cmd.size() < 2)
+        return ;
+    std::string target = cmd[1];
 
     User *info = NULL;
     if (s.findByName(target, &info) == true)

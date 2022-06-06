@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:47:26 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:14:26 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 11:48:04 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void Commands::invite(Server &s, User *u, std::vector<std::string> cmd)
 	if (cmd.size() < 3)
 		return (s.numeric_reply(u, ERR_NEEDMOREPARAMS, *cmd.begin(), NONE, NONE));
 
-	std::string target = *(cmd.begin() + 1);
-	std::string chan_name = *(cmd.begin() + 2);
+	std::string target = cmd[1];
+	std::string chan_name = cmd[2];
 	User *to_invite = NULL;
 	Channel *chan = NULL;
 

@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:47:34 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:09:04 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 11:47:51 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,11 @@ void Commands::join(Server &s, User *u, std::vector<std::string> cmd)
 
 	size_t i = 0;
 	bool joined = false;
-	std::vector<std::string> chans = tokenize(*(cmd.begin() + 1), ',');
+	std::vector<std::string> chans = tokenize((cmd[1]), ',');
 	std::vector<std::string> pass;
 
 	if (cmd.size() >= 3)
-		pass = tokenize(*(cmd.begin() + 2), ',');
+		pass = tokenize((cmd[2]), ',');
 
 	for (std::vector<std::string>::iterator nb_chans_it = chans.begin(); nb_chans_it != chans.end(); nb_chans_it++)
 	{

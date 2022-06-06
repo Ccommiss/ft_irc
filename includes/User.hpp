@@ -9,14 +9,11 @@ class Channel;
 
 class User
 {
+	friend class Server;
+	friend class Commands;
 public:
 	int socket_descriptor;
 	bool registered[4];
-	std::string name;
-	std::string nickname;
-	std::string real_name;
-	std::string ip;
-	std::string buffer;
 	struct epoll_event *event;
 
 	/* Constructor, destructor & co */
@@ -25,12 +22,16 @@ public:
 
 	/* Accessors */
 	void setSocket(int sd);
+	std::string const &getIP() const;
+	std::string const &getBuffer() const;
 	void setName(std::string newName);
 	void setNickName(std::string newNickName);
 	bool HasCompletedRegistration();
 	std::string fullID();
 	std::string const &getName() const;
+	std::string &getName();
 	std::string const &getNickName() const;
+	std::string &getNickName();
 	std::string const &getRealname() const;
 	std::vector<Channel *> const &getJoinedChannels() const;
 	void setAway(std::string msg);
@@ -66,6 +67,11 @@ private:
 	std::map<char, bool> _modes;
 	std::string _away_msg;
 	std::vector<Channel *> joined_chans;
+	std::string name;
+	std::string nickname;
+	std::string real_name;
+	std::string buffer;
+	std::string ip;	
 };
 
 #endif

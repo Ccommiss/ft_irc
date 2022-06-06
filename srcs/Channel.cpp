@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:59:07 by ldes-cou          #+#    #+#             */
-/*   Updated: 2022/06/03 18:15:55 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 11:54:28 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ bool Channel::isTopicSet()
 
 bool Channel::isInChan(User *u)
 {
-	if (_users.count(&u->nickname) == 1)
+	if (_users.count(&u->getNickName()) == 1)
 		return true;
 	return false;
 }
@@ -220,7 +220,7 @@ bool Channel::matchBannedMask(User *u)
 		return false;
 	for (std::vector<std::string>::iterator it = _bannedMasks.begin(); it != _bannedMasks.end(); it++)
 	{
-		if (pattern_match(u->fullID(), *it) || pattern_match(u->nickname, *it))
+		if (pattern_match(u->fullID(), *it) || pattern_match(u->getNickName(), *it))
 			return true;
 	}
 	return false;
@@ -232,7 +232,7 @@ bool Channel::matchExceptMask(User *u)
 		return false;
 	for (std::vector<std::string>::iterator it = _exceptMasks.begin(); it != _exceptMasks.end(); it++)
 	{
-		if (pattern_match(u->fullID(), *it) || pattern_match(u->nickname, *it))
+		if (pattern_match(u->fullID(), *it) || pattern_match(u->getNickName(), *it))
 			return true;
 	}
 	return false;
@@ -254,7 +254,7 @@ size_t Channel::getLimit()
 void Channel::add_user(User *new_user)
 {
 	if (!isInChan(new_user))
-		_users.insert(std::pair<std::string *, User *>(&new_user->nickname, new_user));
+		_users.insert(std::pair<std::string *, User *>(&new_user->getNickName(), new_user));
 }
 
 /*
@@ -264,7 +264,7 @@ void Channel::add_user(User *new_user)
 void Channel::remove_user(User *toDel)
 {
 	if (isInChan(toDel))
-		_users.erase(&toDel->nickname);
+		_users.erase(&toDel->getNickName());
 	if (isOperator(toDel))
 		removeOperator(toDel);
 }

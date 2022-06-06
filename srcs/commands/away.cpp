@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:36:00 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 18:14:07 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 11:49:01 by ccommiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void Commands::away(Server &s, User *u, std::vector<std::string> cmd)
     std::string msg;
     if (cmd.size() > 1)
     {
-        msg = implodeMessage(cmd.begin() + 1, cmd.end());
+        msg = implodeMessage(cmd.begin()+1, cmd.end());
         u->setAway(msg);
         s.numeric_reply(u, RPL_NOWAWAY, u->nickname, msg, NONE);
     }
