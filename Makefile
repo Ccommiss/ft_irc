@@ -3,8 +3,8 @@
 # genmake v1.1.6
 
 #Compiler and Linker
-CC					:= clang
-CXX					:= c++ -g -fsanitize=address -fno-omit-frame-pointer
+CC					:= clang 
+CXX					:= c++ -Wall -Wextra -Werror -std=c++98
 ifeq ($(shell uname -s),Darwin)
 	CC				:= gcc
 	CXX				:= g++ 
@@ -15,7 +15,7 @@ TARGET				:= ircserv
 TARGET_BONUS		:= ircserv-bonus
 
 
-BUILD				:= release
+BUILD				:=
 
 
 include sources.mk
@@ -37,7 +37,7 @@ cflags.release		:= -Wall -Werror -Wextra #-DDEBUG -DDEBUG_SV -DDEBUG_US
 cflags.valgrind		:= -Wall -Werror -Wextra -DDEBUG -DDEBUG_SV 
 cflags.debug		:= -Wall -Werror -Wextra -DDEBUG -ggdb -fsanitize=address -fno-omit-frame-pointer
 CFLAGS				:= $(cflags.$(BUILD))
-CPPFLAGS			:= $(cflags.$(BUILD)) -std=c++98
+CPPFLAGS			:= $(cflags.$(BUILD))
 
 lib.release			:= 
 lib.valgrind		:= $(lib.release)

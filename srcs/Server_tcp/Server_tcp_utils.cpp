@@ -1,7 +1,7 @@
 
 #include "Server.hpp"
 
-char *	Server::get_ip( void )
+char *	Server::get_ip( void ) const
 {
 	return (inet_ntoa(((struct sockaddr_in *) &_client_saddr)->sin_addr));
 }
@@ -31,12 +31,11 @@ User*	Server::create_user( void )
 void	Server::delete_user( User *to_del )
 {
 	start;
-	std::vector<std::string> arg;;
+	std::vector<std::string> arg;
 	arg.push_back("PART");
 	arg.push_back("chan");
 	arg.push_back(":disconnected from server");
 	std::vector <Channel *>::const_iterator it = to_del->getJoinedChannels().begin(); 
-	out ("Nb of chans to leave : " << to_del->getJoinedChannels().size());
 	while (to_del->getJoinedChannels().size() > 0)
 	{
 		it = to_del->getJoinedChannels().begin();
@@ -44,18 +43,10 @@ void	Server::delete_user( User *to_del )
 	 	cmds.part(*this, to_del, arg);
 	}
 	 //remove from server_users
-	 debug(SV,to_del->presentation(), NOCR);
-	 if (server_users.erase(&to_del->getNickName()))
-		 debug(SV,"removed from server_users");
-	 else
-		 debug(SV,"NOT removed from server_users");
+	 server_users.erase(&to_del->getNickName());
 
 	 //remove from users
-	 debug(SV,to_del->presentation(), NOCR);
-	 if (users.erase(to_del->socket_descriptor))
-		 debug(SV,"removed from users");
-	 else
-		 debug(SV,"NOT removed from users");
+	 users.erase(to_del->socket_descriptor);
 
 	 //unset from monitoring
 	 if (epoll_ctl (_efd, EPOLL_CTL_DEL, to_del->socket_descriptor, NULL) == -1)
@@ -68,7 +59,7 @@ void	Server::delete_user( User *to_del )
 	
 }
 
-bool	Server::oper_pass_check( std::string to_check)
+bool	Server::oper_pass_check( std::string to_check) const
 {
 	if (!to_check.compare(_oper_pass))
 		return (true);
@@ -76,11 +67,8 @@ bool	Server::oper_pass_check( std::string to_check)
 		return (false);
 }
 
-bool	Server::pass_check( std::string to_check)
+bool	Server::pass_check( std::string to_check) const
 {
-	out("PASS_CHECK :");
-	out("ORIGINAL [" + _pass + "]");
-	out("TO_CHECK [" + to_check + "]");
 	if (!to_check.compare(_pass))
 		return (true);
 	else

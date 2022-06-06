@@ -14,12 +14,6 @@ void Server::existing_connection( int sd )
 	else //do_action
 	{
 		std::string	st = buffer;
-		//debug(SV, "ASCII - CODE");
-		//for (size_t i = 0; i < st.size(); i++)
-		//{
-		//	int a = st[i];
-		//	std::cout << st[i] << "[" << a << "]" << std::endl;
-		//}
 		size_t old_pos;
 		for (size_t pos = 0; users.count(sd) && pos < st.size();)
 		{
@@ -46,16 +40,5 @@ void Server::existing_connection( int sd )
 				users[sd]->buffer.clear();
 		}
 
-		//debug(SV, users[sd]->nickname,NOCR);
-		//debug(SV, " - BUFF_MAX_SIZE = ", NOCR);
-		//debug(SV, sizeof(buffer), NOCR);
-		//debug(SV, " - BYTES = ",NOCR);
-		//debug(SV, numbytes,NOCR);
-		//debug(SV, " - LEN = ",NOCR);
-		//debug(SV, strlen(buffer), NOCR);
-		//debug(SV, " - MESSAGE = ", NOCR);
-		//debug(SV, buffer);
-		//out (users[sd]->presentation()); 
 	}
-	out ("end existing conn waiting")
 }

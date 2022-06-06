@@ -6,7 +6,7 @@
 /*   By: ccommiss <ccommiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 14:52:28 by ccommiss          #+#    #+#             */
-/*   Updated: 2022/06/03 14:52:37 by ccommiss         ###   ########.fr       */
+/*   Updated: 2022/06/06 12:14:50 by csejault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 
 void Commands::parse_cmd(User *user, Server &s) // envoyer users[i]
 {
-	out ("Buffer - START" << std::endl  << user->buffer << std::endl << "Buffer - STOP");
 	std::string buff(user->buffer);
 	std::vector<std::string> res = tokenize(buff, '\n');
 	for (std::vector<std::string>::iterator line = res.begin(); line != res.end(); line++)
