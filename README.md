@@ -1,16 +1,4 @@
-
-<style>
-t { color: Black; font-family:courier; font-style:bold; text-decoration: underline; }
-st {
-    color: #303030; font-family:Futara; font-style:bold; text-decoration: underline;
-}
-r { color: Red }
-o { color: Orange }
-g { color: Green }
-def { font-family:courier;  background-color: #9999ff; font-style: bold }
-</style>
-
-<h1> ft_irc </h1>
+# ft_irc
 
 _Make your own Internet Relay Chat_
 
